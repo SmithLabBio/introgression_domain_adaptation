@@ -1,0 +1,11 @@
+seed: 1234
+nDatasets: 50
+nSamples: 10 
+sequenceLength: 1e4
+recombinationRate: 1e-8 
+mutationRate: 1e-4
+migrationRateRange: [0, 1]
+initialSizeA: 1000
+initialSizeB: 1000
+initialSizeC: 1000
+splitTime: 100
