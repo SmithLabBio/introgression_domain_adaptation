@@ -17,7 +17,7 @@ from progress.bar import Bar
 
 # Schema for input configuration file
 
-def intSci(s):
+def intSci(s: str):
     """Convert integer string written in scientific notation to int"""
     return int(float(s))
 
@@ -71,7 +71,7 @@ class TwoPopSimulation():
         self.positions[it] = mts.tables.sites.position.astype(np.int64)
         self.charMatrices[it] = mts.genotype_matrix() # Consumes a lot of memory
 
-    def write(self, outDir): 
+    def write(self, outDir: str): 
         print("Writing data ...")
         data = dict(
             config=pickle.dumps(self.config.toDict()),
