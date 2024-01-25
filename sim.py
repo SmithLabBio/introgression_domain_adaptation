@@ -1,97 +1,81 @@
 #!/usr/bin/env python3
 
-import msprime as mp
-# import tskit as tk
-import numpy as np
-# import demesdraw as dd
-# import matplotlib.pyplot as plt
 import fire
-import oyaml as yaml
-from schema import Schema, And, Use, Optional, SchemaError
+from pydantic import BaseModel
+from typing import Tuple 
 import oyaml as yaml
 import pickle
 import os.path as path
-from dotmap import DotMap
 from progress.bar import Bar
+import msprime as mp
+import numpy as np
 
+class Config(BaseModel):
+    seed: int
+    nDatasets: int
+    nSamples: int
+    sequenceLength: int
+    recombinationRate: float
+    mutationRate: float
+    migrationRateRange: Tuple[float, float]
+    initialSizeA: int
+    initialSizeB: int
+    initialSizeC: int
+    splitTime: int 
 
-# Schema for input configuration file
+def simulate(configPath: str, outDir: str = ".") -> None: 
+    config = Config(**yaml.safe_load(open(configPath)))
 
-def intSci(s: str):
-    """Convert integer string written in scientific notation to int"""
-    return int(float(s))
+    # Random seeds
+    rng = np.random.default_rng(config.seed)
+    ancestrySeeds = rng.integers(2**32, size=config.nDatasets)
+    mutationSeeds = rng.integers(2**32, size=config.nDatasets)
 
-YAML_SCHEMA = Schema({
-    "seed": And(int),
-    "nDatasets": And(Use(intSci)),
-    "nSamples": And(Use(intSci)),
-    "sequenceLength": And(Use(intSci)),
-    "recombinationRate": And(Use(float)),
-    "mutationRate": And(Use(float)),
-    "migrationRateRange": And( [Use(float)], lambda a: len(a) == 2 ),
-    "initialSizeA": And(Use(intSci)),
-    "initialSizeB": And(Use(intSci)),
-    "initialSizeC": And(Use(intSci)),
-    "splitTime": And(Use(intSci))
-})
+    # Migration rates
+    migrationRates = rng.uniform(low=config.migrationRateRange[0], 
+            high=config.migrationRateRange[1], size=config.nDatasets)
 
-class TwoPopSimulation():
-    def __init__(self, configPath: str) -> None:
-        self.configPath = configPath
-        # Parse configuration file
-        with open(configPath, "r") as f:
-            unvalidatedConfig = yaml.safe_load(f)
-        self.config = DotMap(YAML_SCHEMA.validate(unvalidatedConfig))
-        # Random seeds
-        rng = np.random.default_rng(self.config.seed)
-        self.ancestrySeeds = rng.integers(2**32, size=self.config.nDatasets)
-        self.mutationSeeds = rng.integers(2**32, size=self.config.nDatasets)
-        # Migration rates
-        self.migrationRates = rng.uniform(low=self.config.migrationRateRange[0], 
-                high=self.config.migrationRateRange[1], size=self.config.nDatasets)
-        # Initialize output arrays
-        self.positions = np.empty(self.config.nDatasets, dtype=object) 
-        self.charMatrices = np.empty(self.config.nDatasets, dtype=object) 
+    # Initialize output arrays
+    positions = np.empty(config.nDatasets, dtype=object) 
+    charMatrices = np.empty(config.nDatasets, dtype=object) 
 
-    def runReplicate(self, it: int):
-        # Build demographic model
-        dem = mp.Demography()
-        dem.add_population(name="a", initial_size=self.config.initialSizeA)
-        dem.add_population(name="b", initial_size=self.config.initialSizeB)
-        dem.add_population(name="c", initial_size=self.config.initialSizeC)
-        dem.add_population_split(time=self.config.splitTime, derived=["b", "c"], ancestral="a")
-        dem.set_symmetric_migration_rate(["b", "c"], rate=self.migrationRates[it])
-        # Simulate ancestry for samples
-        ts = mp.sim_ancestry(samples={"b": self.config.nSamples, "c": self.config.nSamples},
-                demography=dem, random_seed=self.ancestrySeeds[it], 
-                sequence_length=self.config.sequenceLength, 
-                recombination_rate=self.config.recombinationRate)
-        # Simulate mutations for ancestries
-        mts = mp.sim_mutations(ts, rate=self.config.mutationRate, random_seed=self.mutationSeeds[it])
-        self.positions[it] = mts.tables.sites.position.astype(np.int64)
-        self.charMatrices[it] = mts.genotype_matrix() # Consumes a lot of memory
+    # Simulate data
+    with Bar("Simulating data", max=config.nDatasets) as bar:
+        for i in range(config.nDatasets):
 
-    def write(self, outDir: str): 
-        print("Writing data ...")
-        data = dict(
-            config=pickle.dumps(self.config.toDict()),
-            ancesrtySeeds=self.ancestrySeeds,
-            mutationSeeds=self.mutationSeeds,
-            migrationRates=self.migrationRates,
-            positions=self.positions,
-            charMatrices=self.charMatrices)
-        outfile = f"{path.splitext(path.basename(self.configPath))[0]}.npz"
-        outpath = path.join(outDir, outfile)
-        np.savez_compressed(outpath, **data)
+            # Build demographic model
+            dem = mp.Demography()
+            dem.add_population(name="a", initial_size=config.initialSizeA)
+            dem.add_population(name="b", initial_size=config.initialSizeB)
+            dem.add_population(name="c", initial_size=config.initialSizeC)
+            dem.add_population_split(time=config.splitTime, derived=["b", "c"], ancestral="a")
+            dem.set_symmetric_migration_rate(["b", "c"], rate=migrationRates[i])
 
-def simulate(configPath: str, outDir: str = ".") -> None:
-    sim = TwoPopSimulation(configPath)
-    with Bar("Simulating data", max=sim.config.nDatasets) as bar:
-        for i in range(sim.config.nDatasets):
-            sim.runReplicate(i)
+            # Simulate ancestry for samples
+            ts = mp.sim_ancestry(samples={"b": config.nSamples, "c": config.nSamples},
+                    demography=dem, random_seed=ancestrySeeds[i], 
+                    sequence_length=config.sequenceLength, 
+                    recombination_rate=config.recombinationRate)
+
+            # Simulate mutations for ancestries
+            mts = mp.sim_mutations(ts, rate=config.mutationRate, random_seed=mutationSeeds[i])
+            positions[i] = mts.tables.sites.position.astype(np.int64)
+            charMatrices[i] = mts.genotype_matrix() # Node: Consumes a lot of memory
+
             bar.next()
-    sim.write(outDir) 
-    print("Simulation Complete")
+
+    # Write output to file
+    print("Writing data ...")
+    data = dict(
+        config=pickle.dumps(config.model_dump()),
+        ancesrtySeeds=ancestrySeeds,
+        mutationSeeds=mutationSeeds,
+        migrationRates=migrationRates,
+        positions=positions,
+        charMatrices=charMatrices)
+    outfile = f"{path.splitext(path.basename(configPath))[0]}.npz"
+    outpath = path.join(outDir, outfile)
+    np.savez_compressed(outpath, **data)
 
 if __name__ == "__main__":
     fire.Fire(simulate)
