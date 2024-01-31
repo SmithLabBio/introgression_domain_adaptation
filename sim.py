@@ -60,7 +60,7 @@ def simulate(configPath: str, outDir: str = ".") -> None:
             # Simulate mutations for ancestries
             mts = mp.sim_mutations(ts, rate=config.mutationRate, random_seed=mutationSeeds[i])
             positions[i] = mts.tables.sites.position.astype(np.int64)
-            charMatrices[i] = mts.genotype_matrix() # Node: Consumes a lot of memory
+            charMatrices[i] = mts.genotype_matrix() # Node: Consumes a lot of memory, shape: [sites, samples]
 
             bar.next()
 

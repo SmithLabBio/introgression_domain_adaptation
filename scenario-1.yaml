@@ -1,7 +1,7 @@
 seed: 1234
-nDatasets: 100 
+nDatasets: 5_000 
 nSamples: 50 
-sequenceLength: 10_000 
+sequenceLength: 1_000_000 
 recombinationRate: 1e-8 
 mutationRate: 1e-8
 migrationRateRange: [0, 0.1]
