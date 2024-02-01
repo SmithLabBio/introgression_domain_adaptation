@@ -6,9 +6,9 @@ from typing import Tuple
 import oyaml as yaml
 import pickle
 import os.path as path
-from progress.bar import Bar
 import msprime as mp
 import numpy as np
+from tqdm import tqdm
 
 class Config(BaseModel):
     seed: int
@@ -40,29 +40,23 @@ def simulate(configPath: str, outDir: str = ".") -> None:
     charMatrices = np.empty(config.nDatasets, dtype=object) 
 
     # Simulate data
-    with Bar("Simulating data", max=config.nDatasets) as bar:
-        for i in range(config.nDatasets):
-
-            # Build demographic model
-            dem = mp.Demography()
-            dem.add_population(name="a", initial_size=config.initialSizeA)
-            dem.add_population(name="b", initial_size=config.initialSizeB)
-            dem.add_population(name="c", initial_size=config.initialSizeC)
-            dem.add_population_split(time=config.splitTime, derived=["b", "c"], ancestral="a")
-            dem.set_symmetric_migration_rate(["b", "c"], rate=migrationRates[i])
-
-            # Simulate ancestry for samples
-            ts = mp.sim_ancestry(samples={"b": config.nSamples, "c": config.nSamples},
-                    demography=dem, random_seed=ancestrySeeds[i], 
-                    sequence_length=config.sequenceLength, 
-                    recombination_rate=config.recombinationRate)
-
-            # Simulate mutations for ancestries
-            mts = mp.sim_mutations(ts, rate=config.mutationRate, random_seed=mutationSeeds[i])
-            positions[i] = mts.tables.sites.position.astype(np.int64)
-            charMatrices[i] = mts.genotype_matrix() # Node: Consumes a lot of memory, shape: [sites, samples]
-
-            bar.next()
+    for i in tqdm(range(config.nDatasets), desc="Simulating data"):
+        # Build demographic model
+        dem = mp.Demography()
+        dem.add_population(name="a", initial_size=config.initialSizeA)
+        dem.add_population(name="b", initial_size=config.initialSizeB)
+        dem.add_population(name="c", initial_size=config.initialSizeC)
+        dem.add_population_split(time=config.splitTime, derived=["b", "c"], ancestral="a")
+        dem.set_symmetric_migration_rate(["b", "c"], rate=migrationRates[i])
+        # Simulate ancestry for samples
+        ts = mp.sim_ancestry(samples={"b": config.nSamples, "c": config.nSamples},
+                demography=dem, random_seed=ancestrySeeds[i], 
+                sequence_length=config.sequenceLength, 
+                recombination_rate=config.recombinationRate)
+        # Simulate mutations for ancestries
+        mts = mp.sim_mutations(ts, rate=config.mutationRate, random_seed=mutationSeeds[i])
+        positions[i] = mts.tables.sites.position.astype(np.int64)
+        charMatrices[i] = mts.genotype_matrix() # Node: Consumes a lot of memory, shape: [sites, samples]
 
     # Write output to file
     print("Writing data ...")
@@ -76,6 +70,7 @@ def simulate(configPath: str, outDir: str = ".") -> None:
     outfile = f"{path.splitext(path.basename(configPath))[0]}.npz"
     outpath = path.join(outDir, outfile)
     np.savez_compressed(outpath, **data)
+    print("Simulations Complete!")
 
 if __name__ == "__main__":
     fire.Fire(simulate)
