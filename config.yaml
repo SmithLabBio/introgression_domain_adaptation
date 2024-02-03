@@ -1,9 +1,7 @@
-seed: 1234
-nDatasets: 100 
 nSamples: 50 
 sequenceLength: 10_000 
 recombinationRate: 1e-8 
-mutationRate: 1e-8
+mutationRate: 1e-4
 migrationRateRange: [0, 0.1]
 initialSizeA: 10_000
 initialSizeB: 10_000
