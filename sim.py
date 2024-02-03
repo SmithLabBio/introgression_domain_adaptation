@@ -23,7 +23,7 @@ class Config(BaseModel):
     initialSizeC: int
     splitTime: int 
 
-def simulate(nDatasets: int, configPath: str, outPath: str = "", seed=None) -> None: 
+def simulate(nDatasets, configPath, outPath= "", seed=None) -> None: 
     if not outPath:
         outPath = f"{path.splitext(configPath)[0]}.npz"
     else:
