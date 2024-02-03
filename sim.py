@@ -23,17 +23,31 @@ class Config(BaseModel):
     initialSizeC: int
     splitTime: int 
 
-def simulate(configPath: str, outDir: str = ".") -> None: 
-    config = Config(**yaml.safe_load(open(configPath)))
+def simulate(nDatasets: int, configPath: str, outPath: str = "", seed=None) -> None: 
+    if not outPath:
+        outPath = f"{path.splitext(configPath)[0]}.npz"
+    else:
+        if not path.splitext(outPath)[1] == ".npz":
+            quit(f"Aborted: outPath should have extension \".npz\"")
+    if path.exists(outPath): 
+        quit(f"Aborted: {outPath} already exists")
+
+    if seed: 
+        np.random.seed(seed)
+    else:
+        seed = int(np.random.rand() * (2**32 - 1))
+        np.random.seed(seed)
+
+    config = Config(**yaml.safe_load(open(configPath)), seed=seed, nDatasets=nDatasets)
 
     # Random seeds
-    rng = np.random.default_rng(config.seed)
-    ancestrySeeds = rng.integers(2**32, size=config.nDatasets)
-    mutationSeeds = rng.integers(2**32, size=config.nDatasets)
+    ancestrySeeds = np.random.randint(2**32, size=config.nDatasets)
+    mutationSeeds = np.random.randint(2**32, size=config.nDatasets)
 
     # Migration rates
-    migrationRates = rng.uniform(low=config.migrationRateRange[0], 
-            high=config.migrationRateRange[1], size=config.nDatasets)
+    migrationRates = np.random.uniform(low=config.migrationRateRange[0], 
+                                       high=config.migrationRateRange[1], 
+                                       size=config.nDatasets)
 
     # Initialize output arrays
     positions = np.empty(config.nDatasets, dtype=object) 
@@ -62,14 +76,11 @@ def simulate(configPath: str, outDir: str = ".") -> None:
     print("Writing data ...")
     data = dict(
         config=pickle.dumps(config.model_dump()),
-        ancesrtySeeds=ancestrySeeds,
-        mutationSeeds=mutationSeeds,
         migrationRates=migrationRates,
         positions=positions,
         charMatrices=charMatrices)
-    outfile = f"{path.splitext(path.basename(configPath))[0]}.npz"
-    outpath = path.join(outDir, outfile)
-    np.savez_compressed(outpath, **data)
+
+    np.savez_compressed(outPath, **data)
     print("Simulations Complete!")
 
 if __name__ == "__main__":
