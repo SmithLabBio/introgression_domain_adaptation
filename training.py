@@ -1,89 +1,76 @@
+#!/usr/bin/env python
+
+import fire
 import cnn
+import data
 import torch
 from torch import nn
 from torch import optim
 from torch.utils.data import DataLoader, random_split
+import pandas as pd
+import os.path as path
 
 
-class Trainer():
-    def __init__(self, model, lossFunction, optimizer):
-        self.model = model
-        self.lossFunction = lossFunction
-        self.optimizer = optimizer
-    
-    def trainingStep(self, x, y):
-        model.train()
-        yhat = self.model(x)
-        loss = self.lossFunction(yhat, y.unsqueeze(1))
-        self.optimizer.zero_grad() # Don't run between `loss.backward()` and `optimizer.step()` but anywhere else is fine.
-        loss.backward()
-        self.optimizer.step()
-        return loss.item()
-    
-    def validationStep(self, x, y):
-        yhat = self.model(x)
-        loss = self.lossFunction(yhat, y.unsqueeze(1))
-        return loss.item()
+def run(dataPath, outPath=""):
+    if not outPath:
+        outPath = f"{path.splitext(dataPath)[0]}.pt"
+    else:
+        if not path.splitext(outPath)[1] == ".pt":
+            quit(f"Aborted: outPath should have extension \".pt\"")
+    if path.exists(outPath): 
+        quit(f"Aborted: {outPath} already exists")
 
+    batchSize = 64 
+    epochs = 10 
 
-# prefix = "scenario-1"
-prefix = "config"
-batchSize = 64 
-epochs = 10 
-dataset = cnn.Dataset(path=f"{prefix}.npz", nSnps=500)
-nTest = int(len(dataset) * 0.15)
-nVal = int(len(dataset) * 0.15)
-nTrain = len(dataset) - nTest - nVal 
-trainSet, testSet, valSet = random_split(dataset, [nTrain, nTest, nVal])
-trainLoader = DataLoader(trainSet, batch_size=batchSize, shuffle=True) 
-testLoader = DataLoader(testSet, batch_size=batchSize, shuffle=True) 
-validationLoader = DataLoader(valSet, batch_size=batchSize, shuffle=True) 
+    dataset = data.Dataset(path=dataPath, nSnps=500)
+    nVal = int(len(dataset) * 0.2)
+    nTrain = len(dataset) - nVal 
+    trainSet, valSet = random_split(dataset, [nTrain, nVal])
+    trainLoader = DataLoader(trainSet, batch_size=batchSize, shuffle=True) 
+    validationLoader = DataLoader(valSet, batch_size=batchSize, shuffle=True) 
 
-model = cnn.CNN(nBlocks=3, nFeatures=10, nOutputs=1, nFullyConnected=10)
-lossFunction = nn.MSELoss()
-optimizer = optim.Adam(model.parameters())
-# trainer = Trainer(model, lossFunction, optimizer)
+    modelParams = dict(nBlocks=3, nFeatures=10, nOutputs=1, nFullyConnected=10)
+    model = cnn.CNN(**modelParams)
 
-## Show details of model
-# testResult = model(torch.randint(0, 4, (2, 51, 400)).float())
-# g = make_dot(result.mean(), params=dict(model.named_parameters()))
-# g.view("cnn")
-# # print(summary(model, input_size=(1, 51, 400))) # Batch size, Rows, Cols. Channel dimension is added in forward function
+    lossFunction = nn.MSELoss()
+    optimizer = optim.Adam(model.parameters())
 
+    trainingLossList = []
+    # trainingAccuracy = [] # TODO: Compute accuracy
+    validationLossList = []
+    # validationAccuracy = []
 
-
-
-trainingLossList = []
-# trainingAccuracy = [] # TODO: Compute accuracy
-validationLossList = []
-# validationAccuracy = []
-
-for epoch in range(epochs):
-    cumulativeTrainingLoss = 0.0 
-    for x, y in trainLoader:
-        model.train()
-        yhat = model(x)
-        loss = lossFunction(yhat, y.unsqueeze(1))
-        optimizer.zero_grad() # Don't run between `loss.backward()` and `optimizer.step()` but anywhere else is fine.
-        loss.backward()
-        optimizer.step()
-        cumulativeTrainingLoss += loss # TODO: Do I need to account for last batch size being smaller? 
-
-    trainingLoss = cumulativeTrainingLoss / len(trainLoader)  
-    trainingLossList.append(trainingLossList)
-
-    cumulativeValidationLoss = 0.0
-    with torch.no_grad():
-        for x, y in validationLoader:
+    for epoch in range(epochs):
+        print(f"Epoch {epoch}")
+        # Training
+        cumulativeTrainingLoss = 0.0 
+        for x, y in trainLoader:
+            model.train()
             yhat = model(x)
             loss = lossFunction(yhat, y.unsqueeze(1))
-            cumulativeValidationLoss += loss
-    validationLoss = cumulativeValidationLoss / len(validationLoader)
-    validationLossList.append(validationLoss)
+            loss.backward()
+            optimizer.step()
+            optimizer.zero_grad() # Don't run between `loss.backward()` and `optimizer.step()` but anywhere else is fine. Tutorials online vary.
+            cumulativeTrainingLoss += loss # TODO: Do I need to account for last batch size being smaller? 
+        trainingLoss = cumulativeTrainingLoss / len(trainLoader)  
+        trainingLossList.append(trainingLossList)
 
-    print(f"Epoch {epoch + 1}: training loss = {trainingLoss} -- validation loss = {validationLoss}")
+        # Validation
+        cumulativeValidationLoss = 0.0
+        with torch.no_grad():
+            for x, y in validationLoader:
+                yhat = model(x)
+                loss = lossFunction(yhat, y.unsqueeze(1))
+                cumulativeValidationLoss += loss
+        validationLoss = cumulativeValidationLoss / len(validationLoader)
+        validationLossList.append(validationLoss)
+
+        print(f"Epoch {epoch + 1}: training loss = {trainingLoss} -- validation loss = {validationLoss}")
+
+    trainingLoss = dict(trainingLoss=trainingLossList, validationLoss=validationLossList)
+    torch.save([modelParams, model.state_dict(), trainingLoss], outPath) # Save current state, there is also option to save the best performing model state
 
 
-torch.save([model.config, model.state_dict()], f"{prefix}-model-state.pt") # Save current state, there is also option to save the best performing model state
-# df = pd.DataFrame.from_dict(dict(trainingLoss=trainingLossList, validationLoss=validationLossList))
-# df.to_csv("scenario-1-loss.csv", index=False)
+if __name__ == "__main__":
+    fire.Fire(run)
