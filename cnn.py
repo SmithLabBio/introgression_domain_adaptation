@@ -56,8 +56,6 @@ class CNN(nn.Module):
         """
         super().__init__()
         assert nFeatures >= nFullyConnected
-        self.config = dict(nBlocks=nBlocks, nFeatures=nFeatures, 
-                nOutputs=nOutputs, nFullyConnected=nFullyConnected)
         self.nFeatures = nFeatures
         self.nOutputs = nOutputs
         self.nFullyConnected = nFullyConnected
