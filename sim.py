@@ -23,15 +23,15 @@ class Config(BaseModel):
     initialSizeC: int
     splitTime: int 
 
-def simulate(nDatasets, configPath, outPath= "", seed=None) -> None: 
-    if not outPath:
-        outPath = f"{path.splitext(configPath)[0]}.npz"
-    else:
-        if not path.splitext(outPath)[1] == ".npz":
-            quit(f"Aborted: outPath should have extension \".npz\"")
-    if path.exists(outPath): 
-        quit(f"Aborted: {outPath} already exists")
-
+def simulate(nDatasets, configPath, outPath= "", seed=None, force=False) -> None: 
+    # if not outPath:
+    #     outPath = f"{path.splitext(configPath)[0]}.npz"
+    # else:
+    #     if not path.splitext(outPath)[1] == ".npz":
+    #         quit(f"Aborted: outPath should have extension \".npz\"")
+    # if path.exists(outPath): 
+    #     if not force:
+    #         quit(f"Aborted: {outPath} already exists")
     if seed: 
         np.random.seed(seed)
     else:
@@ -52,6 +52,7 @@ def simulate(nDatasets, configPath, outPath= "", seed=None) -> None:
     # Initialize output arrays
     positions = np.empty(config.nDatasets, dtype=object) 
     charMatrices = np.empty(config.nDatasets, dtype=object) 
+    summaryStats = np.empty(config.nDatasets, dtype=object) 
 
     # Simulate data
     for i in tqdm(range(config.nDatasets), desc="Simulating data"):
@@ -70,7 +71,17 @@ def simulate(nDatasets, configPath, outPath= "", seed=None) -> None:
         # Simulate mutations for ancestries
         mts = mp.sim_mutations(ts, rate=config.mutationRate, random_seed=mutationSeeds[i])
         positions[i] = mts.tables.sites.position.astype(np.int64)
-        charMatrices[i] = mts.genotype_matrix() # Node: Consumes a lot of memory, shape: [sites, samples]
+        charMatrices[i] = mts.genotype_matrix().transpose() # Node: Consumes a lot of memory, shape: [sites, samples] (before transpose)
+        # Compute and store summary stats
+        dxy = mts.divergence(sample_sets=[ts.samples(1), ts.samples(2)])
+        fst = mts.Fst(sample_sets=[ts.samples(1), ts.samples(2)])
+        pi = mts.diversity(sample_sets=[ts.samples(), ts.samples(1), ts.samples(2)])
+        tajimasD = mts.Tajimas_D(sample_sets=[ts.samples(), ts.samples(1), ts.samples(2)])
+        segregatingSites = mts.segregating_sites(sample_sets=[ts.samples(), ts.samples(1), ts.samples(2)])
+        sfs = mts.allele_frequency_spectrum(sample_sets=[ts.samples(), ts.samples(1), ts.samples(2)])
+        # ld = mts.LdCalculator(sample_sets=[ts.samples(), ts.samples(1), ts.samples(2)]) # Deprecated 
+        summaryStats[i] = dict(dxy=dxy, fst=fst, pi=pi, tajimasD=tajimasD,
+                segregatingSites=segregatingSites, sfs=sfs)
 
     # Write output to file
     print("Writing data ...")
@@ -78,10 +89,13 @@ def simulate(nDatasets, configPath, outPath= "", seed=None) -> None:
         config=pickle.dumps(config.model_dump()),
         migrationRates=migrationRates,
         positions=positions,
-        charMatrices=charMatrices)
+        charMatrices=charMatrices,
+        summaryStats=summaryStats)
 
     np.savez_compressed(outPath, **data)
     print("Simulations Complete!")
+    for i in summaryStats:
+        print(i["fst"])
 
 if __name__ == "__main__":
     fire.Fire(simulate)
