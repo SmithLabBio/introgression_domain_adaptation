@@ -2,6 +2,10 @@
 *.keras
 *.pt
 *.pickle
+*.png 
+*.csv
+*.txt
+*.webloc
 
 
 # Byte-compiled / optimized / DLL files
