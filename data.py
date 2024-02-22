@@ -1,31 +1,37 @@
-import torch
-import pickle
+import tskit
 import numpy as np
+import pickle
 
-def positionsToDistances(pos):
-    dist = torch.empty_like(pos)
-    dist[1:] = pos[1:] - pos[:-1]
-    dist[0] = pos[0]
-    return dist
+def getGenotypeMatrix(ts, samples, nSnps: int, transpose: bool = False):
+    var = tskit.Variant(ts, samples=samples) 
+    if transpose:
+        shape = (nSnps, len(samples))
+    else:
+        shape = (len(samples), nSnps)
+    mat = np.zeros(shape=shape, dtype=np.int32)
+    for site in range(nSnps):
+        var.decode(site)
+        if transpose:
+            mat[site, :] = var.genotypes
+        else:
+            mat[:, site] = var.genotypes
+    return mat
 
-class Dataset(torch.utils.data.Dataset): 
-    def __init__(self, path: str, nSnps: int):
-        data = np.load(path, allow_pickle=True)
-        self.nSnps = nSnps
-        self.config = pickle.loads(data["config"])
-        self.summaryStates = data["summaryStats"]
-        self.nDatasets = self.config["nDatasets"]
-        self.positions = data["positions"]
-        self.charMatrices = data["charMatrices"]
-        self.migrationRates = torch.from_numpy(data["migrationRates"]).float()
-    
-    def __len__(self):
-        return self.nDatasets 
-
-    def __getitem__(self, index):
-        charMatrix = torch.from_numpy(self.charMatrices[index][:, :self.nSnps]) 
-        positions = torch.from_numpy(self.positions[index][:self.nSnps])
-        distances = positionsToDistances(positions).unsqueeze(0)
-        x = torch.cat((distances, charMatrix), 0).float() 
-        y = self.migrationRates[index] 
-        return x, y 
+def getData(path: str, nSnps: int, transpose: bool =False, split: bool = False):
+    with open(path, "rb") as fh:
+        data = pickle.load(fh)
+    snpMatrices = []
+    migrationStates = []
+    for i in data["simulations"]:
+        ts = i["treeSequence"]
+        if split:
+            popMatrices = []
+            popMatrices.append(getGenotypeMatrix(ts, ts.samples(1), 500, transpose=transpose))
+            popMatrices.append(getGenotypeMatrix(ts, ts.samples(2), 500, transpose=transpose))
+            snpMatrices.append(np.array(popMatrices))
+        else:
+            snpMatrices.append(getGenotypeMatrix(ts, ts.samples(), 500, transpose=transpose))
+        migrationStates.append(i["migrationState"])
+    snpMatrices = np.array(snpMatrices)
+    migrationStates = np.array(migrationStates)
+    return data, snpMatrices, migrationStates

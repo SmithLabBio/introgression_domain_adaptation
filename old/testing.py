@@ -9,14 +9,14 @@ import torch
 from torch.utils.data import DataLoader
 
 
-def run(statePath, dataPath, outPath=""):
-    if not outPath:
+def run(statePath, dataPath, outPrefix=""):
+    if not outPrefix:
         outPath = f"{path.splitext(dataPath)[0]}-predicted.csv"
     else:
-        if not path.splitext(outPath)[1] == ".csv":
-            quit(f"Aborted: outPath should have extension \".csv\"")
+        outPath = f"{outPrefix}.csv"
     if path.exists(outPath): 
         quit(f"Aborted: {outPath} already exists")
+
     data = Dataset(path=dataPath, nSnps=500)
     loader = DataLoader(data, batch_size=64, shuffle=False)
     config, state, _ = torch.load(statePath)

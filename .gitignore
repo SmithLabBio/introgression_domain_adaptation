@@ -1,4 +1,8 @@
 *.npz
+*.keras
+*.pt
+*.pickle
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

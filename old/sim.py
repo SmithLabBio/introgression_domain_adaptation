@@ -25,12 +25,11 @@ class Config(BaseModel):
     initialSizeC: int
     splitTime: int 
 
-def simulate(nDatasets, configPath, outPath= "", seed=None, force=False) -> None: 
-    if not outPath:
+def simulate(nDatasets, configPath, outPrefix= "", seed=None, force=False) -> None: 
+    if not outPrefix:
         outPath = f"{path.splitext(configPath)[0]}.npz"
     else:
-        if not path.splitext(outPath)[1] == ".npz":
-            quit(f"Aborted: outPath should have extension \".npz\"")
+        outPath = f"{outPrefix}.npz"
     if path.exists(outPath): 
         if not force:
             quit(f"Aborted: {outPath} already exists")
@@ -109,7 +108,7 @@ def simulate(nDatasets, configPath, outPath= "", seed=None, force=False) -> None
         charMatrices=charMatrices,
         summaryStats=pickle.dumps(summaryStats))
 
-    np.savez_compressed(outPath, **data)
+    np.savez_compressed(outPrefix, **data)
     print("Simulations Complete!")
 
 if __name__ == "__main__":
