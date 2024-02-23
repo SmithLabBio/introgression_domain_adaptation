@@ -6,6 +6,8 @@ from typing import Tuple
 import fire
 import simulation
 
+# TODO: Replace dictionary with dataclass object or pydantic
+
 class Config(BaseModel):
     nSamples: int
     sequenceLength: int
@@ -53,7 +55,7 @@ class SecondaryContact():
         return data 
 
 def run(configPath, outPrefix, nDatasets, force=False):
-    s = simulation.Simulation(scenarioType=SecondaryContact, configPath=configPath, 
+    s = simulation.Simulation(scenarioType=SecondaryContact, configPath=configPath, # Ignore pylance error
             outPrefix=outPrefix, nDatasets=nDatasets, force=force)
 
 if __name__ == "__main__":

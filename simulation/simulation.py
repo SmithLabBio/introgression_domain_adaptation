@@ -7,14 +7,7 @@ from pydantic import BaseModel
 from typing import Optional
 import oyaml as yaml
 
-def mergeDictionaries(l):
-    newDict = {}
-    for k in l[0].keys():
-        newDict[k] = []
-    for d in l:
-        for k, v in d.items():
-            newDict[k].append(v)
-    return newDict 
+# TODO: Replace dictionaries with dataclass object or pydantic
 
 class Simulation():
     def __init__(self, scenarioType, configPath: str, outPrefix: str, 
