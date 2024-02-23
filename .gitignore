@@ -1,11 +1,15 @@
 *.npz
 *.keras
 *.pt
+*.ckpt
 *.pickle
 *.png 
 *.csv
 *.txt
 *.webloc
+
+links/
+lightning_logs/
 
 
 # Byte-compiled / optimized / DLL files
