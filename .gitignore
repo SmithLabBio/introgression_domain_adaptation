@@ -1,3 +1,4 @@
+*.json
 *.npz
 *.keras
 *.pt
