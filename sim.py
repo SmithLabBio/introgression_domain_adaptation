@@ -57,12 +57,14 @@ class Simulations(BaseModel, Generic[T]):
     config: T 
     simulations: List[Scenario]
 
-    def __getitem__(self, ix):
-        return self.simulations[ix]
-    
     def __len__(self):
         return len(self.simulations)
 
+    def __getitem__(self, ix):
+        return self.simulations[ix]
+    
+    def __iter__(self):
+        yield from self.simulations
 
 class Simulator():
     def __init__(self, scenarioType: type, configPath: str, outPrefix: str, 

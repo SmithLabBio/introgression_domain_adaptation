@@ -1,18 +1,17 @@
 import torch
-import pickle
 import tskit
 from typing import List, TypeVar
 from sim import Simulations
 from secondaryContact import SecondaryContactConfig, SecondaryContactData
 import json
 
-# def positionsToDistances(pos):
-#     dist = torch.empty_like(pos)
-#     dist[1:] = pos[1:] - pos[:-1]
-#     dist[0] = pos[0]
-#     return dist
+def positionsToDistances(pos):
+    dist = torch.empty_like(pos)
+    dist[1:] = pos[1:] - pos[:-1]
+    dist[0] = pos[0]
+    return dist
 
-def getGenotypeMatrix(ts, samples: List[int] , nSnps: int):
+def getGenotypeMatrix(ts: tskit.TreeSequence, samples: List[int] , nSnps: int):
     """Construct tensor from treesequence"""
     # TODO: make this output matrices with the dimension for channels
     var = tskit.Variant(ts, samples=samples) 
@@ -29,33 +28,30 @@ class Dataset(torch.utils.data.Dataset):
         # TODO: Fully parse json into nested models instead of into dictionaries
         self.simulations = Simulations[SecondaryContactConfig].model_validate_json(jsonData)
         self.snpMatrices = []
+        self.distanceArrays = []
         for i in self.simulations:
-            ts = self.simulations[i].treeSequence
+            ts = i.treeSequence 
             if split:
                 popMatrices = []
-                popMatrices.append(getGenotypeMatrix(ts, ts.samples(1), 500))
-                popMatrices.append(getGenotypeMatrix(ts, ts.samples(2), 500))
+                popMatrices.append(getGenotypeMatrix(ts, ts.samples(1), nSnps))
+                popMatrices.append(getGenotypeMatrix(ts, ts.samples(2), nSnps))
                 self.snpMatrices.append(popMatrices)
             else:
-                self.snpMatrices.append(getGenotypeMatrix(ts, ts.samples(), 500))
-    
+                self.snpMatrices.append(getGenotypeMatrix(ts, ts.samples(), nSnps))
+            self.distanceArrays.append(positionsToDistances(torch.tensor(
+                    ts.tables.sites.position[:nSnps], dtype=torch.float)))
+
     def __len__(self):
         return len(self.simulations) 
 
-    def __getitem__(self, index):
-        if self.test:
-            return self.snpMatrices[index]
-        else:
-            return self.snpMatrices[index], self.migrationStates[index]
-        snps = self.snpMatrices[index][:, :self.nSnps]
-        if self.transpose:  
-            snps = snps.transpose()
-        snps = torch.from_numpy(snps).float() 
-        pos = torch.from_numpy(self.positions[index][:self.nSnps]).float()
-        if self.toDistance:
-            pos = positionsToDistances(pos)
-        y = self.migrationRates[index] 
-        return snps, pos, y
+    def __getitem__(self, ix):
+        snps = self.snpMatrices[ix]
+        distances = self.distanceArrays[ix]
+        migrationState = self.simulations[ix].data["migrationState"]
+        return snps, distances, migrationState 
 
-
-d = Dataset("secondaryContact1/secondaryContact1-1.json", 500)
+# d = Dataset("secondaryContact1/secondaryContact1-1.json", 400)
+# snps, distances, migrationState = d[0]
+# print(snps[0].dtype, snps[1].dtype)
+# print(distances.dtype)
+# print(type(migrationState))
