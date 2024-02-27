@@ -1,13 +1,12 @@
 from torch.utils.data import DataLoader
 from lightning import Trainer
-from data import Dataset
 
 from data import Dataset 
 from conv1dModel import CNN 
 
 
 
-testDataset = Dataset("secondaryContact1/secondaryContact1-100.json", 400, split=False)
+testDataset = Dataset("../secondaryContact1/secondaryContact1-100.json", 400, split=False)
 testLoader = DataLoader(testDataset, batch_size=32)
 
 nSamples = testDataset.simulations.config.nSamples 
