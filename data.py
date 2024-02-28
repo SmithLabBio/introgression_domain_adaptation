@@ -11,7 +11,7 @@ def positionsToDistances(pos):
     dist[0] = pos[0]
     return dist
 
-def getGenotypeMatrix(ts: tskit.TreeSequence, samples: List[int] , nSnps: int):
+def getGenotypeMatrix(ts: tskit.TreeSequence, samples: List[int] , nSnps: int, channelDim: bool):
     """Construct tensor from treesequence"""
     # TODO: make this output matrices with the dimension for channels
     var = tskit.Variant(ts, samples=samples) 
@@ -19,10 +19,12 @@ def getGenotypeMatrix(ts: tskit.TreeSequence, samples: List[int] , nSnps: int):
     for site in range(nSnps):
         var.decode(site)
         mat[:, site] = torch.tensor(var.genotypes)
+    if channelDim:
+        mat.unsqueeze(0)
     return mat
 
 class Dataset(torch.utils.data.Dataset): 
-    def __init__(self, path: str, nSnps: int, split: bool = True):
+    def __init__(self, path: str, nSnps: int, split: bool = True, channelDim: bool = True):
         with open(path, "rb") as fh:
             jsonData = fh.read()
         # TODO: Fully parse json into nested models instead of into dictionaries
@@ -33,11 +35,11 @@ class Dataset(torch.utils.data.Dataset):
             ts = i.treeSequence 
             if split:
                 popMatrices = []
-                popMatrices.append(getGenotypeMatrix(ts, ts.samples(1), nSnps))
-                popMatrices.append(getGenotypeMatrix(ts, ts.samples(2), nSnps))
+                popMatrices.append(getGenotypeMatrix(ts, ts.samples(1), nSnps, channelDim))
+                popMatrices.append(getGenotypeMatrix(ts, ts.samples(2), nSnps, channelDim))
                 self.snpMatrices.append(popMatrices)
             else:
-                self.snpMatrices.append(getGenotypeMatrix(ts, ts.samples(), nSnps))
+                self.snpMatrices.append(getGenotypeMatrix(ts, ts.samples(), nSnps, channelDim))
             self.distanceArrays.append(positionsToDistances(torch.tensor(
                     ts.tables.sites.position[:nSnps], dtype=torch.float)))
 
