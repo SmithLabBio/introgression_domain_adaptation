@@ -6,7 +6,7 @@ from conv1dModel import CNN
 
 
 
-testDataset = Dataset("secondaryContact1/secondaryContact1-100-test.json", 400, split=False, channelDim=False)
+testDataset = Dataset("secondaryContact1/secondaryContact1-100-test.json", 400, split=False)
 testLoader = DataLoader(testDataset, batch_size=32)
 
 nSamples = testDataset.simulations.config.nSamples 
