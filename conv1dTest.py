@@ -10,7 +10,7 @@ testDataset = Dataset("secondaryContact1/secondaryContact1-100-test.json", 400, 
 testLoader = DataLoader(testDataset, batch_size=64)
 
 nSamples = testDataset.simulations.config.nSamples 
-model = CNN.load_from_checkpoint("conv1d.ckpt", nSamples=nSamples * 4)
+model = CNN.load_from_checkpoint("secondaryContact1/conv1d.ckpt", nSamples=nSamples * 4)
 trainer = Trainer(log_every_n_steps=1)
 trainer.test(model, testLoader)
 print(model.confusionMatrix.compute())
