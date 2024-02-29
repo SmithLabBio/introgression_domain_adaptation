@@ -57,6 +57,8 @@ class CNN(LightningModule):
         super().__init__()
 
         self.model = SPIDNA(n_blocks, n_features, n_outputs)
+        self.predicted = []
+        self.target = []
 
     def forward(self, snps, distances):
         return self.model(snps, distances)
@@ -75,14 +77,14 @@ class CNN(LightningModule):
         snps, distances, theta = batch
         yhat = self(snps, distances)
         loss = nn.functional.mse_loss(yhat, theta)
-        preds = torch.argmax(yhat, dim=1)
-        # acc = accuracy(preds, theta, task="multilabel")
         if stage:
             self.log(f"{stage}_loss", loss, prog_bar=True)
-            # self.log(f"{stage}_accuracy", acc, prog_bar=True)
+        return yhat, theta
         
     def validation_step(self, batch, batch_idx):
         self.evaluate(batch, "validation")
 
     def test_step(self, batch, batch_idx):
-        self.evaluate(batch, "test")
+        pred, target  = self.evaluate(batch, "test")
+        self.predicted.extend(pred)
+        self.target.extend(target)

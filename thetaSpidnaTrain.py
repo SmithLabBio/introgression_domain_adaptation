@@ -2,10 +2,10 @@ from torch.utils.data import DataLoader
 from lightning import Trainer
 
 from thetaData import Dataset 
-from thetaSpidna import CNN
+from thetaSpidnaModel import CNN
 
     
-trainDataset = Dataset("theta/theta1-1.json", 400, split=False)
+trainDataset = Dataset("theta/theta1-1000.json", 400, split=False)
 trainLoader = DataLoader(trainDataset, batch_size=1, shuffle=True)
 
 valDataset = Dataset("theta/theta1-100-val.json", 400, split=False)
