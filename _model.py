@@ -65,20 +65,20 @@ class SPIDNA(nn.Module):
 
 
 
-m = SPIDNA(5, 50, 2, 50)
-s = torch.rand((32, 100, 400))
-d = torch.rand((32, 400))
-o = m(s, d)
+# m = SPIDNA(5, 50, 2, 50)
+# s = torch.rand((32, 100, 400))
+# d = torch.rand((32, 400))
+# o = m(s, d)
 
 
 
 
 
 class CNN(LightningModule):
-    def __init__(self, n_blocks: int, n_features: int, n_outputs: int):
+    def __init__(self, nBlocks: int, nFeatures: int, nOutputs: int, nSamples: int):
         super().__init__()
 
-        self.model = SPIDNA(n_blocks, n_features, n_outputs)
+        self.model = SPIDNA(nBlocks, nFeatures, nOutputs, nSamples)
 
         self.confusionMatrix = ConfusionMatrix(task="multiclass", num_classes=2)
         # self.testAccuracy = Accuracy(task="multiclass", num_classes=2)
@@ -90,7 +90,7 @@ class CNN(LightningModule):
     def configure_optimizers(self):
         return Adam(self.model.parameters(), lr=0.001)
 
-    def training_step(self, batch, batch_idx):
+    def training_step(self, batch, batchIdx):
         snps, distances, migrationState = batch
         yhat = self(snps, distances)
         loss = nn.functional.cross_entropy(yhat, migrationState.view(-1))
@@ -108,14 +108,14 @@ class CNN(LightningModule):
             self.log(f"{stage}_accuracy", acc, prog_bar=True)
         return preds, migrationState
         
-    def validation_step(self, batch, batch_idx):
+    def validation_step(self, batch, batchIdx):
         self.evaluate(batch, "validation")
 
-    def test_step(self, batch, batch_idx):
+    def test_step(self, batch, batchIdx):
         pred, migState = self.evaluate(batch, "test")
         # self.testAccuracy(pred, migrationState)
         self.confusionMatrix(pred, migState)
     
-    # def predict_step(self, x, batch_idx):
+    # def predict_step(self, x, batchIdx):
     #     pred = self.model(x)
     #     return pred
