@@ -4,8 +4,8 @@ from tskit import TreeSequence, Variant
 from typing import List, TypeVar
 from lightning import LightningDataModule
 from torch.utils.data import random_split, DataLoader
-from sim import Simulations
-from secondaryContact import SecondaryContactConfig, SecondaryContactData
+from .sim import Simulations
+from .secondaryContact import SecondaryContactConfig, SecondaryContactData
 
 def positionsToDistances(pos):
     dist = torch.empty_like(pos)
