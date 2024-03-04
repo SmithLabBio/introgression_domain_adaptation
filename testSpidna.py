@@ -1,8 +1,9 @@
 from torch.utils.data import DataLoader
 from lightning import Trainer
 
-from data import Dataset 
-from spidnaModel import CNN
+from src.simulation.data import Dataset 
+from src.spidna import Model 
+from src.lightning.lightningClassify import Lightning
 
 
 
@@ -10,7 +11,7 @@ testDataset = Dataset("secondaryContact1/secondaryContact1-100-test.json", 400, 
 testLoader = DataLoader(testDataset, batch_size=64)
 
 nSamples = testDataset.simulations.config.nSamples 
-model = CNN.load_from_checkpoint("secondaryContact1/spidna.ckpt", n_blocks=5, n_features=50, n_outputs=2) 
+model = Model.load_from_checkpoint("secondaryContact1/spidna.ckpt", n_blocks=5, n_features=50, n_outputs=2) 
 trainer = Trainer(log_every_n_steps=1)
 trainer.test(model, testLoader)
 print(model.confusionMatrix.compute())

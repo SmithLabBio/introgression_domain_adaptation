@@ -7,7 +7,7 @@ from torchmetrics.functional import accuracy
 from torch.nn.functional import relu
 
 
-class SPIDNABlock(nn.Module):
+class Block(nn.Module):
     def __init__(self, n_outputs, n_features):
         super().__init__()
         self.n_outputs = n_outputs
@@ -28,7 +28,7 @@ class SPIDNABlock(nn.Module):
         return x, output
 
 
-class SPIDNA(nn.Module):
+class Model(nn.Module):
     def __init__(self, n_blocks, n_features, n_outputs):
         super().__init__()
         self.n_outputs = n_outputs
@@ -36,7 +36,7 @@ class SPIDNA(nn.Module):
         self.conv_pos_bn = nn.BatchNorm2d(n_features)
         self.conv_snp = nn.Conv2d(1, n_features, (1, 3))
         self.conv_snp_bn = nn.BatchNorm2d(n_features)
-        self.blocks = nn.ModuleList([SPIDNABlock(n_outputs, n_features)
+        self.blocks = nn.ModuleList([Block(n_outputs, n_features)
                                      for i in range(n_blocks)])
 
     def forward(self, snp, pos):
@@ -51,40 +51,3 @@ class SPIDNA(nn.Module):
             x, output = block(x, output)
         return output
 
-
-class CNN(LightningModule):
-    def __init__(self, n_blocks: int, n_features: int, n_outputs: int):
-        super().__init__()
-
-        self.model = SPIDNA(n_blocks, n_features, n_outputs)
-        self.predicted = []
-        self.target = []
-
-    def forward(self, snps, distances):
-        return self.model(snps, distances)
-
-    def configure_optimizers(self):
-        return Adam(self.model.parameters(), lr=0.001)
-
-    def training_step(self, batch, batch_idx):
-        snps, distances, theta = batch
-        yhat = self(snps, distances)
-        loss = nn.functional.mse_loss(yhat, theta)
-        self.log("train_loss", loss, prog_bar=True)
-        return loss
-    
-    def evaluate(self, batch, stage=None):
-        snps, distances, theta = batch
-        yhat = self(snps, distances)
-        loss = nn.functional.mse_loss(yhat, theta)
-        if stage:
-            self.log(f"{stage}_loss", loss, prog_bar=True)
-        return yhat, theta
-        
-    def validation_step(self, batch, batch_idx):
-        self.evaluate(batch, "validation")
-
-    def test_step(self, batch, batch_idx):
-        pred, target  = self.evaluate(batch, "test")
-        self.predicted.extend(pred)
-        self.target.extend(target)
