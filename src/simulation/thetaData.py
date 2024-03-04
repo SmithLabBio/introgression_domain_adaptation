@@ -1,8 +1,8 @@
 import torch
 from tskit import TreeSequence, Variant
 from typing import List, TypeVar
-from sim import Simulations
-from theta import ThetaConfig, ThetaData
+from .sim import Simulations
+from .theta import ThetaConfig, ThetaData
 import json
 
 def positionsToDistances(pos):

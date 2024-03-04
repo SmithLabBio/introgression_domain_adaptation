@@ -7,7 +7,7 @@ import torch
 from torch.distributions.uniform import Uniform
 import tskit
 import msprime as mp
-from sim import Simulator
+from .sim import Simulator
 
 
 class ThetaConfig(BaseModel):
