@@ -31,7 +31,7 @@ class Lightning(LightningModule):
         loss = nn.functional.cross_entropy(yhat, migrationState.view(-1))
         preds = torch.argmax(yhat, dim=1)
         acc = accuracy(preds, migrationState, task="binary")
-        if stage:
+        if stage == "validation":
             self.log(f"{stage}_loss", loss, prog_bar=True)
             self.log(f"{stage}_accuracy", acc, prog_bar=True)
         return preds, migrationState
