@@ -1,9 +1,11 @@
 import torch
+import json
 from tskit import TreeSequence, Variant
 from typing import List, TypeVar
-from sim import Simulations
-from secondaryContact import SecondaryContactConfig, SecondaryContactData
-import json
+from lightning import LightningDataModule
+from torch.utils.data import random_split, DataLoader
+from .sim import Simulations
+from .secondaryContact import SecondaryContactConfig, SecondaryContactData
 
 def positionsToDistances(pos):
     dist = torch.empty_like(pos)
@@ -50,8 +52,3 @@ class Dataset(torch.utils.data.Dataset):
         migrationState = self.simulations[ix].data["migrationState"]
         return snps, distances, migrationState 
 
-# d = Dataset("secondaryContact1/secondaryContact1-1.json", 400)
-# snps, distances, migrationState = d[0]
-# print(snps[0].dtype, snps[1].dtype)
-# print(distances.dtype)
-# print(type(migrationState))
