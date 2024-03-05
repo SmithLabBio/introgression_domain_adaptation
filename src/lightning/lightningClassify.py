@@ -7,9 +7,10 @@ from torchmetrics.functional import accuracy
 
 
 class Lightning(LightningModule):
-    def __init__(self, model):
+    def __init__(self, model: nn.Module):
         super().__init__()
         self.model = model 
+        self.save_hyperparameters()
         self.confusionMatrix = ConfusionMatrix(task="multiclass", num_classes=2)
 
     def forward(self, snps, distances):
@@ -31,7 +32,7 @@ class Lightning(LightningModule):
         loss = nn.functional.cross_entropy(yhat, migrationState.view(-1))
         preds = torch.argmax(yhat, dim=1)
         acc = accuracy(preds, migrationState, task="binary")
-        if stage == "validation":
+        if stage:
             self.log(f"{stage}_loss", loss, prog_bar=True)
             self.log(f"{stage}_accuracy", acc, prog_bar=True)
         return preds, migrationState

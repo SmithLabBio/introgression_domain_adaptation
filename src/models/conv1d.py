@@ -20,5 +20,5 @@ class Model(nn.Module):
             nn.Sigmoid()
         )
 
-    def forward(self, x):
-        return self.model(x)
+    def forward(self, snps, distances):
+        return self.model(snps)
