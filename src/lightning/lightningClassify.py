@@ -7,10 +7,10 @@ from torchmetrics.functional import accuracy
 
 
 class Lightning(LightningModule):
-    def __init__(self, model: nn.Module):
+    def __init__(self, modelClass: type, **kwargs):
         super().__init__()
-        self.model = model 
-        self.save_hyperparameters()
+        self.save_hyperparameters(logger=False)
+        self.model = modelClass(**kwargs) 
         self.confusionMatrix = ConfusionMatrix(task="multiclass", num_classes=2)
 
     def forward(self, snps, distances):

@@ -15,7 +15,7 @@ valDataset = Dataset("secondaryContact1/secondaryContact1-100-val.json", 400, sp
 valLoader = DataLoader(valDataset, batch_size=64)
 
 # model = Lightning(Model(trainDataset.simulations.config.nSamples * 4)) 
-model = Lightning(Model(trainDataset.simulations.config.nSamples * 4)) 
-trainer = Trainer(max_epochs=5, log_every_n_steps=1, default_root_dir=outDir)
+model = Lightning(Model, nSamples=trainDataset.simulations.config.nSamples * 4) 
+trainer = Trainer(max_epochs=10, log_every_n_steps=1, default_root_dir=outDir)
 trainer.fit(model, trainLoader, valLoader)
 
