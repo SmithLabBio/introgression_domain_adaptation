@@ -7,7 +7,12 @@ import torch
 from torch.distributions.uniform import Uniform
 import tskit
 import msprime as mp
-from .sim import Simulator
+
+# Temporary hack to allow this file to be used in imports and also as an executable
+if __name__ == '__main__':
+    from data.simulation import Simulator
+else:
+    from .simulation import Simulator
 
 
 class SecondaryContactConfig(BaseModel):
@@ -26,8 +31,6 @@ class SecondaryContactData(BaseModel):
     migrationRate: float
 
 class SecondaryContact():
-    #TODO: Possible to combine this with the config pydantic basemodel type so
-    # so it's not neccessary to have two different types?
     def __init__(self):
         self.config = SecondaryContactConfig 
 

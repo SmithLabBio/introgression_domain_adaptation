@@ -1,7 +1,7 @@
 import torch
 from tskit import TreeSequence, Variant
 from typing import List, TypeVar
-from .sim import Simulations
+from .simulation import Simulations
 from .theta import ThetaConfig, ThetaData
 import json
 

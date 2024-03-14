@@ -1,7 +1,7 @@
 from torch.utils.data import DataLoader
 from lightning import Trainer
 
-from src.simulation.thetaData import Dataset 
+from src.data.thetaData import Dataset 
 from src.thetaSpidna import Model 
 from src.lightning.lightningClassify import Lightning
 
