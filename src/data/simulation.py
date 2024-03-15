@@ -6,7 +6,7 @@ import oyaml as yaml
 from pydantic.dataclasses import dataclass
 import json
 from tskit import TreeSequence, load 
-from pydantic import BaseModel, field_serializer, field_validator, ConfigDict, validator
+from pydantic import BaseModel, field_serializer, field_validator, ConfigDict, validator, field_validator
 import tempfile
 import torch
 from typing_extensions import Annotated
@@ -35,13 +35,15 @@ class Scenario(BaseModel, Generic[U]):
     # summaryStatistics: SummaryStatistics
 
     @field_serializer("treeSequence")
-    def serialize_treeSequence(self, ts, _info):
+    @classmethod
+    def serialize_treeSequence(cls, ts, _info):
         with tempfile.SpooledTemporaryFile() as h:
             ts.dump(h)
             h.seek(0)
             return h.read().hex()
 
-    @validator("treeSequence", pre=True)
+    @field_validator("treeSequence", mode="before")
+    @classmethod
     def deserialize_treeSequence(cls, v):
         if isinstance(v, str):
             with tempfile.SpooledTemporaryFile() as h:
@@ -65,6 +67,7 @@ class Simulations(BaseModel, Generic[T]):
     
     def __iter__(self):
         yield from self.simulations
+
 
 class Simulator():
     def __init__(self, scenarioType: type, configPath: str, outPrefix: str, 

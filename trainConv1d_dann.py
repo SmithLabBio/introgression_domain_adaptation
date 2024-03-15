@@ -4,6 +4,7 @@ from keras.layers import Input, Conv1D, Conv2D, AveragePooling1D, AveragePooling
 from keras.utils import to_categorical
 from keras.optimizers import Adam
 from adapt.feature_based import DANN
+from adapt.parameter_based import FineTuning
 
 import numpy as np
 from src.data.simulation import Simulations
@@ -41,8 +42,9 @@ class Dataset():
         self.snps = np.array(snpMatrices)
         # self.migrationStates = np.array(migrationStates)
         self.migrationStates = to_categorical(migrationStates, num_classes=2)
+        self.shape = self.snps.shape[1:]
 
-def encoder(shape):
+def getEncoder(shape):
     model = Sequential()
     model.add(Input(shape=shape))
     model.add(Conv1D(256, kernel_size=2, activation='relu'))
@@ -53,60 +55,41 @@ def encoder(shape):
     model.add(AveragePooling1D(pool_size=2))
     model.add(Dropout(0.25))
     model.add(Flatten())
+    model.compile(optimizer=Adam(0.01), loss="categorical_crossentropy")
     return model
 
-def task():
+def getTask():
     model = Sequential()
     model.add(Dense(128, activation='relu'))
     model.add(Dropout(0.5))
     model.add(Dense(128, activation='relu'))
     model.add(Dropout(0.5))
     model.add(Dense(2, activation="sigmoid"))
+    model.compile(optimizer=Adam(0.01), loss="categorical_crossentropy")
     return model
 
-def discriminator():
+def getDiscriminator():
     model = Sequential()
     model.add(Dense(2048, activation="relu"))
     model.add(Dense(2048, activation="relu"))
     model.add(Dense(1))
+    model.compile(optimizer=Adam(0.01), loss="categorical_crossentropy")
     return model
 
-src = Dataset("secondaryContact1/secondaryContact1-100-val.json", 400, transpose=True)
-targ = Dataset("secondaryContact1/secondaryContact1-100-val.json", 400, transpose=True)
+source = Dataset("secondaryContact1/secondaryContact1-100-val.json", 400, transpose=True)
+target = Dataset("secondaryContact1/secondaryContact1-100-val.json", 400, transpose=True)
 
-model = DANN(encoder(shape=src.snps.shape), task(), discriminator(), lambda_=1.0, 
-        optimizer=Adam(0.001), loss="categorical_crossentropy",
-        metrics=["accuracy"])
+model = DANN(encoder=getEncoder(shape=source.shape), task=getTask(), 
+             discriminator=getDiscriminator(), Xt=target.snps, lambda_=1.0, 
+            optimizer=Adam(0.001), loss="categorical_crossentropy",
+            metrics=["accuracy"], copy=False)
 
-model.fit(x, y, epochs=1, batch_size=64)
+# model = FineTuning(encoder=getEncoder(shape=source.shape), task=getTask(), discriminator=getDiscriminator(), lambda_=1.0, 
+#         optimizer=Adam(0.001), loss="categorical_crossentropy",
+#         metrics=["accuracy"], copy=False, pretrain=False)
 
-# def get_encoder(input_shape=(2,)):
-#     model = Sequential()
-#     model.add(Dense(100, activation='elu',
-#                     input_shape=input_shape))
-#     model.add(Dense(2, activation="sigmoid"))
-#     model.compile(optimizer=Adam(0.01), loss='mse')
-#     return model
-
-# def get_task(input_shape=(2,)):
-#     model = Sequential()
-#     model.add(Dense(10, activation='elu'))
-#     model.add(Dense(1, activation="sigmoid"))
-#     model.compile(optimizer=Adam(0.01), loss='mse')
-#     return model
-
-# def get_discriminator(input_shape=(2,)):
-#     model = Sequential()
-#     model.add(Dense(10, activation='elu'))
-#     model.add(Dense(1, activation="sigmoid"))
-#     model.compile(optimizer=Adam(0.01), loss='mse')
-#     return model
-
-
-
-
-
-
+model.fit(source.snps, source.migrationStates, epochs=1)
+# model.save("ghost/conv1d_dann.keras")
 
 
 
@@ -120,7 +103,7 @@ model.fit(x, y, epochs=1, batch_size=64)
 # from data.dataset import Dataset 
 # from src.models.conv1d import Model
 # # from src.lightning.lightningClassify import Lightning
-# from src.models.conv1d_dann import Generator, Classifier, Discriminator
+# from src.models.conv1d_dann import Generator, Classifier, getDiscriminator
 
 # import pytorch_lightning as pl
 # import torch
@@ -131,7 +114,7 @@ model.fit(x, y, epochs=1, batch_size=64)
 #     CombinedSourceAndTargetDataset, SourceDataset, TargetDataset)
 # from pytorch_adapt.frameworks.lightning import Lightning
 # from pytorch_adapt.frameworks.utils import filter_datasets
-# from pytorch_adapt.models import Discriminator, mnistC, mnistG
+# from pytorch_adapt.models import getDiscriminator, mnistC, mnistG
 # from pytorch_adapt.validators import IMValidator
 
 # # from src.models.conv1d_dann import Lightning
@@ -157,7 +140,7 @@ model.fit(x, y, epochs=1, batch_size=64)
 
 # G = Generator(nSamples=100)
 # C = Classifier() 
-# D = Discriminator()
+# D = getDiscriminator()
 
 # # G_opt = torch.optim.Adam(G.parameters())
 # # C_opt = torch.optim.Adam(C.parameters())
