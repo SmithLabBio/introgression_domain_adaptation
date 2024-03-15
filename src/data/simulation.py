@@ -58,6 +58,7 @@ T = TypeVar('T')
 class Simulations(BaseModel, Generic[T]):
     config: T 
     simulations: List[Scenario]
+    seed: int
 
     def __len__(self):
         return len(self.simulations)
@@ -93,10 +94,10 @@ class Simulator():
 
         # Create seeds
         if seed: 
-            self.seed = seed
+            # self.seed = seed
             torch.manual_seed(seed)
         else:
-            self.seed = torch.initial_seed() 
+            seed = torch.initial_seed() 
         self.randomSeeds = torch.randint(0, 2**32, (nDatasets,))
 
         # Run simulations
@@ -110,7 +111,7 @@ class Simulator():
 
         # Output to file 
         print(f"Writing output ...")
-        data = Simulations(config=self.config, simulations=simulations)
+        data = Simulations(config=self.config, simulations=simulations, seed=seed)
         with open(outPath, "w") as fh:
             fh.write(data.model_dump_json())
         print("Simulations Complete!")
