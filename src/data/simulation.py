@@ -94,7 +94,6 @@ class Simulator():
 
         # Create seeds
         if seed: 
-            # self.seed = seed
             torch.manual_seed(seed)
         else:
             seed = torch.initial_seed() 
