@@ -12,7 +12,7 @@ import msprime as mp
 if __name__ == '__main__':
     from simulation import Simulator
 else:
-    from simulation import Simulator
+    from .simulation import Simulator
 
 
 class SecondaryContactConfig(BaseModel):
@@ -42,24 +42,24 @@ class SecondaryContact():
         timeRange = config.divTimeRange
         divTime = int(torch.randint(timeRange[0], timeRange[1], (1,)).item())
         dem = mp.Demography()
-        dem.add_population(name="a", initial_size=popSize)
-        dem.add_population(name="b", initial_size=popSize)
         dem.add_population(name="c", initial_size=popSize)
-        dem.add_population_split(time=divTime, derived=["b", "c"], ancestral="a")
+        dem.add_population(name="d", initial_size=popSize)
+        dem.add_population(name="e", initial_size=popSize)
+        dem.add_population_split(time=divTime, derived=["d", "e"], ancestral="c")
         half = simulator.nDatasets // 2    
         if ix > half: 
             migRange = config.migrationRateRange
             migrationRate = Uniform(migRange[0], migRange[1]).sample().item()
-            dem.add_symmetric_migration_rate_change(populations=["b", "c"], 
-                                                    rate=migrationRate, time=0)
-            dem.add_symmetric_migration_rate_change(populations=["b", "c"], 
-                                                    rate=0, time=divTime/2)
+            dem.add_symmetric_migration_rate_change(populations=["d", "e"], 
+                    time=0, rate=migrationRate)
+            dem.add_symmetric_migration_rate_change(populations=["d", "e"], 
+                    time=divTime//2, rate=0)
             migrationState = 1
         else:
             migrationRate = 0
             migrationState = 0
         dem.sort_events()
-        ts = mp.sim_ancestry(samples={"b": config.nSamples, "c": 
+        ts = mp.sim_ancestry(samples={"d": config.nSamples, "e": 
                 config.nSamples}, demography=dem, 
                 random_seed=torch.randint(0, 2**32, (1,)).item(), 
                 sequence_length=config.sequenceLength, 
