@@ -2,7 +2,7 @@ from tensorflow import keras
 from keras import Sequential, models
 from keras.layers import Input, Conv1D, AveragePooling1D, Dropout, Flatten, Dense  
 from keras.optimizers import Adam
-from adapt.feature_based import DANN
+from adapt.feature_based import CDAN
 
 from src.data.kerasSecondaryContactDataset import Dataset
 from src.kerasPredict import predict
@@ -42,7 +42,7 @@ def getDiscriminator():
 source = Dataset("secondaryContact1/secondaryContact1-1000.json", 400, transpose=True)
 target = Dataset("ghost1/ghost1-1000.json", 400, transpose=True)
 
-model = DANN(
+model = CDAN(
     encoder=getEncoder(shape=source.shape), 
     task=getTask(), 
     optimizer=Adam(0.001), 
@@ -53,12 +53,13 @@ model = DANN(
 history = model.fit(source.snps, source.migrationStates, target.snps, 
                     epochs=20, batch_size=64)
 
-model.save("ghost1/conv1d_dann")
+model.save("ghost1/conv1d_cdan")
 
 test = Dataset("ghost1/ghost1-test-100.json", 400, transpose=True)
 
-model = models.load_model("ghost1/conv1d_dann", compile=False)
+model = models.load_model("ghost1/conv1d_cdan", compile=False)
 print(predict(model, test))
+
 
 
 

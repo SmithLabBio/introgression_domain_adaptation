@@ -57,13 +57,19 @@ class Ghost():
         dem.add_population(name="e", initial_size=popSize)
         dem.add_population_split(time=ghostDivTime, derived=["b", "c"], ancestral="a")
         dem.add_population_split(time=divTime, derived=["d", "e"], ancestral="c")
+        # Ghost migration
+        migRange = config.migrationRateRange
+        ghostRate = Uniform(migRange[0], migRange[1]).sample().item()
+        dem.add_migration_rate_change(time=0, source="b", dest="d", 
+                rate=ghostRate)
+        dem.add_migration_rate_change(time=divTime//2, source="b", dest="d", 
+                rate=0)
         half = simulator.nDatasets // 2    
         if ix > half: 
-            migRange = config.migrationRateRange
             migrationRate = Uniform(migRange[0], migRange[1]).sample().item()
-            dem.add_symmetric_migration_rate_change(populations=["e", "b"], 
+            dem.add_symmetric_migration_rate_change(populations=["d", "e"], 
                                                     rate=migrationRate, time=0)
-            dem.add_symmetric_migration_rate_change(populations=["e", "b"], 
+            dem.add_symmetric_migration_rate_change(populations=["d", "e"], 
                                                     rate=0, time=divTime/2)
             migrationState = 1
         else:
