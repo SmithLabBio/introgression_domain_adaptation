@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import fire
-from pydantic import BaseModel, field_validator, model_validator
+from pydantic import BaseModel, model_validator
 from typing import Tuple
 import torch
 from torch.distributions.uniform import Uniform
@@ -60,17 +60,18 @@ class Ghost():
         # Ghost migration
         migRange = config.migrationRateRange
         ghostRate = Uniform(migRange[0], migRange[1]).sample().item()
-        dem.add_migration_rate_change(time=0, source="b", dest="d", 
-                rate=ghostRate)
-        dem.add_migration_rate_change(time=divTime//2, source="b", dest="d", 
-                rate=0)
+        dem.add_migration_rate_change(source="b", dest="d", 
+                time=0, rate=ghostRate)
+        dem.add_migration_rate_change(source="b", dest="d", 
+                time=divTime//2, rate=0)
+        # Migration
         half = simulator.nDatasets // 2    
         if ix > half: 
             migrationRate = Uniform(migRange[0], migRange[1]).sample().item()
             dem.add_symmetric_migration_rate_change(populations=["d", "e"], 
-                                                    rate=migrationRate, time=0)
+                    time=0, rate=migrationRate)
             dem.add_symmetric_migration_rate_change(populations=["d", "e"], 
-                                                    rate=0, time=divTime/2)
+                    time=divTime//2, rate=0)
             migrationState = 1
         else:
             migrationRate = 0
