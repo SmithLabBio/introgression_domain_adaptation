@@ -47,18 +47,12 @@ model = CDAN(
     task=getTask(), 
     optimizer=Adam(0.001), 
     loss="categorical_crossentropy",
-    metrics=["accuracy"], 
-)
-
+    metrics=["accuracy"])
 history = model.fit(source.snps, source.migrationStates, target.snps, 
                     epochs=20, batch_size=64)
+model.save("ghost1/conv1d_cdan_model")
 
-model.save("ghost1/conv1d_cdan")
 
-test = Dataset("ghost1/ghost1-test-100.json", 400, transpose=True)
-
-model = models.load_model("ghost1/conv1d_cdan", compile=False)
-print(predict(model, test))
 
 
 

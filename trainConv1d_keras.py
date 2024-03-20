@@ -31,4 +31,4 @@ model.fit(source.snps, source.migrationStates,
         validation_data=(validation.snps, validation.migrationStates), 
         batch_size=64, epochs=10)
 
-model.save("secondaryContact1/keras_conv1d")
+model.save("secondaryContact1/keras_conv1d_model")
