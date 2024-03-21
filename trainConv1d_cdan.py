@@ -1,7 +1,7 @@
 from tensorflow import keras
 from keras import Sequential, models
 from keras.layers import Input, Conv1D, AveragePooling1D, Dropout, Flatten, Dense  
-from keras.optimizers import Adam
+from keras.optimizers.legacy import Adam
 from adapt.feature_based import CDAN
 
 from src.data.kerasSecondaryContactDataset import Dataset
