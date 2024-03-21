@@ -1,7 +1,7 @@
 from tensorflow import keras
 from keras import Sequential, models
 from keras.layers import Input, Conv1D, AveragePooling1D, Dropout, Flatten, Dense  
-from keras.optimizers import Adam
+from keras.optimizers.legacy import Adam
 from adapt.feature_based import DANN
 
 from src.data.kerasSecondaryContactDataset import Dataset
@@ -39,8 +39,8 @@ def getDiscriminator():
     # model.compile(optimizer=Adam(0.01), loss="categorical_crossentropy")
     return model
 
-source = Dataset("secondaryContact1/secondaryContact1-5000.json", 500, transpose=True)
-target = Dataset("ghost1/ghost1-5000.json", 500, transpose=True)
+source = Dataset("secondaryContact1/secondaryContact1-1000.json", 100, transpose=True)
+target = Dataset("ghost1/ghost1-1000.json", 100, transpose=True)
 
 model = DANN(
     encoder=getEncoder(shape=source.shape), 
