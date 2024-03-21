@@ -40,7 +40,7 @@ def getDiscriminator():
     return model
 
 source = Dataset("secondaryContact1/secondaryContact1-1000.json", 400, transpose=True)
-target = Dataset("ghost1/ghost1-test-100.json", 400, transpose=True)
+target = Dataset("ghost1/ghost1-1000.json", 400, transpose=True)
 
 model = DANN(
     encoder=getEncoder(shape=source.shape), 
@@ -49,7 +49,7 @@ model = DANN(
     loss="categorical_crossentropy",
     metrics=["accuracy"])
 history = model.fit(source.snps, source.migrationStates, target.snps, 
-                    epochs=10, batch_size=64)
+                    epochs=20, batch_size=64)
 # print(model.score(target.snps, target.migrationStates))
 model.save("ghost1/conv1d_dann_model")
 
