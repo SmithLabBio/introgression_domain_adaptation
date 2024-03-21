@@ -5,8 +5,8 @@ from keras.layers import Input, Conv1D, AveragePooling1D, Dropout, Flatten, Dens
 from src.data.kerasSecondaryContactDataset import Dataset
 
 
-source = Dataset("secondaryContact1/secondaryContact1-1000.json", 400, transpose=True)
-validation = Dataset("secondaryContact1/secondaryContact1-val-100.json", 400, transpose=True)
+source = Dataset("secondaryContact1/secondaryContact1-5000.json", 500, transpose=True)
+validation = Dataset("secondaryContact1/secondaryContact1-val-500.json", 500, transpose=True)
 
 model = Sequential()
 model.add(Input(shape=source.shape))

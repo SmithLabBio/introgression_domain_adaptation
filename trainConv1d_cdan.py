@@ -39,8 +39,8 @@ def getDiscriminator():
     # model.compile(optimizer=Adam(0.01), loss="categorical_crossentropy")
     return model
 
-source = Dataset("secondaryContact1/secondaryContact1-1000.json", 400, transpose=True)
-target = Dataset("ghost1/ghost1-1000.json", 400, transpose=True)
+source = Dataset("secondaryContact1/secondaryContact1-5000.json", 500, transpose=True)
+target = Dataset("ghost1/ghost1-5000.json", 500, transpose=True)
 
 model = CDAN(
     encoder=getEncoder(shape=source.shape), 
