@@ -4,4 +4,5 @@ recombinationRate: 1e-8
 mutationRate: 1e-7
 migrationRateRange: [1e-6, 1e-4]
 popSizeRange: [10_000, 1_000_000]
-divTimeRange: [10_000, 1_000_000]
+divTimeRange: [10_000, 100_000]
+ghostDivTimeRange: [100_000, 1_000_000]

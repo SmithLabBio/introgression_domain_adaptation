@@ -7,7 +7,7 @@ import torch
 from torch.distributions.uniform import Uniform
 import tskit
 import msprime as mp
-from .sim import Simulator
+from .simulation import Simulator
 
 
 class ThetaConfig(BaseModel):
@@ -21,8 +21,6 @@ class ThetaData(BaseModel):
     populationSize: int
 
 class Theta():
-    #TODO: Possible to combine this with the config pydantic basemodel type so
-    # so it's not neccessary to have two different types?
     def __init__(self):
         self.config = ThetaConfig 
 

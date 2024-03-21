@@ -1,8 +1,8 @@
 from torch.utils.data import DataLoader
 from lightning import Trainer
 
-from src.simulation.data import Dataset 
-from src.spidna import Model 
+from data.dataset import Dataset 
+from src.models.spidna import Model 
 from src.lightning.lightningClassify import Lightning
 
     

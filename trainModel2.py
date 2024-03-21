@@ -2,7 +2,7 @@ from torch.utils.data import DataLoader
 from lightning import Trainer
 from lightning.pytorch.callbacks import RichProgressBar
 
-from src.simulation.data import Dataset 
+from data.dataset import Dataset 
 from src.models.model1 import Model 
 from src.lightning.lightningClassify import Lightning
 

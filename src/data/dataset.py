@@ -1,19 +1,25 @@
+from dataclasses import dataclass
 import torch
 import json
 from tskit import TreeSequence, Variant
-from typing import List, TypeVar
+from typing import List, TypeVar, Optional
 from lightning import LightningDataModule
 from torch.utils.data import random_split, DataLoader
-from .sim import Simulations
+from .simulation import Simulations
 from .secondaryContact import SecondaryContactConfig, SecondaryContactData
 
-def positionsToDistances(pos):
+@dataclass
+class Data:
+    snps: torch.Tensor
+    distances: torch.Tensor
+
+def positionsToDistances(pos: torch.Tensor) -> torch.Tensor:
     dist = torch.empty_like(pos)
     dist[1:] = pos[1:] - pos[:-1]
     dist[0] = pos[0]
     return dist
 
-def getGenotypeMatrix(ts: TreeSequence, samples: List[int] , nSnps: int):
+def getGenotypeMatrix(ts: TreeSequence, samples: List[int] , nSnps: int) -> torch.Tensor:
     """Construct tensor from treesequence"""
     # TODO: make this output matrices with the dimension for channels
     var = Variant(ts, samples=samples) 
@@ -50,5 +56,10 @@ class Dataset(torch.utils.data.Dataset):
         snps = self.snpMatrices[ix]
         distances = self.distanceArrays[ix]
         migrationState = self.simulations[ix].data["migrationState"]
-        return snps, distances, migrationState 
+        return Data(snps, distances), migrationState 
 
+
+# class AdaptDataset(torch.utils.data.Dataset):
+#     def __init__(self, srcTrain: Dataset, targetTrain: Dataset, 
+#             srcValidation: Optional[Dataset] = None, 
+#             targetValidation: Optional[Dataset] = None):
