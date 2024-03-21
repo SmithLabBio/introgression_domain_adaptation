@@ -12,7 +12,7 @@ import msprime as mp
 if __name__ == '__main__':
     from simulation import Simulator
 else:
-    from .simulation import Simulator
+    from simulation import Simulator
 
 
 class SecondaryContactConfig(BaseModel):
