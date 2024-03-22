@@ -31,10 +31,9 @@ def getTask():
 
 def getDiscriminator():
     model = Sequential()
-    model.add(Dense(64, activation="relu"))
-    model.add(Dropout(0.5))
-    model.add(Dense(64, activation="relu"))
-    model.add(Dropout(0.5))
+    model.add(Dense(32, activation="relu"))
+    model.add(Dense(32, activation="relu"))
+    model.add(Dense(32, activation="relu"))
     model.add(Dense(1, activation="sigmoid"))
     return model
 
@@ -45,13 +44,14 @@ model = DANN(
     encoder=getEncoder(shape=source.shape), 
     task=getTask(), 
     discriminator=getDiscriminator(),
-    optimizer=Adam(0.001), 
+    lambda_=0.5,
     loss="categorical_crossentropy",
-    metrics=["accuracy"])
+    metrics=["accuracy"],
+    optimizer=Adam(0.001)) 
 history = model.fit(source.snps, source.migrationStates, target.snps, 
-                    epochs=10, batch_size=64)
+                    epochs=20, batch_size=64)
 # print(model.score(target.snps, target.migrationStates))
-model.save("ghost1/conv1d_dann_model")
+model.save("ghost1/dann_model_3_32_0.5")
 
 
 
