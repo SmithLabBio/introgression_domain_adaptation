@@ -18,7 +18,6 @@ def getEncoder(shape):
     model.add(AveragePooling1D(pool_size=2))
     model.add(Dropout(0.25))
     model.add(Flatten())
-    # model.compile(optimizer=Adam(0.01), loss="categorical_crossentropy")
     return model
 
 def getTask():
@@ -28,15 +27,15 @@ def getTask():
     model.add(Dense(128, activation='relu'))
     model.add(Dropout(0.5))
     model.add(Dense(2, activation="sigmoid"))
-    # model.compile(optimizer=Adam(0.01), loss="categorical_crossentropy")
     return model
 
 def getDiscriminator():
     model = Sequential()
-    model.add(Dense(2048, activation="relu"))
-    model.add(Dense(2048, activation="relu"))
-    model.add(Dense(1))
-    # model.compile(optimizer=Adam(0.01), loss="categorical_crossentropy")
+    model.add(Dense(64, activation="relu"))
+    model.add(Dropout(0.5))
+    model.add(Dense(64, activation="relu"))
+    model.add(Dropout(0.5))
+    model.add(Dense(1, activation="sigmoid"))
     return model
 
 source = Dataset("secondaryContact1/secondaryContact1-1000.json", 100, transpose=True)
@@ -45,11 +44,12 @@ target = Dataset("ghost1/ghost1-1000.json", 100, transpose=True)
 model = DANN(
     encoder=getEncoder(shape=source.shape), 
     task=getTask(), 
+    discriminator=getDiscriminator(),
     optimizer=Adam(0.001), 
     loss="categorical_crossentropy",
     metrics=["accuracy"])
 history = model.fit(source.snps, source.migrationStates, target.snps, 
-                    epochs=20, batch_size=64)
+                    epochs=10, batch_size=64)
 # print(model.score(target.snps, target.migrationStates))
 model.save("ghost1/conv1d_dann_model")
 
