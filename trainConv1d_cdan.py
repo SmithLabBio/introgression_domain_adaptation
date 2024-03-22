@@ -18,7 +18,6 @@ def getEncoder(shape):
     model.add(AveragePooling1D(pool_size=2))
     model.add(Dropout(0.25))
     model.add(Flatten())
-    # model.compile(optimizer=Adam(0.01), loss="categorical_crossentropy")
     return model
 
 def getTask():
@@ -28,24 +27,24 @@ def getTask():
     model.add(Dense(128, activation='relu'))
     model.add(Dropout(0.5))
     model.add(Dense(2, activation="sigmoid"))
-    # model.compile(optimizer=Adam(0.01), loss="categorical_crossentropy")
     return model
 
 def getDiscriminator():
     model = Sequential()
-    model.add(Dense(2048, activation="relu"))
-    model.add(Dense(2048, activation="relu"))
-    model.add(Dense(1))
-    # model.compile(optimizer=Adam(0.01), loss="categorical_crossentropy")
+    model.add(Dense(32, activation="relu"))
+    model.add(Dense(32, activation="relu"))
+    model.add(Dense(32, activation="relu"))
+    model.add(Dense(1, activation="sigmoid"))
     return model
 
 source = Dataset("secondaryContact1/secondaryContact1-1000.json", 100, transpose=True)
 target = Dataset("ghost1/ghost1-1000.json", 100, transpose=True)
 
 model = CDAN(
+    lambda_=10,
     encoder=getEncoder(shape=source.shape), 
     task=getTask(), 
-    optimizer=Adam(0.001), 
+    optimizer=Adam(0.0001), 
     loss="categorical_crossentropy",
     metrics=["accuracy"])
 history = model.fit(source.snps, source.migrationStates, target.snps, 
