@@ -4,9 +4,7 @@
 *.pt
 *.ckpt
 *.pickle
-*.png 
 *.csv
-*.txt
 *.webloc
 
 links/
