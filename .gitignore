@@ -7,9 +7,9 @@
 *.csv
 *.webloc
 checkpoint
-conv_1d_cdan_v1a_model.model*
-conv_1d_dann_v1a_model.model*
-conv_1d_finetunig_v1a_model.model*
+conv1d_cdan_v1a_model.model*
+conv1d_dann_v1a_model.model*
+conv1d_finetunig_v1a_model.model*
 
 
 links/
