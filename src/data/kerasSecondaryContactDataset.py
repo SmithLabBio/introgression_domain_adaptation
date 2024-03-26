@@ -6,7 +6,7 @@ from secondaryContact import SecondaryContactConfig
 from tskit import TreeSequence, Variant
 
 def getGenotypeMatrix(ts: TreeSequence, nSnps: int, transpose=False) -> np.ndarray:
-    var = Variant(ts, samples=ts.samples()) 
+    var = Variant(ts, samples=ts.samples())
     if transpose:
         shape = (nSnps, len(ts.samples()))
     else:

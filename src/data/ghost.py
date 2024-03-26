@@ -60,9 +60,9 @@ class Ghost():
         # Ghost migration
         migRange = config.migrationRateRange
         ghostRate = Uniform(migRange[0], migRange[1]).sample().item()
-        dem.add_migration_rate_change(source="b", dest="d", 
+        dem.add_migration_rate_change(source="d", dest="b", 
                 time=0, rate=ghostRate)
-        dem.add_migration_rate_change(source="b", dest="d", 
+        dem.add_migration_rate_change(source="d", dest="b", 
                 time=divTime//2, rate=0)
         # Migration
         half = simulator.nDatasets // 2    
