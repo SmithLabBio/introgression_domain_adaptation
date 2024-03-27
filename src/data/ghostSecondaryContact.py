@@ -23,6 +23,7 @@ class GhostConfig(BaseModel):
     popSizeRange: Tuple[int, int]
     divTimeRange: Tuple[int, int]
     ghostDivTimeRange: Tuple[int, int]
+    ghostMigrationRateRange: Tuple[float, float]
 
     @model_validator(mode="after") # Ignore pycharm warning
     def validate_divtimes(self):
@@ -35,6 +36,7 @@ class GhostData(BaseModel):
     ghostDivTime: int
     migrationState: int
     migrationRate: float
+    ghostMigrationRate: float
 
 class Ghost():
     def __init__(self):
@@ -58,15 +60,16 @@ class Ghost():
         dem.add_population_split(time=ghostDivTime, derived=["b", "c"], ancestral="a")
         dem.add_population_split(time=divTime, derived=["d", "e"], ancestral="c")
         # Ghost migration
-        migRange = config.migrationRateRange
-        ghostRate = Uniform(migRange[0], migRange[1]).sample().item()
-        dem.add_migration_rate_change(source="d", dest="b", 
+        ghostMigRange = config.ghostMigrationRateRange
+        ghostRate = Uniform(ghostMigRange[0], ghostMigRange[1]).sample().item()
+        dem.add_symmetric_migration_rate_change(populations=["d", "b"],
                 time=0, rate=ghostRate)
-        dem.add_migration_rate_change(source="d", dest="b", 
+        dem.add_symmetric_migration_rate_change(populations=["d", "b"],
                 time=divTime//2, rate=0)
         # Migration
         half = simulator.nDatasets // 2    
         if ix > half: 
+            migRange =  config.migrationRateRange
             migrationRate = Uniform(migRange[0], migRange[1]).sample().item()
             dem.add_symmetric_migration_rate_change(populations=["d", "e"], 
                     time=0, rate=migrationRate)
@@ -86,7 +89,7 @@ class Ghost():
                 random_seed=torch.randint(0, 2**32, (1,)).item())
         data = GhostData(popSize=popSize, divTime=divTime, 
                 migrationState=migrationState, migrationRate=migrationRate,
-                ghostDivTime=ghostDivTime)
+                ghostDivTime=ghostDivTime, ghostMigrationRate=ghostRate)
         return mts, data 
 
 def run(configPath, outPrefix, nDatasets, force=False):
