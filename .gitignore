@@ -4,10 +4,9 @@
 *.pt
 *.ckpt
 *.pickle
-*.png 
 *.csv
-*.txt
 *.webloc
+
 
 links/
 lightning_logs/
