@@ -59,9 +59,8 @@ class SecondaryContact():
             migrationRate = 0
             migrationState = 0
         dem.sort_events()
-        ts = mp.sim_ancestry(samples={"d": config.nSamples, "e": 
-                config.nSamples}, demography=dem, 
-                random_seed=torch.randint(0, 2**32, (1,)).item(), 
+        ts = mp.sim_ancestry(samples=dict(d=config.nSamples, e=config.nSamples),
+                demography=dem, random_seed=torch.randint(0, 2**32, (1,)).item(), 
                 sequence_length=config.sequenceLength, 
                 recombination_rate=config.recombinationRate)
         mts = mp.sim_mutations(ts, rate=config.mutationRate, 
