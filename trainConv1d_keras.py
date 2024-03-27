@@ -1,12 +1,14 @@
 from tensorflow import keras
 from keras import Sequential
 from keras.layers import Input, Conv1D, AveragePooling1D, Dropout, Flatten, Dense  
+from keras.optimizers.legacy import Adam
 
 from src.data.kerasSecondaryContactDataset import Dataset
+from src.kerasPredict import predict
 
 
-source = Dataset("secondaryContact1/secondaryContact1-1000.json", 100, transpose=True)
-validation = Dataset("secondaryContact1/secondaryContact1-val-100.json", 100, transpose=True)
+source = Dataset("secondaryContact1/secondaryContact1-1000.json", 500, transpose=True)
+validation = Dataset("secondaryContact1/secondaryContact1-val-100.json", 500, transpose=True)
 
 model = Sequential()
 model.add(Input(shape=source.shape))
@@ -22,13 +24,21 @@ model.add(Dense(128, activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(128, activation='relu'))
 model.add(Dropout(0.5))
-model.add(Dense(2, activation="sigmoid"))
+model.add(Dense(1, activation="sigmoid"))
 
-model.compile(loss='categorical_crossentropy', optimizer='adam', 
-        metrics=["accuracy"])
+model.compile(loss='binary_crossentropy', metrics=["accuracy"], 
+        optimizer=Adam(0.001)) 
 
 model.fit(source.snps, source.migrationStates, 
         validation_data=(validation.snps, validation.migrationStates), 
-        batch_size=64, epochs=10)
+        batch_size=64, epochs=20)
 
-model.save("secondaryContact1/keras_conv1d_model")
+# model.save("secondaryContact1/keras_conv1d_model")
+
+
+test = Dataset("secondaryContact1/secondaryContact1-test-100.json", 500, transpose=True)
+print("Specified model")
+print(predict(model, test))
+print("Mispecified model")
+test = Dataset("ghost1/ghost1-test-100.json", 500, transpose=True)
+print(predict(model, test))

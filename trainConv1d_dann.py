@@ -26,7 +26,7 @@ def getTask():
     model.add(Dropout(0.5))
     model.add(Dense(128, activation='relu'))
     model.add(Dropout(0.5))
-    model.add(Dense(2, activation="sigmoid"))
+    model.add(Dense(1, activation="sigmoid"))
     return model
 
 def getDiscriminator():
@@ -37,85 +37,21 @@ def getDiscriminator():
     model.add(Dense(1, activation="sigmoid"))
     return model
 
-source = Dataset("secondaryContact1/secondaryContact1-1000.json", 100, transpose=True)
-target = Dataset("ghost1/ghost1-1000.json", 100, transpose=True)
+source = Dataset("secondaryContact1/secondaryContact1-1000.json", 500, transpose=True)
+target = Dataset("ghost1/ghost1-1000.json", 500, transpose=True)
 
 model = DANN(
+    lambda_=0.01,
     encoder=getEncoder(shape=source.shape), 
     task=getTask(), 
     discriminator=getDiscriminator(),
-    lambda_=0.5,
-    loss="categorical_crossentropy",
+    loss="binary_crossentropy",
     metrics=["accuracy"],
     optimizer=Adam(0.001)) 
 history = model.fit(source.snps, source.migrationStates, target.snps, 
                     epochs=20, batch_size=64)
-# print(model.score(target.snps, target.migrationStates))
-model.save("ghost1/dann_model_3_32_0.5")
+# model.save("ghost1/dann_model_3_32_0.5")
 
-
-
-
-
-
-# from torch.utils.data import DataLoader
-# from lightning import Trainer
-
-# from data.dataset import Dataset 
-# from src.models.conv1d import Model
-# # from src.lightning.lightningClassify import Lightning
-# from src.models.conv1d_dann import Generator, Classifier, getDiscriminator
-
-# import pytorch_lightning as pl
-# import torch
-
-# from pytorch_adapt.adapters import DANN
-# from pytorch_adapt.containers import Models, Optimizers
-# from pytorch_adapt.datasets import (DataloaderCreator, get_mnist_mnistm, 
-#     CombinedSourceAndTargetDataset, SourceDataset, TargetDataset)
-# from pytorch_adapt.frameworks.lightning import Lightning
-# from pytorch_adapt.frameworks.utils import filter_datasets
-# from pytorch_adapt.models import getDiscriminator, mnistC, mnistG
-# from pytorch_adapt.validators import IMValidator
-
-# # from src.models.conv1d_dann import Lightning
-
-# outDir = "out/conv1d-1/"
-
-# src_train = Dataset("secondaryContact1/secondaryContact1-1000.json", 400, split=False)
-# src_val = Dataset("secondaryContact1/secondaryContact1-100-val.json", 400, split=False)
-# target_train = Dataset("secondaryContact1/secondaryContact1-100-target-train.json", 400, split=False)
-# target_val = Dataset("secondaryContact1/secondaryContact1-100-target-val.json", 400, split=False)
-# train = CombinedSourceAndTargetDataset(SourceDataset(src_train), TargetDataset(target_train)) 
-
-# datasets = dict(
-#     src_train = src_train,
-#     src_val = src_val,
-#     target_train = target_train,
-#     target_val = target_val,
-#     train = train)
-
-# dc = DataloaderCreator(train_kwargs=dict(batch_size=64, shuffle=True), val_kwargs=dict(batch_size=64))
-# dataloaders = dc(**datasets)
-
-
-# G = Generator(nSamples=100)
-# C = Classifier() 
-# D = getDiscriminator()
-
-# # G_opt = torch.optim.Adam(G.parameters())
-# # C_opt = torch.optim.Adam(C.parameters())
-# # D_opt = torch.optim.Adam(D.parameters())
-
-# models = Models({"G": G, "C": C, "D": D})
-# optimizers = Optimizers((torch.optim.Adam, {"lr": 0.0001}))
-
-# adapter = DANN(models=models, optimizers=optimizers)
-# validator = IMValidator()
-# dataloaders = dc(**filter_datasets(datasets, validator))
-# train_loader = dataloaders.pop("train")
-
-# L_adapter = Lightning(adapter, validator=validator)
-# trainer = pl.Trainer(max_epochs=2)
-
-# trainer.fit(L_adapter, train_loader, list(dataloaders.values()))
+test = Dataset("ghost1/ghost1-test-100.json", 500, transpose=True)
+print(model.score(target.snps, target.migrationStates))
+print(predict(model, test))
