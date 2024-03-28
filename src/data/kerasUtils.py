@@ -32,11 +32,15 @@ def _genotypeMatrix(ts: TreeSequence, samples: List[int], nSnps: int, transpose:
     return mat
 
 def genotypeMatrix(ts: TreeSequence, nSnps: int, transpose: bool = False, 
-        sorting: Optional[Callable] = None, split: bool = False) -> np.ndarray:
+        sorting: Optional[Callable] = None, split: bool = False,
+        channelsLast: bool = True) -> np.ndarray:
     if split:
         matrices = []
         matrices.append(_genotypeMatrix(ts, ts.samples(1), nSnps, transpose, sorting))
         matrices.append(_genotypeMatrix(ts, ts.samples(1), nSnps, transpose, sorting))
-        return np.array(matrices)
+        if channelsLast:
+            return np.stack(matrices, axis=-1)
+        else:
+            return np.array(matrices)
     else:
         return _genotypeMatrix(ts, ts.samples(), nSnps, transpose, sorting)

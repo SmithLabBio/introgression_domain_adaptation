@@ -1,4 +1,4 @@
-nSamples: 25 
+nSamples: 10 
 sequenceLength: 50_000 
 recombinationRate: 1e-8 
 mutationRate: 1e-7
