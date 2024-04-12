@@ -16,7 +16,7 @@ from src.kerasPlot import plotEncoded, plotAdaptTrainingAcc, plotAdaptTrainingLo
 
 prefix = "out/secondaryContact2_conv1d_dann"
 
-snps = 500
+snps = 1500
 
 source = Dataset("../secondaryContact2/secondaryContact2-1000.json", snps, transpose=True)
 target = Dataset("../ghost2/ghost2-100.json", snps, transpose=True)

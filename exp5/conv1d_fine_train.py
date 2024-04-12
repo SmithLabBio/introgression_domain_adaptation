@@ -15,7 +15,7 @@ from src.kerasPlot import plotEncoded
 
 prefix = "out/secondaryContact2_conv1d_fine_tune"
 
-snps = 500
+snps = 1500
 
 source = Dataset("../secondaryContact2/secondaryContact2-1000.json", snps, transpose=True)
 

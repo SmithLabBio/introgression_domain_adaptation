@@ -13,7 +13,7 @@ from src.kerasPlot import plotTrainingAcc, plotTrainingLoss
 
 prefix = "out/secondaryContact2_conv2d"
 
-snps = 500
+snps = 1500
 
 source = Dataset("../secondaryContact2/secondaryContact2-1000.json", snps, sorting=euclidean, split=True)
 validation = Dataset("../secondaryContact2/secondaryContact2-val-100.json", snps, sorting=euclidean, split=True)
