@@ -47,7 +47,7 @@ class SecondaryContact():
         dem.add_population(name="e", initial_size=popSize)
         dem.add_population_split(time=divTime, derived=["d", "e"], ancestral="c")
         half = simulator.nDatasets // 2    
-        if ix > half: 
+        if ix >= half: 
             migRange = config.migrationRateRange
             migrationRate = Uniform(migRange[0], migRange[1]).sample().item()
             dem.add_symmetric_migration_rate_change(populations=["d", "e"], 

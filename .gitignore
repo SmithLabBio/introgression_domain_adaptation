@@ -6,6 +6,7 @@
 *.pickle
 *.csv
 *.webloc
+*.out
 
 
 links/

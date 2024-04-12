@@ -68,7 +68,7 @@ class Ghost():
                 time=divTime//2, rate=0)
         # Migration
         half = simulator.nDatasets // 2    
-        if ix > half: 
+        if ix >= half: 
             migRange =  config.migrationRateRange
             migrationRate = Uniform(migRange[0], migRange[1]).sample().item()
             dem.add_symmetric_migration_rate_change(populations=["d", "e"], 

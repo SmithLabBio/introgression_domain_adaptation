@@ -1,5 +1,5 @@
-nSamples: 10 
-sequenceLength: 50_000 
+nSamples: 25 
+sequenceLength: 100_000 
 recombinationRate: 1e-8 
 mutationRate: 1e-7
 migrationRateRange: [1e-6, 1e-4]
