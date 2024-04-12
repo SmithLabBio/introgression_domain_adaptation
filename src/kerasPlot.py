@@ -15,7 +15,7 @@ def plotEncoded(model, source, target, outputpath):
     plt.savefig(outputpath)
     plt.close()
 
-def plotTrainingAcc(model, outputpath):
+def plotAdaptTrainingAcc(model, outputpath):
     acc = model.history.history["accuracy"]
     disc_acc = model.history.history["disc_acc"]
     plt.plot(acc, label="Train acc - final value: %.3f"%acc[-1])
@@ -26,11 +26,33 @@ def plotTrainingAcc(model, outputpath):
     plt.savefig(outputpath)
     plt.close()
 
-def plotTrainingLoss(model, outputpath):
+def plotAdaptTrainingLoss(model, outputpath):
     loss = model.history.history["loss"]
     disc_loss = model.history.history["disc_loss"]
     plt.plot(loss, label="Train Loss - final value: %.3f"%loss[-1])
     plt.plot(disc_loss, label="Disc Loss - final value: %.3f"%disc_loss[-1])
+    plt.legend()
+    plt.xlabel("Epochs")
+    plt.ylabel("Loss")
+    plt.savefig(outputpath)
+    plt.close()
+
+def plotTrainingAcc(history, outputpath):
+    acc = history.history["accuracy"]
+    val_acc = history.history["val_accuracy"]
+    plt.plot(acc, label="Train acc - final value: %.3f"%acc[-1])
+    plt.plot(val_acc, label="Validation acc - final value: %.3f"%val_acc[-1])
+    plt.legend()
+    plt.xlabel("Epochs")
+    plt.ylabel("Acc")
+    plt.savefig(outputpath)
+    plt.close()
+
+def plotTrainingLoss(history, outputpath):
+    loss = history.history["loss"]
+    val_loss = history.history["val_loss"]
+    plt.plot(loss, label="Train Loss - final value: %.3f"%loss[-1])
+    plt.plot(val_loss, label="Validation Loss - final value: %.3f"%val_loss[-1])
     plt.legend()
     plt.xlabel("Epochs")
     plt.ylabel("Loss")
