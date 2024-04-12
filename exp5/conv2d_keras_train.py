@@ -15,8 +15,8 @@ prefix = "out/secondaryContact2_conv2d"
 
 snps = 500
 
-source = Dataset("../secondaryContact2/secondaryContact2-5000.json", snps, sorting=euclidean, split=True)
-validation = Dataset("../secondaryContact2/secondaryContact2-val-500.json", snps, sorting=euclidean, split=True)
+source = Dataset("../secondaryContact2/secondaryContact2-1000.json", snps, sorting=euclidean, split=True)
+validation = Dataset("../secondaryContact2/secondaryContact2-val-100.json", snps, sorting=euclidean, split=True)
 
 model = getEncoder(shape=source.shape)
 for i in getTask().layers:
@@ -24,17 +24,16 @@ for i in getTask().layers:
 
 model.compile(loss='binary_crossentropy', metrics=["accuracy"], 
         optimizer=Adam(0.0001)) 
-model.fit(source.snps, source.migrationStates, 
+history = model.fit(source.snps, source.migrationStates, 
         validation_data=(validation.snps, validation.migrationStates), 
         batch_size=64, epochs=50)
 model.save(f"{prefix}.keras")
 
-test = Dataset("../secondaryContact2/secondaryContact2-test-500.json", snps, sorting=euclidean, split=True)
-ghost = Dataset("../ghost2/ghost2-test-500.json", snps, sorting=euclidean, split=True)
-
-plotTrainingAcc(model, f"{prefix}_training_acc.png")
-plotTrainingLoss(model, f"{prefix}_training_loss.png")
+test = Dataset("../secondaryContact2/secondaryContact2-test-100.json", snps, sorting=euclidean, split=True)
+ghost = Dataset("../ghost2/ghost2-test-100.json", snps, sorting=euclidean, split=True)
 
 np.savetxt(f"{prefix}_test_cm.txt", predict(model, test), fmt="%1.0f")
 np.savetxt(f"{prefix}_ghost_cm.txt", predict(model, ghost), fmt="%1.0f")
 
+plotTrainingAcc(history, f"{prefix}_training_acc.png")
+plotTrainingLoss(history, f"{prefix}_training_loss.png")

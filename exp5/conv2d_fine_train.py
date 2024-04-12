@@ -12,13 +12,13 @@ import numpy as np
 from src.data.kerasSecondaryContactDataset import Dataset
 from src.kerasPredictSigmoid import predict
 from conv2d_models import getEncoder, getTask
-from src.kerasPlot import plotEncoded, plotTrainingAcc, plotTrainingLoss
+from src.kerasPlot import plotEncoded
 
 prefix = "out/secondaryContact2_conv2d_fine_tune"
 
 snps = 500
 
-source = Dataset("../secondaryContact2/secondaryContact2-5000.json", snps, sorting=euclidean, split=True)
+source = Dataset("../secondaryContact2/secondaryContact2-1000.json", snps, sorting=euclidean, split=True)
 
 model = FineTuning(
     encoder=getEncoder(shape=source.shape),
@@ -29,11 +29,9 @@ model = FineTuning(
 history = model.fit(source.snps, source.migrationStates, epochs=50, batch_size=64)
 model.save(f"{prefix}.keras")
 
-test = Dataset("../secondaryContact2/secondaryContact2-test-500.json", snps, sorting=euclidean, split=True)
-ghost = Dataset("../ghost2/ghost2-test-500.json", snps, sorting=euclidean, split=True)
+test = Dataset("../secondaryContact2/secondaryContact2-test-100.json", snps, sorting=euclidean, split=True)
+ghost = Dataset("../ghost2/ghost2-test-100.json", snps, sorting=euclidean, split=True)
 
-plotTrainingAcc(model, f"{prefix}_training_acc.png")
-plotTrainingLoss(model, f"{prefix}_training_loss.png")
 
 np.savetxt(f"{prefix}_test_cm.txt", predict(model, test), fmt="%1.0f")
 np.savetxt(f"{prefix}_ghost_cm.txt", predict(model, ghost), fmt="%1.0f")
