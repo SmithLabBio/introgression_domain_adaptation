@@ -37,6 +37,28 @@ def plotAdaptTrainingLoss(model, outputpath):
     plt.savefig(outputpath)
     plt.close()
 
+def plotFineTrainingAcc(model, outputpath):
+    acc = model.history.history["accuracy"]
+    val_acc = model.history.history["val_accuracy"]
+    plt.plot(acc, label="Train Accuracy - final value: %.3f"%acc[-1])
+    plt.plot(val_acc, label="Validation Accuracy - final value: %.3f"%val_acc[-1])
+    plt.legend()
+    plt.xlabel("Epochs")
+    plt.ylabel("Accuracy")
+    plt.savefig(outputpath)
+    plt.close()
+
+def plotFineTrainingLoss(model, outputpath):
+    loss = model.history.history["loss"]
+    val_loss = model.history.history["val_loss"]
+    plt.plot(loss, label="Train Loss - final value: %.3f"%loss[-1])
+    plt.plot(val_loss, label="Validation Loss - final value: %.3f"%val_loss[-1])
+    plt.legend()
+    plt.xlabel("Epochs")
+    plt.ylabel("Loss")
+    plt.savefig(outputpath)
+    plt.close()
+
 def plotTrainingAcc(history, outputpath):
     acc = history.history["accuracy"]
     val_acc = history.history["val_accuracy"]
