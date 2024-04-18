@@ -40,9 +40,12 @@ class Dataset(torch.utils.data.Dataset):
         for i in self.simulations:
             ts = i.treeSequence 
             if split:
+                n_samples = len(ts.samples())
+                pop1 = list(range(0, n_samples//2))
+                pop2 = list(range(n_samples//2, n_samples))
                 popMatrices = []
-                popMatrices.append(getGenotypeMatrix(ts, ts.samples(1), nSnps))
-                popMatrices.append(getGenotypeMatrix(ts, ts.samples(2), nSnps))
+                popMatrices.append(getGenotypeMatrix(ts, pop1, nSnps))
+                popMatrices.append(getGenotypeMatrix(ts, pop2, nSnps))
                 self.snpMatrices.append(popMatrices)
             else:
                 self.snpMatrices.append(getGenotypeMatrix(ts, ts.samples(), nSnps))
