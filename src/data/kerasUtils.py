@@ -15,11 +15,11 @@ def _sort(mat: np.ndarray, sorting: Callable, axis: int = 0) -> np.ndarray:
 
 def _genotypeMatrix(ts: TreeSequence, samples: List[int], nSnps: int, transpose: bool = False, 
         sorting: Optional[Callable] = None) -> np.ndarray:
-    var = Variant(ts, samples=ts.samples()) 
+    var = Variant(ts, samples=samples) 
     if transpose:
-        shape = (nSnps, len(ts.samples()))
+        shape = (nSnps, len(samples))
     else:
-        shape = (len(ts.samples()), nSnps)
+        shape = (len(samples), nSnps)
     mat = np.empty(shape=shape)
     for site in range(nSnps):
         var.decode(site)
@@ -35,9 +35,12 @@ def genotypeMatrix(ts: TreeSequence, nSnps: int, transpose: bool = False,
         sorting: Optional[Callable] = None, split: bool = False,
         channelsLast: bool = True) -> np.ndarray:
     if split:
+        n_samples = len(ts.samples())
+        pop1 = list(range(0, n_samples//2))
+        pop2 = list(range(n_samples//2, n_samples))
         matrices = []
-        matrices.append(_genotypeMatrix(ts, ts.samples(1), nSnps, transpose, sorting))
-        matrices.append(_genotypeMatrix(ts, ts.samples(1), nSnps, transpose, sorting))
+        matrices.append(_genotypeMatrix(ts, pop1, nSnps, transpose, sorting))
+        matrices.append(_genotypeMatrix(ts, pop2, nSnps, transpose, sorting))
         if channelsLast:
             return np.stack(matrices, axis=-1)
         else:
