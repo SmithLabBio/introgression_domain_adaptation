@@ -1,0 +1,9 @@
+nSamples: 10 
+sequenceLength: 1_000_000
+recombinationRate: 1e-8 
+mutationRate: 1e-8
+migrationRateRange: [1e-6, 1e-4]
+popSizeRange: [10_000, 20_000]
+divTimeRange: [40_000, 50_000]
+ghostDivTimeRange: [200_000, 300_000]
+ghostMigrationRateRange: [1e-6, 1e-4]
