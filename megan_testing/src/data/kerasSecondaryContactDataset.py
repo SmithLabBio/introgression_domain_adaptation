@@ -40,12 +40,16 @@ class Dataset():
             jsonData = fh.read()
         self.simulations = Simulations[SecondaryContactConfig].model_validate_json(jsonData)
         snpMatrices = []
+        sfsMatrices = []
         migrationStates = []
         for ix, s in enumerate(self.simulations):
-            ts = s.treeSequence 
+            ts = s.treeSequence
+            afs = ts.allele_frequency_spectrum(sample_sets=[ts.samples(0), ts.samples(1)], span_normalise=False, polarised=True)
+            sfsMatrices.append(afs)
             snpMatrices.append(getGenotypeMatrix(ts, nSnps, transpose=transpose, multichannel=multichannel))
             migrationStates.append(self.simulations[ix].data["migrationState"])
-        self.snps = np.array(snpMatrices)
+        #self.snps = np.array(snpMatrices)
         # self.migrationStates = np.array(migrationStates)
         self.migrationStates = to_categorical(migrationStates, num_classes=2)
-        self.shape = self.snps.shape[1:]
+        self.afs = np.expand_dims(np.array(sfsMatrices), axis=-1)
+        self.shape = self.afs.shape[1:]

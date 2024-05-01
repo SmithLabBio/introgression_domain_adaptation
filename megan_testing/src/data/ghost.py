@@ -52,11 +52,11 @@ class Ghost():
         ghostTimeRange = config.ghostDivTimeRange
         ghostDivTime = int(torch.randint(ghostTimeRange[0], ghostTimeRange[1], (1,)).item())
         dem = mp.Demography()
+        dem.add_population(name="d", initial_size=popSize)
+        dem.add_population(name="e", initial_size=popSize)
         dem.add_population(name="a", initial_size=popSize)
         dem.add_population(name="b", initial_size=popSize)
         dem.add_population(name="c", initial_size=popSize)
-        dem.add_population(name="d", initial_size=popSize)
-        dem.add_population(name="e", initial_size=popSize)
         dem.add_population_split(time=ghostDivTime, derived=["b", "c"], ancestral="a")
         dem.add_population_split(time=divTime, derived=["d", "e"], ancestral="c")
         # Ghost migration
@@ -70,7 +70,7 @@ class Ghost():
         #        time=0, rate=ghostRate)
         #dem.add_migration_rate_change(source="d", dest="b",
         #        time=divTime//2, rate=0)
-        dem.add_mass_migration(time=divTime//4, source="d", dest="b", proportion=0.1)
+        dem.add_mass_migration(time=divTime//6, source="d", dest="b", proportion=0.2)
         # Migration
         half = simulator.nDatasets // 2    
         if ix >= half: 

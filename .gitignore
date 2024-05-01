@@ -8,6 +8,13 @@
 *.webloc
 *.out
 
+genomic_map*.txt
+recombination_map*.txt
+*.trees
+*.sliminfo.*
+*.npy
+*_params.tsv
+
 
 links/
 lightning_logs/

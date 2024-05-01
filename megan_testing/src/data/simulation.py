@@ -5,7 +5,7 @@ from typing import List, TypeVar, Optional, Generic
 import oyaml as yaml
 from pydantic.dataclasses import dataclass
 import json
-from tskit import TreeSequence, load 
+from tskit import TreeSequence, load, load_text
 from pydantic import BaseModel, field_serializer, field_validator, ConfigDict, validator, field_validator
 import tempfile
 import torch

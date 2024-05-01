@@ -1,6 +1,6 @@
 ## Step 1: simulate data
 # training data
-python src/data/secondaryContact.py secondaryContact3/secondaryContact3.yaml secondaryContact3/secondaryContact3-train 1000
+python src/data/secondaryContact.py secondaryContact3/secondaryContact3.yaml secondaryContact3/secondaryContact3-train 5000
 # validation data
 python src/data/secondaryContact.py secondaryContact3/secondaryContact3.yaml secondaryContact3/secondaryContact3-val 100
 # test data

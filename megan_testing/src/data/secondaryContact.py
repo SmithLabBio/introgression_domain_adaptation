@@ -42,9 +42,9 @@ class SecondaryContact():
         timeRange = config.divTimeRange
         divTime = int(torch.randint(timeRange[0], timeRange[1], (1,)).item())
         dem = mp.Demography()
-        dem.add_population(name="c", initial_size=popSize)
         dem.add_population(name="d", initial_size=popSize)
         dem.add_population(name="e", initial_size=popSize)
+        dem.add_population(name="c", initial_size=popSize)
         dem.add_population_split(time=divTime, derived=["d", "e"], ancestral="c")
         half = simulator.nDatasets // 2    
         if ix >= half: 
