@@ -1,0 +1,1 @@
+sub -w "python conv2d_fine_train.py" -o out/ -n exp4-2d-fine
