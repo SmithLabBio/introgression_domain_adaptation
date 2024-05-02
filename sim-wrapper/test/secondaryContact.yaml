@@ -1,0 +1,7 @@
+    nSamples: 10 
+    sequenceLength: 100 
+    recombinationRate: 1e-8 
+    mutationRate: 1e-8
+    migrationRateRange: [1e-8, 1e-6]
+    popSizeRange: [1000, 10000]
+    divTimeRange: [1000, 10000]

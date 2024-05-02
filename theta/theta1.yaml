@@ -1,5 +1,0 @@
-nSamples: 50 
-sequenceLength: 1_000_000 
-recombinationRate: 1e-8 
-mutationRate: 1e-4
-popSizeRange: [10_000, 1_000_000]
