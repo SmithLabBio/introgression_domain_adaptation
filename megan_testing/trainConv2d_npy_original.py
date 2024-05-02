@@ -3,10 +3,9 @@ from adapt.parameter_based import FineTuning
 import numpy as np
 from tensorflow.keras.utils import to_categorical
 
-from src.data.kerasSecondaryContactDataset import Dataset
-from src.kerasPredict import predict_npy
-from src.kerasPlot import plotEncoded_npy
-from src.models_v2 import getEncoder, getTask
+from src.kerasPredict import predict
+from src.kerasPlot import getEncoded
+from src.models_alignments import getEncoder, getTask
 import os
 
 outdir="results/npy/original/"
@@ -40,12 +39,12 @@ finetunig = FineTuning(encoder=getEncoder(shape=source.shape[1:]),
 history_finetunig = finetunig.fit(source, labels_source, epochs = epochs, batch_size = batch_size, validation_data=(val, labels_val))
 
 # make predictions with original network for test data and ghost data
-np.savetxt(os.path.join(outdir, "test_cm.txt"), predict_npy(finetunig, test, labels_test, os.path.join(outdir, "test_roc.txt")), fmt="%1.0f")
-np.savetxt(os.path.join(outdir, "ghost_cm.txt"), predict_npy(finetunig, ghost, labels_ghost, os.path.join(outdir, "ghost_roc.txt")), fmt="%1.0f")
-np.savetxt(os.path.join(outdir, "bgs_cm.txt"), predict_npy(finetunig, bgs, labels_bgs, os.path.join(outdir, "bgs_roc.txt")), fmt="%1.0f")
+np.savetxt(os.path.join(outdir, "test_cm.txt"), predict(finetunig, test, labels_test, os.path.join(outdir, "test_roc.txt")), fmt="%1.0f")
+np.savetxt(os.path.join(outdir, "ghost_cm.txt"), predict(finetunig, ghost, labels_ghost, os.path.join(outdir, "ghost_roc.txt")), fmt="%1.0f")
+np.savetxt(os.path.join(outdir, "bgs_cm.txt"), predict(finetunig, bgs, labels_bgs, os.path.join(outdir, "bgs_roc.txt")), fmt="%1.0f")
 
 
-# plot encoded space for original
-plotEncoded_npy(finetunig, source=source, target=ghost, outdir = outdir, outprefix = "ghost")
-plotEncoded_npy(finetunig, source=source, target=test, outdir = outdir, outprefix = "test")
-plotEncoded_npy(finetunig, source=source, target=bgs, outdir = outdir, outprefix = "bgs")
+# get encoded space
+getEncoded(finetunig, source=source, target=ghost, outdir = outdir, outprefix = "ghost")
+getEncoded(finetunig, source=source, target=test, outdir = outdir, outprefix = "test")
+getEncoded(finetunig, source=source, target=bgs, outdir = outdir, outprefix = "bgs")

@@ -6,10 +6,9 @@ from adapt.utils import UpdateLambda
 from tensorflow.keras.utils import to_categorical
 import os
 
-from src.data.kerasSecondaryContactDataset import Dataset
-from src.kerasPredict import predict_npy
-from src.kerasPlot import plotEncoded_npy, plotTrainingAcc, plotTrainingLoss
-from src.models_v2 import getEncoder, getTask, getDiscriminator, EarlyStoppingCustom
+from src.kerasPredict import predict
+from src.kerasPlot import getEncoded, plotTrainingAcc, plotTrainingLoss
+from src.models_alignments import getEncoder, getTask, getDiscriminator, EarlyStoppingCustom
 
 
 outdir="results/npy/cdan/bgs/"
@@ -58,12 +57,10 @@ plotTrainingAcc(cdan, os.path.join(outdir, 'training_acc.png'))
 plotTrainingLoss(cdan, os.path.join(outdir, 'training_loss.png'))
 
 # make predictions with original network for test data and bgs data
-np.savetxt(os.path.join(outdir, "test_cm.txt"), predict_npy(cdan, test, labels_test, os.path.join(outdir, "test_roc.txt")), fmt="%1.0f")
-np.savetxt(os.path.join(outdir, "bgs_cm.txt"), predict_npy(cdan, bgs, labels_bgs, os.path.join(outdir, "bgs_roc.txt")), fmt="%1.0f")
+np.savetxt(os.path.join(outdir, "test_cm.txt"), predict(cdan, test, labels_test, os.path.join(outdir, "test_roc.txt")), fmt="%1.0f")
+np.savetxt(os.path.join(outdir, "bgs_cm.txt"), predict(cdan, bgs, labels_bgs, os.path.join(outdir, "bgs_roc.txt")), fmt="%1.0f")
 
 
-# plot encoded space for original
-plotEncoded_npy(cdan, source=source, target=bgs, outdir = outdir, outprefix = "bgs")
-
-# plot encoded space for original
-plotEncoded_npy(cdan, source=source, target=test, outdir = outdir, outprefix = "test")
+# get encoded space
+getEncoded(cdan, source=source, target=bgs, outdir = outdir, outprefix = "bgs")
+getEncoded(cdan, source=source, target=test, outdir = outdir, outprefix = "test")

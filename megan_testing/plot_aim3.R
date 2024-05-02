@@ -2,10 +2,10 @@ library(ggplot2)
 
 setwd("~/Documents/GitHub/popAI/megan_testing/")
 
-# get roc curve for ghost original
+# get roc curves for ghost
 roc_ghost_original <- read.table(file='results/npy/original/ghost_roc.txt', sep =",", header=TRUE)
 roc_ghost_cdan <- read.table(file='results/npy/cdan/ghost/ghost_roc.txt', sep =",", header=TRUE)
-afs_roc_ghost_original <- read.table(file="results/afs/original/ghost/ghost_roc.txt", sep =",", header=TRUE)
+afs_roc_ghost_original <- read.table(file="results/afs/original/ghost_roc.txt", sep =",", header=TRUE)
 afs_roc_ghost_cdan <- read.table(file="results/afs/cdan/ghost/ghost_roc.txt", sep =",", header=TRUE)
 
 name_roc_ghost_original =  "Original Alignments"
@@ -34,9 +34,9 @@ ghost_all$scenario <- factor(ghost_all$scenario, levels = c(name_afs_roc_ghost_o
                                                             name_afs_roc_ghost_cdan, name_roc_ghost_original, 
                                                             name_roc_ghost_cdan))
 
+# plot for ghost
 ghost_plot <- ggplot(ghost_all, aes(x = fpr, y = tpr, color = scenario)) +
   geom_line(lwd=1) + 
-  #scale_color_manual(values = color_palette, name=NULL) + # set colors for scenarios
   scale_color_manual(values = color_palette,
                      name = NULL,
                      labels = c(paste(name_afs_roc_ghost_original, " (AUC =", round(auc_afs_roc_ghost_original, 2), ")"),
@@ -55,10 +55,10 @@ ghost_plot <- ggplot(ghost_all, aes(x = fpr, y = tpr, color = scenario)) +
       axis.text = element_text(size = 12),
       title = element_text(size=14))
 
-# get roc curve for bgs original
+# get roc curve for bgs 
 roc_bgs_original <- read.table(file='results/npy/original/bgs_roc.txt', sep =",", header=TRUE)
 roc_bgs_cdan <- read.table(file='results/npy/cdan/bgs/bgs_roc.txt', sep =",", header=TRUE)
-afs_roc_bgs_original <- read.table(file="results/afs/original/ghost/bgs_roc.txt", sep =",", header=TRUE)
+afs_roc_bgs_original <- read.table(file="results/afs/original/bgs_roc.txt", sep =",", header=TRUE)
 afs_roc_bgs_cdan <- read.table(file="results/afs/cdan/bgs/bgs_roc.txt", sep =",", header=TRUE)
 
 name_roc_bgs_original =  "Original Alignments"
@@ -87,9 +87,9 @@ bgs_all$scenario <- factor(bgs_all$scenario, levels = c(name_afs_roc_bgs_origina
                                                             name_afs_roc_bgs_cdan, name_roc_bgs_original, 
                                                             name_roc_bgs_cdan))
 
+# plot for bgs
 bgs_plot <- ggplot(bgs_all, aes(x = fpr, y = tpr, color = scenario)) +
   geom_line(lwd=1) + 
-  #scale_color_manual(values = color_palette, name=NULL) + # set colors for scenarios
   scale_color_manual(values = color_palette,
                      name = NULL,
                      labels = c(paste(name_afs_roc_bgs_original, " (AUC =", round(auc_afs_roc_bgs_original, 2), ")"),

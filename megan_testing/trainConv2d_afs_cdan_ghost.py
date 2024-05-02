@@ -5,10 +5,9 @@ import numpy as np
 from adapt.utils import UpdateLambda
 import os
 
-from src.data.kerasSecondaryContactDataset import Dataset
-from src.kerasPredict import predict_afs_npy
-from src.kerasPlot import plotEncoded_npy, plotTrainingAcc, plotTrainingLoss
-from src.models_afs_npy import getEncoder, getTask, getDiscriminator, EarlyStoppingCustom
+from src.kerasPredict import predict
+from src.kerasPlot import getEncoded, plotTrainingAcc, plotTrainingLoss
+from src.models_afs import getEncoder, getTask, getDiscriminator, EarlyStoppingCustom
 from tensorflow.keras.utils import to_categorical
 
 outdir="results/afs/cdan/ghost/"
@@ -32,8 +31,6 @@ labels_test = to_categorical(np.load("secondaryContact3/secondaryContact3-test_l
 labels_val = to_categorical(np.load("secondaryContact3/secondaryContact3-val_labels.npy"))
 labels_ghost = to_categorical(np.load("ghost3/ghost3-test_labels.npy"))
 
-
-
 # define and train cdan model
 lambda_max = 50
 epochs = 100
@@ -43,7 +40,6 @@ ratio_disc_enc_lr = 5
 
 
 cdan = CDAN(
-    #lambda_=Variable(0.0),
     lambda_ = lambda_max,
     encoder=getEncoder(shape=source.shape[1:]), 
     task=getTask(), 
@@ -55,7 +51,6 @@ cdan = CDAN(
     copy = False,
     metrics=["accuracy"],
     callbacks=[EarlyStoppingCustom()])
-    #callbacks=[UpdateLambda(lambda_max=lambda_max), EarlyStoppingCustom()])
 
 history = cdan.fit(source, labels_source, ghost, 
                     epochs=epochs, batch_size=batch_size)
@@ -64,13 +59,10 @@ history = cdan.fit(source, labels_source, ghost,
 plotTrainingAcc(cdan, os.path.join(outdir, 'training_acc.png'))
 plotTrainingLoss(cdan, os.path.join(outdir, 'training_loss.png'))
 
-# make predictions with original network for test data and ghost data
-np.savetxt(os.path.join(outdir, "test_cm.txt"), predict_afs_npy(cdan, test, labels_test, os.path.join(outdir, "test_roc.txt")), fmt="%1.0f")
-np.savetxt(os.path.join(outdir, "ghost_cm.txt"), predict_afs_npy(cdan, ghost, labels_ghost, os.path.join(outdir, "ghost_roc.txt")), fmt="%1.0f")
+# make predictions with cdan network for test data and ghost data
+np.savetxt(os.path.join(outdir, "test_cm.txt"), predict(cdan, test, labels_test, os.path.join(outdir, "test_roc.txt")), fmt="%1.0f")
+np.savetxt(os.path.join(outdir, "ghost_cm.txt"), predict(cdan, ghost, labels_ghost, os.path.join(outdir, "ghost_roc.txt")), fmt="%1.0f")
 
-
-# plot encoded space for original
-plotEncoded_npy(cdan, source=source, target=ghost, outdir = outdir, outprefix = "ghost")
-
-# plot encoded space for original
-plotEncoded_npy(cdan, source=source, target=test, outdir = outdir, outprefix = "test")
+# get encoded space
+getEncoded(cdan, source=source, target=ghost, outdir = outdir, outprefix = "ghost")
+getEncoded(cdan, source=source, target=test, outdir = outdir, outprefix = "test")

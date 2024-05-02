@@ -14,6 +14,7 @@ import pyslim
 import random
 
 def getGenotypeMatrix(ts: TreeSequence, nSnps: int, transpose=False, multichannel=False) -> np.ndarray:
+    """Build a genotype matrix from tree sequences."""
     var = Variant(ts, samples=ts.samples()) 
     if transpose:
         shape = (nSnps, len(ts.samples()))
@@ -50,6 +51,9 @@ def getGenotypeMatrix(ts: TreeSequence, nSnps: int, transpose=False, multichanne
     return mat
 
 def parse_yaml(file_path, ghost):
+
+    """Parse model information from a yaml file."""
+
     with open(file_path, 'r') as file:
         config = yaml.safe_load(file)
 
@@ -116,9 +120,10 @@ def parse_yaml(file_path, ghost):
             'nSNPs': nSNPs
         }
 
-
-def get_demography(parsed_config, seeds, ix, reps, ghost, outdir):
+def simulate_data(parsed_config, seeds, ix, reps, ghost, outdir):
     
+    """Define demographies and simulate data for isolation, secondary contact, and ghost models.."""
+
     torch.manual_seed(seeds[ix])
 
     # draw always used parameters from priors
@@ -175,6 +180,9 @@ def get_demography(parsed_config, seeds, ix, reps, ghost, outdir):
     return([popSize, divTime, migrationRate], matrix, afs, migrationState)
 
 def generate_genomic_regions(sequence_length):
+    
+    """Define genomic regions for SLiM simulations with BGS."""
+
     regions = []
     total_length = 0
 
@@ -188,6 +196,9 @@ def generate_genomic_regions(sequence_length):
     return regions
 
 def generate_recombination_map(sequence_length, scale):
+    
+    """Generate recombination map for bgs simulations."""
+
     regions = []
     total_length = 0
 
@@ -200,19 +211,25 @@ def generate_recombination_map(sequence_length, scale):
 
     return regions
 
-
 def write_tuples_to_file(tuples_list, filename):
+    
+    """Write genomic map to file."""
+
     with open(filename, 'w') as file:
         for tpl in tuples_list:
             file.write(f"{tpl[0]}\t{tpl[1]}\t{tpl[2]}\n")
 
 def write_rec_tuples_to_file(tuples_list, filename):
+
+    """Write recombination map to file."""
+
     with open(filename, 'w') as file:
         for tpl in tuples_list:
             file.write(f"{tpl[0]}\t{tpl[1]}\n")
 
-
-def get_demography_slim(parsed_config, seeds, ix, reps, ghost, slim, outdir):
+def simulate_data_slim(parsed_config, seeds, ix, reps, ghost, slim, outdir):
+    
+    """Simulate data under the BGS model."""
     
     torch.manual_seed(seeds[ix])
 
@@ -270,13 +287,7 @@ def get_demography_slim(parsed_config, seeds, ix, reps, ghost, slim, outdir):
     keep_nodes = []
     for k in keep_inds:
         keep_nodes.extend(ts.individual(k).nodes)
-
-    ts = ts.simplify(keep_nodes)
-
-    ## add neutral mutations
-    #mutrate_neutral = parsed_config['mutation_rate']*scale * (1-propdel)
-    #mts = msprime.mutate(ts, rate=mutrate_neutral, keep=True)
-    mts = ts
+    mts = ts.simplify(keep_nodes)
 
     # create afs
     afs = mts.allele_frequency_spectrum(sample_sets=[mts.samples(0), mts.samples(1)], span_normalise=False, polarised=True)
@@ -287,6 +298,9 @@ def get_demography_slim(parsed_config, seeds, ix, reps, ghost, slim, outdir):
     return([popSize, divTime, migrationRate], matrix, afs, migrationState)
 
 def write_params_to_file(params, outfile):
+    
+    """Write parameters used for simulation to a file."""
+
     # Define the header
     header = ['popSize', 'divtime', 'migRate']
     
@@ -302,20 +316,25 @@ def write_params_to_file(params, outfile):
             writer.writerow(row)
 
 def write_matrices_to_file(matrices, outfile):
+    
+    """Store numpy matrices to a file."""
 
     combined_matrix = np.stack(matrices)
     np.save(outfile, combined_matrix, allow_pickle=True)
 
 def write_afs_to_file(afs, outfile):
+    
+    """Store SFS to a file."""
 
     combined_matrix = np.stack(afs)
     np.save(outfile, combined_matrix, allow_pickle=True)
 
 def write_labels_to_file(labels, outfile):
+    
+    """Save labels to a file."""
 
     combined_matrix = np.stack(labels)
     np.save(outfile, combined_matrix, allow_pickle=True)
-
 
 if __name__ == "__main__":
 
@@ -354,10 +373,10 @@ if __name__ == "__main__":
     all_afs = []
     all_labels = []
     for i in range(args.reps):
-        if args.slim:
-            parameters, matrix, afs, label = get_demography_slim(parsed_config, randomSeeds, i, reps=args.reps, ghost=args.ghost, slim=args.slim, outdir = args.outdir)
+        if args.bgs:
+            parameters, matrix, afs, label = simulate_data_slim(parsed_config, randomSeeds, i, reps=args.reps, ghost=args.ghost, slim=args.slim, outdir = args.outdir)
         else:
-            parameters, matrix, afs, label = get_demography(parsed_config, randomSeeds, i, reps=args.reps, ghost=args.ghost)
+            parameters, matrix, afs, label = simulate_data(parsed_config, randomSeeds, i, reps=args.reps, ghost=args.ghost, outdir = args.outdir)
         
         all_params.append(parameters)
         all_matrices.append(matrix)

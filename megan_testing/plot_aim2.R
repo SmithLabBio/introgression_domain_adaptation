@@ -10,6 +10,7 @@ encoded_original_bgs <- read.delim('results/npy/original/bgs_encododed.txt', sep
 encoded_bgs <- encoded_original_bgs[20001:20100,]
 encoded_original_test <- read.delim('results/npy/original/test_encododed.txt', sep = " ", header=FALSE)
 encoded_test <- encoded_original_test[20001:20100,]
+
 # pca
 pca_model <- princomp(encoded_original)
 original_pca <- data.frame(predict(pca_model, newdata = encoded_original))
@@ -57,13 +58,14 @@ conduct_test <- function(source, target, threshold){
 
 # PCA AFS
 # read encoded data
-afs_encoded_original_ghost <- read.delim('results/afs/original/ghost/ghost_encododed.txt', sep = " ", header=FALSE)
+afs_encoded_original_ghost <- read.delim('results/afs/original/ghost_encododed.txt', sep = " ", header=FALSE)
 afs_encoded_original <- afs_encoded_original_ghost[1:20000,]
 afs_encoded_ghost <- afs_encoded_original_ghost[20001:20100,]
-afs_encoded_original_bgs <- read.delim('results/afs/original/ghost/bgs_encododed.txt', sep = " ", header=FALSE)
+afs_encoded_original_bgs <- read.delim('results/afs/original/bgs_encododed.txt', sep = " ", header=FALSE)
 afs_encoded_bgs <- afs_encoded_original_bgs[20001:20100,]
-afs_encoded_original_test <- read.delim('results/afs/original/ghost/test_encododed.txt', sep = " ", header=FALSE)
+afs_encoded_original_test <- read.delim('results/afs/original/test_encododed.txt', sep = " ", header=FALSE)
 afs_encoded_test <- afs_encoded_original_test[20001:20100,]
+
 # pca
 afs_pca_model <- princomp(afs_encoded_original)
 afs_original_pca <- data.frame(predict(afs_pca_model, newdata = afs_encoded_original))
@@ -100,7 +102,6 @@ results_test_bgs <- conduct_test(encoded_original, encoded_bgs, 0.01)
 print(sum(results_test_bgs))
 results_test_test <- conduct_test(encoded_original, encoded_test, 0.01)
 print(sum(results_test_test))
-# Create a dataframe with the information
 data <- data.frame(
   Scenario = c("test", "ghost", "BGS"),
   Detection_Percentage = c(sum(results_test_test), sum(results_test_ghost), sum(results_test_bgs))
@@ -114,7 +115,6 @@ afs_results_test_bgs <- conduct_test(afs_encoded_original, afs_encoded_bgs, 0.01
 print(sum(afs_results_test_bgs))
 afs_results_test_test <- conduct_test(afs_encoded_original, afs_encoded_test, 0.01)
 print(sum(afs_results_test_test))
-# Create a dataframe with the information
 afs_data <- data.frame(
   Scenario = c("test", "ghost", "BGS"),
   Detection_Percentage = c(sum(afs_results_test_test), sum(afs_results_test_ghost), sum(afs_results_test_bgs))
@@ -128,7 +128,7 @@ all_data <- rbind(data, afs_data)
 
 color_palette <- c("test" = "#DDCC77", "ghost" = "#332288", "BGS" = "#CC6677")
 
-# Create the bar plot
+# plot
 violations_detectec <- ggplot(all_data, aes(x = Scenario, y = Detection_Percentage, fill = Scenario)) +
   geom_bar(stat = "identity") +
   facet_grid(.~CNN) +
@@ -137,8 +137,7 @@ violations_detectec <- ggplot(all_data, aes(x = Scenario, y = Detection_Percenta
   theme_bw() +
   theme(legend.text = element_text(size = 14),
         axis.title = element_text(size=14),
-        legend.position = "none",    # Place legend inside at specified coordinates
-        #legend.justification = c(0, 1),
+        legend.position = "none",
         legend.background = element_rect(color = "black", fill = "white"),
         axis.text = element_text(size = 14),
         strip.text = element_text(size=14))
