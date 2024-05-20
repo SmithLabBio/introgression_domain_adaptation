@@ -19,7 +19,7 @@ U = TypeVar('U')
 class Replicate(BaseModel, Generic[U]): 
     model_config = ConfigDict(arbitrary_types_allowed = True)
     data: U
-    treeSequence: TreeSequence 
+    treeSequence: TreeSequence  #TODO: Change this field name to have underscore to make it consistent.
 
     @field_serializer("treeSequence")
     @classmethod
@@ -56,11 +56,10 @@ class Simulations(BaseModel, Generic[T, U]):
     def __iter__(self):
         yield from self.simulations
 
-def run_simulations(scenario_type: type, config_path: str, out_prefix: str, n_datasets: int, 
+def run_simulations(scenario_type: type, config_path: str, out_path: str, n_datasets: int, 
                     seed: Optional[int] = None, force: bool = False) -> None:
 
     # Create outpath and check for existing
-    out_path = f"{out_prefix}.json"
     if path.exists(out_path): 
         if not force:
             quit(f"Aborted: {out_path} already exists")
@@ -92,7 +91,10 @@ def run_simulations(scenario_type: type, config_path: str, out_prefix: str, n_da
     print("Simulations complete.")
 
 
-
+def parse_simulations(scenario: type, path: str):
+    with open(path, "r") as fh:
+        json_data = fh.read()
+    return Simulations[scenario, scenario._data_class].model_validate_json(json_data)
 
 
 

@@ -1,0 +1,11 @@
+sub -n sim -p normal -w "secondary-contact general-secondary-contact-1.yaml /mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-1000-train.json 1000 --force"    
+sub -n sim -p normal -w "secondary-contact general-secondary-contact-1.yaml /mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-100-train.json 100 --force"    
+sub -n sim -p normal -w "secondary-contact general-secondary-contact-1.yaml /mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-100-val.json 100 --force"    
+sub -n sim -p normal -w "secondary-contact general-secondary-contact-1.yaml /mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-100-test.json 100 --force"    
+sub -n sim -p normal -w "secondary-contact general-secondary-contact-1.yaml /mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-1.json 1 --force"    
+
+sub -n sim -p normal -w "ghost-secondary-contact general-secondary-contact-ghost-1.yaml /mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-ghost-1-1000-train.json 1000 --force"
+sub -n sim -p normal -w "ghost-secondary-contact general-secondary-contact-ghost-1.yaml /mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-ghost-1-100-train.json 100 --force"
+sub -n sim -p normal -w "ghost-secondary-contact general-secondary-contact-ghost-1.yaml /mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-ghost-1-100-val.json 100 --force"
+sub -n sim -p normal -w "ghost-secondary-contact general-secondary-contact-ghost-1.yaml /mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-ghost-1-100-test.json 100 --force"
+sub -n sim -p normal -w "ghost-secondary-contact general-secondary-contact-ghost-1.yaml /mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-ghost-1-1.json 1 --force"
