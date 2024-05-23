@@ -41,6 +41,21 @@ for i in 0.1 1 5 10
   end
 end
 
+# SNP CDAN 
+set sim_dir "/mnt/scratch/smithfs/cobb/popai/simulations/"
+set out_base "/mnt/scratch/smithfs/cobb/popai/output"
+for i in 0.1 1 5 10
+  set name "model1-rate_ratio_$i-rate_1e-5" 
+  for rep in 01 02 03 04 05 06 07 08 09 10
+    set cmd "./test.py \
+      --json_path $out_base/snp-cdan/$name/$rep/config.json \
+      --source_path $sim_dir/general-secondary-contact-1-100-test.json \
+      --target_path $sim_dir/general-secondary-contact-ghost-1-100-test.json \
+      --epoch 50"
+    sub -n test-snp-cdan-$name-$rep -o logs -m 4 -w $cmd
+  end
+end
+
 
 # AFS CDAN
 set sim_dir "/mnt/scratch/smithfs/cobb/popai/simulations/"

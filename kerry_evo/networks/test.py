@@ -8,6 +8,7 @@ from scipy.spatial.distance import euclidean
 from importlib import import_module
 import json
 from sklearn.metrics import accuracy_score
+import numpy as np
 
 from simulations.secondary_contact import SecondaryContact
 from simulations.secondary_contact_ghost import GhostSecondaryContact
@@ -52,13 +53,13 @@ def test(json_path, source_path, target_path, epoch):
     plot_tsne(model, source, target, f"{d['outdir']}/tsne.png")
 
     stats = dict(
-        source_accuracy=accuracy_score(source.labels, source_pred), 
-        target_accuracy=accuracy_score(target.labels, target_pred),
+        source_accuracy=accuracy_score(source.labels, np.argmax(source_pred, axis=1)), 
+        target_accuracy=accuracy_score(target.labels, np.argmax(target_pred, axis=1)),
         source_auc=get_auc(f"{d['outdir']}/source-roc.csv"),
         target_auc=get_auc(f"{d['outdir']}/target-roc.csv")
     )
 
-    with open(f"{d['outdir']}/stats.json") as fh:
+    with open(f"{d['outdir']}/stats.json", "w") as fh:
         json.dump(stats, fh)
 
 if __name__ == "__main__":

@@ -19,7 +19,6 @@ from simulations.secondary_contact_ghost import GhostSecondaryContact
 from sim_wrapper.numpy_dataset import NumpySnpDataset, NumpyAfsDataset
 
 from util import plot_adapt_history, save_history
-# from models import getEncoder, getTask, getDiscriminator
 
 
 def train(ModelFile, DataType, SrcType, TgtType, source_path, target_path, val_path, n_snps,
@@ -86,7 +85,6 @@ def train(ModelFile, DataType, SrcType, TgtType, source_path, target_path, val_p
 
     plot_adapt_history(history, outdir)
     save_history(history.history.history, outdir)
-
 
 if __name__ == "__main__":
     fire.Fire(train)
