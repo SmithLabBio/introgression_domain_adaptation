@@ -1,10 +1,10 @@
 n_samples: 10 
 sequence_length: 10_000_000 
 recombination_rate: 1e-8 
-# mutation_rate: 1e-8
-# migration_rate_range: [0.05, 5.0]
-# pop_size_range: [10_000, 100_000]
-# div_time_range: [50_000, 500_000]
-# ghostDivTimeRange: [1_000_000, 2_000_000]
-# ghostProportionRange: [0.05,0.3]
-# ghostMigTimeRange: [500, 2_000]
+mutation_rate: 1e-8
+migration_rate_range: [0.05, 5.0]
+population_size_range: [5_000, 20_000]
+divergence_time_range: [2_000, 5_000]
+ghost_divergence_time_range: [40_000, 80_000]
+ghost_migration_proportion_range: [0.05,0.3]
+ghost_migration_time_range: [0, 1_000]
