@@ -4,7 +4,7 @@ import numpy as np
 from typing import Callable, Optional, List
 from tskit import TreeSequence, Variant
 
-def _sort(mat: np.ndarray, sorting: Callable, axis: int = 0) -> np.ndarray:
+def sort_genotype_matrix(mat: np.ndarray, sorting: Callable, axis: int = 0) -> np.ndarray:
     # TODO: Make this capable of doing more complex sorting such as with kmeans
     match axis:
         case 0: slices = [np.s_[i,:] for i in range(mat.shape[axis])]
@@ -30,7 +30,7 @@ def _genotypeMatrix(ts: TreeSequence, samples: List[int], n_snps: int, transpose
         else:
             mat[:, site] = var.genotypes
     if sorting:
-        _sort(mat, sorting, transpose) 
+        sort_genotype_matrix(mat, sorting, transpose) 
     return mat
 
 def genotype_matrix(ts: TreeSequence, n_snps: int, transpose: bool = False, 
