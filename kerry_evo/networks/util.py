@@ -16,19 +16,21 @@ def plot_adapt_history(history, outdir):
     ax1.set_ylabel("Accuracy")
     ax1.plot(h["accuracy"], color="darkgreen", label="Accuracy: %.2f"%h["accuracy"][-1])
     ax1.plot(h["disc_acc"], color="forestgreen", linestyle="dashed", label="Disc. Accuracy: %.2f"%h["disc_acc"][-1])
-    ax1.plot(h["val_accuracy"], color="green", linestyle="dotted", label="Val. Accuracy: %.2f"%h["val_accuracy"][-1])
+    if "val_accuracy" in h:
+        ax1.plot(h["val_accuracy"], color="green", linestyle="dotted", label="Val. Accuracy: %.2f"%h["val_accuracy"][-1])
     ax2 = ax1.twinx()
     ax2.set_ylabel("Loss")
     ax2.plot(h["loss"], color="darkblue", label="Loss: %.2f"%h["loss"][-1])
     ax2.plot(h["disc_loss"], color="royalblue", linestyle="dashed", label="Disc. Loss: %.2f"%h["disc_loss"][-1])
-    ax2.plot(h["val_loss"], color="blue", linestyle="dotted", label="Val Loss: %.2f"%h["val_loss"][-1])
+    if "val_loss" in h:
+        ax2.plot(h["val_loss"], color="blue", linestyle="dotted", label="Val Loss: %.2f"%h["val_loss"][-1])
     fig.legend(loc="upper left", bbox_to_anchor=(1.01, 1))
     fig.savefig(f"{outdir}/loss-acc.png", bbox_inches="tight")
     plt.close()
 
 def plot_tsne(model, source, target, outpath):
-    Xs_enc_original = model.transform(source.x)
-    Xt_enc_original = model.transform(target.x)
+    Xs_enc_original = model.transform(source["x"])
+    Xt_enc_original = model.transform(target["x"])
     X_original = np.concatenate((Xs_enc_original, Xt_enc_original))
     X_original_tsne = TSNE(2).fit_transform(X_original)
     plt.plot(X_original_tsne[:len(Xs_enc_original), 0], X_original_tsne[:len(Xs_enc_original), 1], '.', label="Source")
