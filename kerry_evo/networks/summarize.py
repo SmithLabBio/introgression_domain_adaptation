@@ -5,21 +5,25 @@ import json
 import pandas as pd
 from os import listdir, sep 
 from os.path import join, normpath, split
+import os
 import glob
 
+pd.set_option('display.max_colwidth', None)
+pd.set_option('display.max_rows', None)
 
-# def summarize(outpath, directory, *paths, stat="mean", format="pprint"):
 def summarize(glob_pattern, directory, outpath, stat="mean", format="pprint"):
     dfs = []
     for p in glob.glob(glob_pattern):
-        name = normpath(p).split(sep)[-1]
+        name = os.path.basename(p)
         data = []
         for dir in listdir(p): 
-            try:
-                with open(join(p, dir, directory, "stats.json")) as fh:
-                    data.append(json.load(fh))
-            except:
-                pass
+            with open(join(p, dir, directory, "stats.json")) as fh:
+                data.append(json.load(fh))
+            # try:
+                # with open(join(p, dir, directory, "stats.json")) as fh:
+                    # data.append(json.load(fh))
+            # except:
+            #     pass
         match stat:
             case "mean":
                 df = pd.DataFrame(data).mean().to_frame().T

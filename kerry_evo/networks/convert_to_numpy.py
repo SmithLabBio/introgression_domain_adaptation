@@ -10,7 +10,7 @@ from simulations.secondary_contact_ghost import GhostSecondaryContact
 from sim_wrapper.numpy_dataset import NumpySnpDataset, NumpyAfsDataset
 
 
-def convert(DataType, SimType, inpath, suffix, n_snps=None, force=False, polarized=False):
+def convert(DataType, SimType, inpath, suffix, n_snps=None, force=False, polarized=False, normalized=False):
     outpath = f"{os.path.splitext(inpath)[0]}-{suffix}.npz"
     if os.path.exists(outpath):
         if not force:
@@ -20,7 +20,7 @@ def convert(DataType, SimType, inpath, suffix, n_snps=None, force=False, polariz
         case "NumpySnpDataset": 
             data =     NumpySnpDataset(eval(SimType), inpath, "migration_state", n_snps=n_snps, split=True, sorting=euclidean)
         case "NumpyAfsDataset":
-            data =     NumpyAfsDataset(eval(SimType), inpath, "migration_state", expand_dims=True, polarized=False)
+            data =     NumpyAfsDataset(eval(SimType), inpath, "migration_state", expand_dims=True, polarized=False, normalized=normalized)
         case _: 
             quit("Invalid DataType argument")
 

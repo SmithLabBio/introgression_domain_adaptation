@@ -8,20 +8,24 @@ from sklearn.manifold import TSNE
 from sklearn.metrics import roc_curve, auc
 import os
 
-def plot_adapt_history(history, outdir):
+def plot_adapt_history(history, outdir, disc=True):
     h = history.history.history
     fig, ax1 = plt.subplots()
     ax1.set_title("Training History")
     ax1.set_xlabel("Epoch")
     ax1.set_ylabel("Accuracy")
     ax1.plot(h["accuracy"], color="darkgreen", label="Accuracy: %.2f"%h["accuracy"][-1])
-    ax1.plot(h["disc_acc"], color="forestgreen", linestyle="dashed", label="Disc. Accuracy: %.2f"%h["disc_acc"][-1])
+    if disc:
+        if "disc_acc" in h: 
+            ax1.plot(h["disc_acc"], color="forestgreen", linestyle="dashed", label="Disc. Accuracy: %.2f"%h["disc_acc"][-1])
     if "val_accuracy" in h:
         ax1.plot(h["val_accuracy"], color="green", linestyle="dotted", label="Val. Accuracy: %.2f"%h["val_accuracy"][-1])
     ax2 = ax1.twinx()
     ax2.set_ylabel("Loss")
     ax2.plot(h["loss"], color="darkblue", label="Loss: %.2f"%h["loss"][-1])
-    ax2.plot(h["disc_loss"], color="royalblue", linestyle="dashed", label="Disc. Loss: %.2f"%h["disc_loss"][-1])
+    if disc:
+        if "disc_loss" in h: 
+            ax2.plot(h["disc_loss"], color="royalblue", linestyle="dashed", label="Disc. Loss: %.2f"%h["disc_loss"][-1])
     if "val_loss" in h:
         ax2.plot(h["val_loss"], color="blue", linestyle="dotted", label="Val Loss: %.2f"%h["val_loss"][-1])
     fig.legend(loc="upper left", bbox_to_anchor=(1.01, 1))
@@ -29,12 +33,12 @@ def plot_adapt_history(history, outdir):
     plt.close()
 
 def plot_tsne(model, source, target, outpath):
-    Xs_enc_original = model.transform(source["x"])
-    Xt_enc_original = model.transform(target["x"])
-    X_original = np.concatenate((Xs_enc_original, Xt_enc_original))
-    X_original_tsne = TSNE(2).fit_transform(X_original)
-    plt.plot(X_original_tsne[:len(Xs_enc_original), 0], X_original_tsne[:len(Xs_enc_original), 1], '.', label="Source")
-    plt.plot(X_original_tsne[len(Xs_enc_original):, 0], X_original_tsne[len(Xs_enc_original):, 1], '.', label="Target")
+    Xs = model.transform(source["x"])
+    Xt = model.transform(target["x"])
+    X = np.concatenate((Xs, Xt))
+    X_tsne = TSNE(2).fit_transform(X)
+    plt.plot(X_tsne[:len(Xs), 0], X_tsne[:len(Xs), 1], '.', label="Source")
+    plt.plot(X_tsne[len(Xs):, 0], X_tsne[len(Xs):, 1], '.', label="Target")
     plt.legend(fontsize=14)
     plt.title("Encoded Space tSNE")
     plt.savefig(outpath)
