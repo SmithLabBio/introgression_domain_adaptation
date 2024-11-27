@@ -1,4 +1,4 @@
-// Domain Adaptation 
+// Domain Adaptation comparing normalized and non-normalized sfs 
 
 process train {
 

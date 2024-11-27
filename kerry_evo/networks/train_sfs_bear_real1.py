@@ -1,8 +1,5 @@
 #!/usr/bin/env python
 
-# // Domain Adaptation with bears using all chromosome for each population 
-# // Using ghost 1 simulations
-
 from tensorflow import keras
 from tensorflow import Variable
 # from keras.optimizers import Adam
@@ -23,11 +20,12 @@ import model1 as models
 from util import plot_adapt_history, save_history
 
 sim_dir = "/mnt/scratch/smithfs/cobb/popai/simulations"
-outdir = "/mnt/scratch/smithfs/cobb/popai/bear4"
+bear_dir = "/mnt/scratch/smithlab/cobb/bears/filtered"
+outdir = "/mnt/scratch/smithfs/cobb/popai/bear_real1"
 
-def run_training(rep, max_lambda, batch, learn, enc_learn, disc_learn, epochs):
+def run_training(pops, rep, max_lambda, batch, learn, enc_learn, disc_learn, epochs):
     source_path = f"{sim_dir}/bear-secondary-contact-1-20000-train-sfs-norm.npz"
-    target_path = f"{sim_dir}/bear-secondary-contact-ghost-1-100-train-sfs-norm.npz"
+    target_path = f"{bear_dir}/{pops}_norm.npz"
     valid_path  = f"{sim_dir}/bear-secondary-contact-1-1000-train-sfs-norm.npz"
 
     source = np.load(source_path) 
@@ -37,7 +35,11 @@ def run_training(rep, max_lambda, batch, learn, enc_learn, disc_learn, epochs):
     def exp(d):
         return np.format_float_scientific(d, trim='-', exp_digits=1)
          
-    out = f"{outdir}/batch{batch}.learn_{exp(learn)}.enc_learn_{exp(enc_learn)}.disc_learn_{exp(disc_learn)}.lambda_{max_lambda}/{rep}"
+    out = f"{outdir}/batch{batch}.learn_{exp(learn)}.enc_learn_{exp(enc_learn)}.disc_learn_{exp(disc_learn)}.lambda_{max_lambda}/{pops}/{rep}"
+
+    if os.path.exists(out):
+        print("Output directory already exists.")
+        quit(0)
 
     os.makedirs(out)
     callbacks = [ModelCheckpoint(f"{out}/checkpoints/{{epoch}}.hdf5", save_weights_only=True)]

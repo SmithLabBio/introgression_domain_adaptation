@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # // Domain Adaptation with bears using all chromosome for each population 
-# // Using ghost 1 simulations
+# // Using ghost 2 simulations
 
 from tensorflow import keras
 from tensorflow import Variable
@@ -23,12 +23,12 @@ import model1 as models
 from util import plot_adapt_history, save_history
 
 sim_dir = "/mnt/scratch/smithfs/cobb/popai/simulations"
-outdir = "/mnt/scratch/smithfs/cobb/popai/bear4"
+outdir = "/mnt/scratch/smithfs/cobb/popai/general1"
 
 def run_training(rep, max_lambda, batch, learn, enc_learn, disc_learn, epochs):
-    source_path = f"{sim_dir}/bear-secondary-contact-1-20000-train-sfs-norm.npz"
-    target_path = f"{sim_dir}/bear-secondary-contact-ghost-1-100-train-sfs-norm.npz"
-    valid_path  = f"{sim_dir}/bear-secondary-contact-1-1000-train-sfs-norm.npz"
+    source_path = f"{sim_dir}/general-secondary-contact-1-20000-train-sfs-norm.npz"
+    target_path = f"{sim_dir}/general-secondary-contact-ghost-1-100-train-sfs-norm.npz"
+    valid_path  = f"{sim_dir}/general-secondary-contact-1-1000-train-sfs-norm.npz"
 
     source = np.load(source_path) 
     target = np.load(target_path) 

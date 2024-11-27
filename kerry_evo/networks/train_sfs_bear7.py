@@ -23,12 +23,12 @@ import model1 as models
 from util import plot_adapt_history, save_history
 
 sim_dir = "/mnt/scratch/smithfs/cobb/popai/simulations"
-outdir = "/mnt/scratch/smithfs/cobb/popai/bear4"
+outdir = "/mnt/scratch/smithfs/cobb/popai/bear7"
 
 def run_training(rep, max_lambda, batch, learn, enc_learn, disc_learn, epochs):
-    source_path = f"{sim_dir}/bear-secondary-contact-1-20000-train-sfs-norm.npz"
-    target_path = f"{sim_dir}/bear-secondary-contact-ghost-1-100-train-sfs-norm.npz"
-    valid_path  = f"{sim_dir}/bear-secondary-contact-1-1000-train-sfs-norm.npz"
+    source_path = f"{sim_dir}/bear-secondary-contact-2-20000-train-sfs-norm.npz"
+    target_path = f"{sim_dir}/bear-secondary-contact-ghost-2-100-train-sfs-norm.npz"
+    valid_path  = f"{sim_dir}/bear-secondary-contact-2-1000-train-sfs-norm.npz"
 
     source = np.load(source_path) 
     target = np.load(target_path) 

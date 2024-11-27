@@ -1,5 +1,4 @@
-
-// Domain adaptation with normalized trying multiple parameter combinations
+// Domain Adaptation 
 
 process train {
 
@@ -10,7 +9,7 @@ process train {
     
     script:
     """
-    /mnt/home/kc2824/popAI/kerry_evo/networks/train_sfs_bear4.py \
+    /mnt/home/kc2824/popAI/kerry_evo/networks/train_sfs_bear5.py \
       --rep ${replicate} \
       --max_lambda ${lambda} \
       --batch ${batch_size} \
@@ -23,16 +22,11 @@ process train {
 
 workflow {
     replicate = channel.of("01", "02", "03", "04", "05", "06", "07", "08", "09", "10")
-    // lambda = channel.of(0, 1, 2, 10)
-    lambda = channel.of(0, 0.5)
-    // batch_size = channel.of(32, 64, 256)
-    batch_size = channel.of(16)
-    // learn_rate = channel.of(1e-3, 1e-4)
-    learn_rate = channel.of(1e-3)
-    // enc_learn = channel.of(1e-3, 1e-4)
-    enc_learn = channel.of(1e-3)
-    // disc_learn = channel.of(1e-3, 1e-4)
-    disc_learn = channel.of(1e-3)
+    lambda = channel.of(0)
+    batch_size = channel.of(32, 64, 256)
+    learn_rate = channel.of(1e-3, 1e-4)
+    enc_learn = channel.of(1e-3, 1e-4)
+    disc_learn = channel.of(1e-3, 1e-4)
     comb = replicate.combine(lambda).combine(batch_size).combine(learn_rate).combine(enc_learn).combine(disc_learn)
     train(comb)
 }

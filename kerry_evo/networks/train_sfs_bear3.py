@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+#  Domain Adaptation comparing normalized and non-normalized sfs 
+
 from tensorflow import keras
 from tensorflow import Variable
 # from keras.optimizers import Adam

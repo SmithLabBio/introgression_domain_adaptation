@@ -1,7 +1,8 @@
-params.basedir = "/mnt/home/kc2824/fscratch/popai/bear4/"
+params.basedir = "/mnt/home/kc2824/fscratch/popai/bear6/"
 params.sim_dir = "/mnt/scratch/smithfs/cobb/popai/simulations/"
 
 process test_sfs {
+    errorStrategy 'ignore'
 
     input:
     tuple val(path)
@@ -19,7 +20,6 @@ process test_sfs {
 
 workflow {
 
-    // outputs = channel.fromPath("${params.basedir}/*/*", type: "dir")
-    outputs = channel.fromPath("${params.basedir}/batch16*/*", type: "dir")
+    outputs = channel.fromPath("${params.basedir}/*/*", type: "dir")
     test_sfs(outputs)
 }

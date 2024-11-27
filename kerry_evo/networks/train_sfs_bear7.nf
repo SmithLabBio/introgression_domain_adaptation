@@ -10,7 +10,7 @@ process train {
     
     script:
     """
-    /mnt/home/kc2824/popAI/kerry_evo/networks/train_sfs_bear4.py \
+    /mnt/home/kc2824/popAI/kerry_evo/networks/train_sfs_bear7.py \
       --rep ${replicate} \
       --max_lambda ${lambda} \
       --batch ${batch_size} \

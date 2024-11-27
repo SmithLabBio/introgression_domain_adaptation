@@ -18,7 +18,7 @@ from simulations.secondary_contact import SecondaryContact
 from simulations.secondary_contact_ghost import GhostSecondaryContact
 from sim_wrapper.numpy_dataset import NumpySnpDataset, NumpyAfsDataset
 
-from util import save_confusion_matrix, save_roc, plot_roc, plot_tsne, get_auc, save_latent_space
+from util import save_confusion_matrix, save_roc, plot_roc, plot_tsne, get_auc, save_latent_space, save_predictions
 
 
 # def early_stopping1(history):
@@ -74,6 +74,8 @@ def test(dir, meth, source_path, target_path, epoch=None, epoch_selector=None):
     model.load_weights(f"{dir}/checkpoints/{epoch}.hdf5")
     source_pred = model.predict(source["x"])
     target_pred = model.predict(target["x"])
+    save_predictions(source["labels"], source_pred, f"{outdir}/source-predictions.csv")
+    save_predictions(target["labels"], target_pred, f"{outdir}/target-predictions.csv")
     save_latent_space(model, source, target, f"{outdir}/latent-space.npz")
     save_confusion_matrix(f"{outdir}/source-cm.csv", source["labels"], source_pred)
     save_confusion_matrix(f"{outdir}/target-cm.csv", target["labels"], target_pred)

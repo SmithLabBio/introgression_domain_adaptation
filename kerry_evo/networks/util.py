@@ -32,6 +32,11 @@ def plot_adapt_history(history, outdir, disc=True):
     fig.savefig(f"{outdir}/loss-acc.png", bbox_inches="tight")
     plt.close()
 
+def save_latent_space(model, source, target, outpath):
+    source_latent_space = model.transform(source["x"])
+    target_latent_space = model.transform(target["x"]) 
+    np.savez(outpath, source=source_latent_space, target=target_latent_space)
+
 def plot_tsne(model, source, target, outpath):
     Xs = model.transform(source["x"])
     Xt = model.transform(target["x"])
@@ -47,6 +52,12 @@ def plot_tsne(model, source, target, outpath):
 def save_history(history, outdir):
     df = pd.DataFrame(history)
     df.to_csv(f"{outdir}/history.csv", index=False)
+
+def save_predictions(labels, predictions, outpath):
+    df = pd.DataFrame()
+    df["labels"] = labels
+    df["predictions"] = predictions[:,1]
+    df.to_csv(outpath, index=False)
 
 def save_confusion_matrix(outpath, labels, pred):
     cm =confusion_matrix(labels, np.argmax(pred, axis=1))

@@ -1,15 +1,13 @@
 #!/usr/bin/env python
 
-# // Domain Adaptation with bears using all chromosome for each population 
-# // Using ghost 1 simulations
+# Domain adaptation with mdd
 
 from tensorflow import keras
 from tensorflow import Variable
 # from keras.optimizers import Adam
 from keras.optimizers.legacy import Adam
 from keras.callbacks import ModelCheckpoint
-from adapt.feature_based import CDAN
-from adapt.parameter_based import FineTuning
+from adapt.feature_based import MDD
 from keras.utils import to_categorical
 from adapt.utils import UpdateLambda
 from scipy.spatial.distance import euclidean
@@ -23,11 +21,12 @@ import model1 as models
 from util import plot_adapt_history, save_history
 
 sim_dir = "/mnt/scratch/smithfs/cobb/popai/simulations"
-outdir = "/mnt/scratch/smithfs/cobb/popai/bear4"
+bear_dir = "/mnt/scratch/smithlab/cobb/bears/filtered"
+outdir = "/mnt/scratch/smithfs/cobb/popai/bear_real2"
 
-def run_training(rep, max_lambda, batch, learn, enc_learn, disc_learn, epochs):
+def run_training(pops, rep, max_lambda, gamma, batch, learn, enc_learn, disc_learn, epochs):
     source_path = f"{sim_dir}/bear-secondary-contact-1-20000-train-sfs-norm.npz"
-    target_path = f"{sim_dir}/bear-secondary-contact-ghost-1-100-train-sfs-norm.npz"
+    target_path = f"{bear_dir}/{pops}_norm.npz"
     valid_path  = f"{sim_dir}/bear-secondary-contact-1-1000-train-sfs-norm.npz"
 
     source = np.load(source_path) 
@@ -37,14 +36,19 @@ def run_training(rep, max_lambda, batch, learn, enc_learn, disc_learn, epochs):
     def exp(d):
         return np.format_float_scientific(d, trim='-', exp_digits=1)
          
-    out = f"{outdir}/batch{batch}.learn_{exp(learn)}.enc_learn_{exp(enc_learn)}.disc_learn_{exp(disc_learn)}.lambda_{max_lambda}/{rep}"
+    out = f"{outdir}/batch{batch}.learn_{exp(learn)}.enc_learn_{exp(enc_learn)}.disc_learn_{exp(disc_learn)}.lambda_{max_lambda}.gamma_{gamma}/{pops}/{rep}"
+
+    if os.path.exists(out):
+        print("Output directory already exists.")
+        quit(0)
 
     os.makedirs(out)
     callbacks = [ModelCheckpoint(f"{out}/checkpoints/{{epoch}}.hdf5", save_weights_only=True)]
-    lambda_ = Variable(0.0) 
-    callbacks.append(UpdateLambda(lambda_max=max_lambda))
-    cdan = CDAN(
-        lambda_=lambda_, # Ignore Pycharm Warning 
+    # lambda_ = Variable(0.0) 
+    # callbacks.append(UpdateLambda(lambda_max=max_lambda))
+    mdd = MDD(
+        lambda_=max_lambda, # Ignore Pycharm Warning 
+        gamma=gamma,
         encoder=models.getEncoder(shape=source["x"].shape[1:]), 
         task=models.getTask(), 
         discriminator=models.getDiscriminator(),
@@ -54,7 +58,7 @@ def run_training(rep, max_lambda, batch, learn, enc_learn, disc_learn, epochs):
         loss="categorical_crossentropy",
         metrics=["accuracy"],
         callbacks=callbacks)
-    history = cdan.fit(
+    history = mdd.fit(
         X=source["x"], 
         y=to_categorical(source["labels"], 2), 
         Xt=target["x"], 
