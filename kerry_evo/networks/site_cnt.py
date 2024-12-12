@@ -22,7 +22,9 @@ def cnt(Scenario, paths):
         for i in sims:
             ts = i.treeSequence
             snp_cnt.append(ts.num_sites)
-        print(f"Mean sites: {mean(snp_cnt)}")
+    print(f"Mean sites: {mean(snp_cnt)}")
+    print(f"Min sites: {min(snp_cnt)}")
+    print(f"Min sites: {max(snp_cnt)}")
     
 
 if __name__ == "__main__":
