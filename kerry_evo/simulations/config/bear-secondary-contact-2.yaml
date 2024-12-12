@@ -1,0 +1,7 @@
+n_samples: 10 
+sequence_length: 10_000_000 
+recombination_rate: 1e-8 
+mutation_rate: 1e-8
+migration_rate_range: [0.05, 5.0]
+population_size_range: [100, 20_000]
+divergence_time_range: [500, 10_000]
