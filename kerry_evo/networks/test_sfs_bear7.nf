@@ -18,7 +18,6 @@ process test_sfs {
 }
 
 workflow {
-
     // outputs = channel.fromPath("${params.basedir}/*/*", type: "dir")
     outputs = channel.fromPath("${params.basedir}/batch16*/*", type: "dir")
     test_sfs(outputs)
