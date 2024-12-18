@@ -10,9 +10,7 @@ from simulations.secondary_contact import SecondaryContact
 from simulations.secondary_contact_ghost2 import GhostSecondaryContact
 
 
-def cnt(Scenario, paths):
-    if isinstance(paths, str):
-        paths = [paths]
+def cnt(Scenario, *paths):
     Scenario = eval(Scenario)
     snp_cnt = []
     for path in paths:
@@ -29,4 +27,3 @@ def cnt(Scenario, paths):
 
 if __name__ == "__main__":
     fire.Fire(cnt)
-

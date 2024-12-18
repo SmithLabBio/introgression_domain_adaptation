@@ -17,9 +17,6 @@ plt.rcParams["axes.labelsize"] = 13
 plt.rcParams["axes.titlesize"] = 15 
 plt.rcParams["figure.titlesize"] = 18
 
-def rd(x):
-    return math.floor(x * 100) / 100
-
 def rgb(r, g, b):
     w = 255
     return [r/w, g/w, b/w]
@@ -52,9 +49,9 @@ def run(input_dir, test_dir_name, outpath):
     fig, ax = plt.subplots()
 
     ax.add_collection(source_segments).set(color=src_color, zorder=4, 
-            label=f"Source\nMean AUC: {rd(source_auc):0.2f}")
+            label=f"Source\nMean AUC: {source_auc:0.2f}")
     ax.add_collection(target_segments).set(color=tgt_color, zorder=3, linestyle=tgt_lstyle,
-            label=f"Target\nMean AUC: {rd(target_auc):0.2f}")
+            label=f"Target\nMean AUC: {target_auc:0.2f}")
 
     def format(ax):
         ticks = [0, 0.25, 0.5, 0.75, 1]
