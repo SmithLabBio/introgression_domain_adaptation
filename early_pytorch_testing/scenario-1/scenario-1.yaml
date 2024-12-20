@@ -1,9 +1,0 @@
-nSamples: 50 
-sequenceLength: 100_000 
-recombinationRate: 1e-8 
-mutationRate: 1e-7
-migrationRateRange: [0, 0.00003]
-initialSizeA: 10_000
-initialSizeB: 10_000
-initialSizeC: 10_000
-splitTime: 100_000
