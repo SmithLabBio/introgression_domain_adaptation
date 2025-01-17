@@ -6,7 +6,3 @@ Scripts used for training and testing networks and for summarizing results.
 
 # simulations
 Configurations and scripts for simulating data.
-
-# sim-wrapper
-Wrapper to help with simulation file IO
-
