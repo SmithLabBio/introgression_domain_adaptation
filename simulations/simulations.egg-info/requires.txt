@@ -1,8 +1,0 @@
-tensorflow==2.15.0
-tqdm
-tskit
-msprime
-pydantic
-oyaml
-numpy==1.26.4
-fire
