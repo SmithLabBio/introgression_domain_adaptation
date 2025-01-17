@@ -65,13 +65,12 @@ def plot(dir, test_dir, source_test_data_sfs, source_test_data_ts, target_test_d
 
     # Plot Normalized
     fig, axs = plt.subplots(2, 3)
-    sns.heatmap(data=source_norm_tp_mean_sfs, ax=axs[0,0], norm=LogNorm(vmin=0.0000095, vmax=1), cbar=False, yticklabels=False, xticklabels=False, square=True)
-    sns.heatmap(data=target_norm_tp_mean_sfs, ax=axs[0,1], norm=LogNorm(vmin=0.0000095, vmax=1), cbar=False, yticklabels=False, xticklabels=False, square=True)
-    sns.heatmap(data=target_norm_fn_mean_sfs, ax=axs[0,2], norm=LogNorm(vmin=0.0000095, vmax=1), cbar=False, yticklabels=False, xticklabels=False, square=True)
-
-    sns.heatmap(data=source_norm_tn_mean_sfs, ax=axs[1,0], norm=LogNorm(vmin=0.0000095, vmax=1), cbar=False, yticklabels=False, xticklabels=False, square=True)
-    sns.heatmap(data=target_norm_tn_mean_sfs, ax=axs[1,1], norm=LogNorm(vmin=0.0000095, vmax=1), cbar=False, yticklabels=False, xticklabels=False, square=True)
-    sns.heatmap(data=target_norm_fp_mean_sfs, ax=axs[1,2], norm=LogNorm(vmin=0.0000095, vmax=1), cbar=False, yticklabels=False, xticklabels=False, square=True)
+    sns.heatmap(data=source_norm_tp_mean_sfs, ax=axs[0,0], norm=LogNorm(), vmin=0, vmax=1, cbar=False, yticklabels=False, xticklabels=False, square=True)
+    sns.heatmap(data=target_norm_tp_mean_sfs, ax=axs[0,1], norm=LogNorm(), vmin=0, vmax=1, cbar=False, yticklabels=False, xticklabels=False, square=True)
+    sns.heatmap(data=target_norm_fn_mean_sfs, ax=axs[0,2], norm=LogNorm(), vmin=0, vmax=1, cbar=False, yticklabels=False, xticklabels=False, square=True)
+    sns.heatmap(data=source_norm_tn_mean_sfs, ax=axs[1,0], norm=LogNorm(), vmin=0, vmax=1, cbar=False, yticklabels=False, xticklabels=False, square=True)
+    sns.heatmap(data=target_norm_tn_mean_sfs, ax=axs[1,1], norm=LogNorm(), vmin=0, vmax=1, cbar=False, yticklabels=False, xticklabels=False, square=True)
+    sns.heatmap(data=target_norm_fp_mean_sfs, ax=axs[1,2], norm=LogNorm(), vmin=0, vmax=1, cbar=False, yticklabels=False, xticklabels=False, square=True)
 
     axs[0,0].set_title("Source True Positive")
     axs[0,1].set_title("Target True Positive")
@@ -79,6 +78,10 @@ def plot(dir, test_dir, source_test_data_sfs, source_test_data_ts, target_test_d
     axs[1,0].set_title("Source True Negative")
     axs[1,1].set_title("Target True Negative")
     axs[1,2].set_title("Target False Positive")
+
+    for i, ax in enumerate(fig.get_axes()):
+        ax.text(-0.05, 1.02, f"{chr(97 + i)})", transform=ax.transAxes, size=8, weight="bold")
+
     plt.tight_layout(rect=[0, 0, .9, 1])
     cbar_ax = fig.add_axes([0.90, 0.3, 0.02, 0.41])
     cbar_ax.tick_params(labelsize=8) 
@@ -102,31 +105,13 @@ def plot(dir, test_dir, source_test_data_sfs, source_test_data_ts, target_test_d
     axs[1,0].set_title("Source True Negative")
     axs[1,1].set_title("Target True Negative")
     axs[1,2].set_title("Target False Positive")
+
+    for i, ax in enumerate(fig.get_axes()):
+        ax.text(-0.05, 1.02, f"{chr(97 + i)})", transform=ax.transAxes, size=8, weight="bold")
+
     plt.tight_layout()
     fig.savefig(f"{dir}/misclassified_sfs_counts.pdf")
 
-    # with open(target_test_data_ts, "r") as fh:
-    #     json_data = fh.read()
-    # sims = Simulations[GhostSecondaryContact, GhostSecondaryContact._data_class].model_validate_json(json_data)
-
-    # tp_ts = [s for s, b in zip(sims, target_tp) if b]
-    # fp_ts = [s for s, b in zip(sims, target_fp) if b]
-    # tn_ts = [s for s, b in zip(sims, target_tn) if b]
-    # fn_ts = [s for s, b in zip(sims, target_fn) if b]
-
-    # def hist(param): 
-    #     plt.figure()
-    #     sns.histplot([getattr(i.data, param) for i in tp_ts], label="True Positive")
-    #     sns.histplot([getattr(i.data, param) for i in fp_ts], label="False Positive")
-    #     sns.histplot([getattr(i.data, param) for i in tn_ts], label="True Negative")
-    #     sns.histplot([getattr(i.data, param) for i in fn_ts], label="False Negative")
-    #     plt.legend()
-    #     plt.title(param)
-    #     plt.savefig(f"{dir}/target-{param}.pdf")
-
-    # hist("population_size")
-    # hist("migration_rate")
-    # hist("divergence_time")
 
 if __name__ == "__main__":
     fire.Fire(plot)

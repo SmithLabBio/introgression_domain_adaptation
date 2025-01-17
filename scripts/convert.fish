@@ -1,41 +1,8 @@
 #!/usr/bin/env fish
 
-set n_snps 1500
-set sim_dir "/mnt/scratch/smithfs/cobb/popai/simulations/"
-
-for i in (ls $sim_dir/general-secondary-contact-1*.json)  
-  sub -n convert -m 16 -w "./convert_to_numpy.py NumpyAfsDataset SecondaryContact $i sfs --force"
-  sleep .1
-  sub -n convert -m 100 -w "./convert_to_numpy.py NumpyAfsDataset SecondaryContact $i sfs-norm --force --normalized"
-  sleep .1
-  # sub -n convert -m 16 -w "./convert_to_numpy.py NumpySnpDataset SecondaryContact $i snps --n_snps $n_snps --force --polarized"
-  # sleep .1
-end
-
-for i in (ls $sim_dir/general-secondary-contact-ghost-1*.json)
-  sub -n convert -m 16 -w "./convert_to_numpy.py NumpyAfsDataset GhostSecondaryContact $i sfs --force"
-  sleep .1
-  sub -n convert -m 100 -w "./convert_to_numpy.py NumpyAfsDataset GhostSecondaryContact $i sfs-norm --force --normalized"
-  sleep .1
-  # sub -n convert -m 16 -w "./convert_to_numpy.py NumpySnpDataset GhostSecondaryContact $i snps --n_snps $n_snps --force --polarized"
-  # sleep .1
-end
-
-
-for i in (ls $sim_dir/bear-secondary-contact-1*.json)  
-  sub -n convert -m 16 -w "./convert_to_numpy.py NumpyAfsDataset SecondaryContact $i sfs --force"
-  sleep .1
-  sub -n convert -m 100 -w "./convert_to_numpy.py NumpyAfsDataset SecondaryContact $i sfs-norm --force --normalized"
-  sleep .1
-  # sub -n convert -m 16 -w "./convert_to_numpy.py NumpySnpDataset SecondaryContact $i snps --n_snps $n_snps --force"
-  # sleep .1
-end
-
-for i in (ls $sim_dir/bear-secondary-contact-ghost-1*.json)
-  sub -n convert -m 16 -w "./convert_to_numpy.py NumpyAfsDataset GhostSecondaryContact $i sfs --force"
-  sleep .1
-  sub -n convert -m 100 -w "./convert_to_numpy.py NumpyAfsDataset GhostSecondaryContact $i sfs-norm --force --normalized"
-  sleep .1
-  # sub -n convert -m 16 -w "./convert_to_numpy.py NumpySnpDataset GhostSecondaryContact $i snps --n_snps $n_snps --force"
-  # sleep .1
-end
+sub -n convert-sim-20000 -m 100 -p normal -w "./convert_to_numpy2.py NumpyAfsDataset SecondaryContact /mnt/scratch/smithfs/cobb/popai/simulations/bear-secondary-contact-2-20000-train.json          sfs-norm --force --normalized"
+sub -n convert-sim-1000         -p normal -w "./convert_to_numpy2.py NumpyAfsDataset SecondaryContact /mnt/scratch/smithfs/cobb/popai/simulations/bear-secondary-contact-2-1000-test.json            sfs-norm --force --normalized"
+sub -n convert-sim-1000         -p normal -w "./convert_to_numpy2.py NumpyAfsDataset SecondaryContact /mnt/scratch/smithfs/cobb/popai/simulations/bear-secondary-contact-2-1000-train.json           sfs-norm --force --normalized"
+sub -n convert-sim-ghost-1000   -p normal -w "./convert_to_numpy2.py NumpyAfsDataset GhostSecondaryContact /mnt/scratch/smithfs/cobb/popai/simulations/bear-secondary-contact-ghost-2-1000-test.json sfs-norm --force --normalized"
+sub -n convert-sim-ghost-100    -p normal -w "./convert_to_numpy2.py NumpyAfsDataset GhostSecondaryContact /mnt/scratch/smithfs/cobb/popai/simulations/bear-secondary-contact-ghost-2-100-train.json sfs-norm --force --normalized"
+sub -n convert-sim-ghost-36     -p normal -w "./convert_to_numpy2.py NumpyAfsDataset GhostSecondaryContact /mnt/scratch/smithfs/cobb/popai/simulations/bear-secondary-contact-ghost-2-36-train.json  sfs-norm --force --normalized"

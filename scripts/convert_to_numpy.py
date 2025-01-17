@@ -6,7 +6,7 @@ import numpy as np
 from scipy.spatial.distance import euclidean
 
 from simulations.secondary_contact import SecondaryContact
-from simulations.secondary_contact_ghost import GhostSecondaryContact
+from simulations.secondary_contact_ghost2 import GhostSecondaryContact
 from sim_wrapper.numpy_dataset import NumpySnpDataset, NumpyAfsDataset
 
 

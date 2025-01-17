@@ -1,5 +1,5 @@
 # bears
-Scripts used for downloading, processing, and using trained network to test for introgression with empirical bear data.
+Scripts used for downloading and processing bear whole genome resequence data, and for using a trained network to test for introgression with empirical bear data.
 
 # scripts
 Scripts used for training and testing networks and for summarizing results. 
@@ -8,5 +8,5 @@ Scripts used for training and testing networks and for summarizing results.
 Configurations and scripts for simulating data.
 
 # sim-wrapper
-Wrapper to help with simulation file IO and parallelization.
+Wrapper to help with simulation file IO
 
