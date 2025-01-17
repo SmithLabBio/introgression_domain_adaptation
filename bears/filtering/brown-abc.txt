@@ -1,0 +1,10 @@
+/mnt/scratch/smithlab/cobb/bears/mapped//SAMN01057688.bam
+/mnt/scratch/smithlab/cobb/bears/mapped//SAMN02045560.bam
+/mnt/scratch/smithlab/cobb/bears/mapped//SAMN02256321.bam
+/mnt/scratch/smithlab/cobb/bears/mapped//SAMN32301304.bam
+/mnt/scratch/smithlab/cobb/bears/mapped//SAMN32301305.bam
+/mnt/scratch/smithlab/cobb/bears/mapped//SAMN02256316.bam
+/mnt/scratch/smithlab/cobb/bears/mapped//SAMN02256317.bam
+/mnt/scratch/smithlab/cobb/bears/mapped//SAMN02256318.bam
+/mnt/scratch/smithlab/cobb/bears/mapped//SAMN02256320.bam
+/mnt/scratch/smithlab/cobb/bears/mapped//SAMN03247209.bam

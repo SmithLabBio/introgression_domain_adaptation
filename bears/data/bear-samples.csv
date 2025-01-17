@@ -1,0 +1,176 @@
+Species,Sample ID,Sex,Subpopulation,BioSample ID,Publication,Lat,Lon
+Brown Bear,ABC13,,ABCa,SAMN01057688,Miller et al. 2012,57.44,-134.2
+Brown Bear,ABC10,,ABCa,SAMN02045560,Cahill et al. 2015,57.44,-134.2
+Brown Bear,ABC06,NA,ABCa,SAMN02256321,Liu et al. 2014,57.73333,-134.333
+Brown Bear,ABC07,,ABCa,SAMN32301304, de Jong et al. 2023,57.73333,-134.333
+Brown Bear,ABC08,,ABCa,SAMN32301305, de Jong et al. 2023,57.73333,-134.333
+Brown Bear,ABC09,,ABCa,SAMN32301306, de Jong et al. 2023,57.73333,-134.333
+Brown Bear,ABC14,,ABCbc,SAMN01057689,Miller et al 2012,56.95083,-134.942
+Brown Bear,ABC01,NA,ABCbc,SAMN02256316,Liu et al. 2014,56.9508,-134.942
+Brown Bear,ABC02,NA,ABCbc,SAMN02256317,Liu et al. 2014,56.9508,-134.942
+Brown Bear,ABC03,NA,ABCbc,SAMN02256318,Liu et al. 2014,57.87083,-135.772
+Brown Bear,ABC04,NA,ABCbc,SAMN02256319,Liu et al. 2014,57.87083,-135.772
+Brown Bear,ABC05,NA,ABCbc,SAMN02256320,Liu et al. 2014,57.87083,-135.772
+Brown Bear,ABC11,,ABCbc,SAMN03247209,Cahill et al. 2015,57.87083,-135.772
+Brown Bear,ABC12,,ABCbc,SAMN03252406,Cahill et al. 2015,57.87083,-135.772
+Brown Bear,TorontoZoo,,ABCcoast1,SAMN09907428,Taylor et al. 2018,58.747,-134.878
+Brown Bear,ABC15,,ABCcoast2,SAMN32301302, de Jong et al. 2023,57.98417,-133.788
+Brown Bear,ABC16,,ABCcoast2,SAMN32301303, de Jong et al. 2023,57.98417,-133.788
+Brown Bear,Alaska02,,Alaska,SAMN01057690,Miller et al. 2012,60.55444,-151.258
+Brown Bear,Alaska03,,Alaska,SAMN02045559,Cahill et al. 2013,63.12989,-151.197
+Brown Bear,Alaska11,,Alaska,SAMN32301308, de Jong et al. 2023,68.143,-151.736
+Brown Bear,Alaska12,,Alaska,SAMN32301309, de Jong et al. 2023,68.143,-151.736
+Brown Bear,Alaska07,,Alaska,SAMN32301310, de Jong et al. 2023,68.143,-151.736
+Brown Bear,Alaska09,,Alaska,SAMN32301311, de Jong et al. 2023,68.143,-151.736
+Brown Bear,AlaskaW1,,Alaska,SAMN32301396, de Jong et al. 2023,66.94,-160.6
+Brown Bear,AlaskaN1,,Alaska,SAMN32301397, de Jong et al. 2023,70.29,-148.79
+Brown Bear,AlaskaSW1,,Aleutian,SAMN32301393, de Jong et al. 2023,55.328,-160.5
+Brown Bear,AlaskaSW2,,Aleutian,SAMN32301394, de Jong et al. 2023,55.81,-166.66
+Brown Bear,AlaskaSW3,,Aleutian,SAMN32301395, de Jong et al. 2023,55.81,-166.66
+Brown Bear,Amur1,,Amur,SAMN32301312, de Jong et al. 2023,52.43055,140.3289
+Brown Bear,Amur2,,Amur,SAMN32301313, de Jong et al. 2023,46.0321,136.677
+Brown Bear,Amur3,,Amur,SAMN32301314, de Jong et al. 2023,45.4562,137.185
+Brown Bear,Finland,F,Baltic,SAMN02256315,Liu et al. 2014,61.28333,28.83333
+Brown Bear,Estonia1,,Baltic,SAMN32301334, de Jong et al. 2023,59.008,26.226
+Brown Bear,Estonia2,,Baltic,SAMN32301335, de Jong et al. 2023,59.2672,27.552
+Brown Bear,Finland2,,Baltic,SAMN32301346, de Jong et al. 2023,61.6934,29.729
+Brown Bear,Finland3,,Baltic,SAMN32301347, de Jong et al. 2023,61.91971,27.81635
+Black Bear,Americanblack2,,Black,SAMN01057691,Miller et al 2012,53,-121
+Black Bear,Americanblack1,,Black,SAMN02045561,Cahill et al. 2013,53,-121
+Brown Bear,Russia,,CentreRus,SAMEA4762872,Barlow et al. 2018,55.23,91.37
+Brown Bear,CentralRussia3,,CentreRus,SAMN32301331, de Jong et al. 2023,55.4,91.4
+Brown Bear,CentralRussia4,,CentreRus,SAMN32301332, de Jong et al. 2023,60.3,94.3
+Brown Bear,CentralRussia2,,CentreRus2,SAMN32301330, de Jong et al. 2023,55.5,91.4
+Brown Bear,Slovenia,,Europe,SAMEA4762870,Barlow et al. 2018,46.445,14.01778
+Brown Bear,Italy1,,Europe,SAMN07422262,Benazo et al. 2017,42.03908,13.43847
+Brown Bear,Greece1,,Europe,SAMN07422268,Benazo et al. 2018,39.07421,21.82431
+Brown Bear,Slovakia1,,Europe,SAMN07422269,Benazo et al. 2017,48.14816,17.10674
+Brown Bear,Spain1,,Europe,SAMN07422271,Benazo et al. 2017,43.46278,-3.805
+Brown Bear,Slovenia1,,Europe,SAMN07422272,Benazo et al. 2017,46.15124,14.99546
+Brown Bear,Rumania1,,Europe,SAMN32301366, de Jong et al. 2023,44.43996,26.09631
+Brown Bear,Rumania2,,Europe,SAMN32301367, de Jong et al. 2023,44.43996,26.09631
+Brown Bear,Rumania3,,Europe,SAMN32301368, de Jong et al. 2023,44.43996,26.09631
+Brown Bear,Rumania4,,Europe,SAMN32301369, de Jong et al. 2023,44.43996,26.09631
+Brown Bear,Rumania5,,Europe,SAMN32301370, de Jong et al. 2023,44.43996,26.09631
+Brown Bear,Himalaya1,,Himalaya,SAMN32301348, de Jong et al. 2023,38.11,70.41
+Brown Bear,HokkaidoSouth1,,Hokkaido,SAMD00282811,Endo et al. 2021,41.729,140.4298
+Brown Bear,HokkaidoSouth2,,Hokkaido,SAMD00282812,Endo et al. 2021,42.942,140.617
+Brown Bear,HokkaidoCentral1,,Hokkaido,SAMD00282813,Endo et al. 2021,43.317,141.967
+Brown Bear,HokkaidoCentral2,,Hokkaido,SAMD00282814,Endo et al. 2021,45.092,141.831
+Brown Bear,HokkaidoEast1,,Hokkaido,SAMD00282815,Endo et al. 2021,43.728,144.587
+Brown Bear,HokkaidoEast2,,Hokkaido,SAMD00282816,Endo et al. 2021,43.987,144.952
+Brown Bear,Hokkaido1,,Hokkaido,SAMN32301349, de Jong et al. 2023,42.9239,143.1961
+Brown Bear,Canada10,,HudsonBay,SAMN32301318, de Jong et al. 2023,61.117,-94.05
+Brown Bear,Canada11,,HudsonBay,SAMN32301319, de Jong et al. 2023,61.117,-94.05
+Brown Bear,Canada12,,HudsonBay,SAMN32301320, de Jong et al. 2023,61.117,-94.05
+Brown Bear,Canada2,,HudsonBay,SAMN32301321, de Jong et al. 2023,62.2373,-92.5922
+Brown Bear,Canada3,,HudsonBay,SAMN32301322, de Jong et al. 2023,61.117,-94.05
+Brown Bear,Canada4,,HudsonBay,SAMN32301323, de Jong et al. 2023,61.117,-94.05
+Brown Bear,Canada5,,HudsonBay,SAMN32301324, de Jong et al. 2023,64.167,-95.5
+Brown Bear,Canada6,,HudsonBay,SAMN32301325, de Jong et al. 2023,64.167,-95.5
+Brown Bear,Canada7,,HudsonBay,SAMN32301326, de Jong et al. 2023,62.75,-92
+Brown Bear,Canada8,,HudsonBay,SAMN32301327, de Jong et al. 2023,61.117,-94.05
+Brown Bear,Canada9,,HudsonBay,SAMN32301328, de Jong et al. 2023,61.117,-94.05
+Brown Bear,Kamtschetka3,,Kamtchatka,SAMN32301351, de Jong et al. 2023,56.21095,159.3467
+Brown Bear,Kamtschetka4,,Kamtchatka,SAMN32301352, de Jong et al. 2023,56.21095,159.3467
+Brown Bear,Alaska01,,Kodiak,SAMN32301307, de Jong et al. 2023,57.79,-152.407
+Brown Bear,Kodiak1,,Kodiak,SAMN32301353, de Jong et al. 2023,57.79,-152.407
+Brown Bear,Kodiak2,,Kodiak,SAMN32301354, de Jong et al. 2023,57.79,-152.407
+Brown Bear,Kodiak3,,Kodiak,SAMN32301355, de Jong et al. 2023,57.79,-152.407
+Brown Bear,Kodiak4,,Kodiak,SAMN32301356, de Jong et al. 2023,57.79,-152.407
+Brown Bear,Kodiak5,,Kodiak,SAMN32301357, de Jong et al. 2023,57.79,-152.407
+Brown Bear,Kodiak6,,Kodiak,SAMN32301392, de Jong et al. 2023,57.79,-152.407
+Brown Bear,FarEast1,,Magadan,SAMN32301336, de Jong et al. 2023,59.5638,150.8035
+Brown Bear,FarEast2,,Magadan,SAMN32301337, de Jong et al. 2023,59.5638,150.8035
+Brown Bear,FarEast3,,Magadan,SAMN32301338, de Jong et al. 2023,59.5638,150.8035
+Brown Bear,FarEast4,,Magadan,SAMN32301339, de Jong et al. 2023,59.5638,150.8035
+Brown Bear,FarEast10,,Magadan,SAMN32301344, de Jong et al. 2023,59.6,153.15
+Brown Bear,FarEast11,,Magadan,SAMN32301345, de Jong et al. 2023,59.6,153.15
+Brown Bear,Georgia,,MiddleEast,SAMEA4762871,Barlow et al. 2018,43.02592,43.04349
+Brown Bear,IranGudrun,,MiddleEast,SAMN32301350, de Jong et al. 2023,38,46
+Brown Bear,TurkeyMartin,,MiddleEast,SAMN32301380, de Jong et al. 2023,39.9,41.3
+Brown Bear,NorthSweden,F,MidScand,SAMN02256314,Liu et al. 2014,66.60665,19.82324
+Brown Bear,Norway7,,MidScand,SAMN32301364, de Jong et al. 2023,70.483,26.0135
+Brown Bear,SouthNorway4,,MidScand,SAMN32301376, de Jong et al. 2023,63.16666,10.3333
+Brown Bear,SouthNorway6,,MidScand,SAMN32301378, de Jong et al. 2023,63.16666,10.3333
+Brown Bear,SouthNorway7,,MidScand,SAMN32301379, de Jong et al. 2023,63.16666,10.3333
+Brown Bear,Norway1,,NorthScand,SAMN32301358, de Jong et al. 2023,69.96887,23.27165
+Brown Bear,Norway2,,NorthScand,SAMN32301359, de Jong et al. 2023,69.96887,23.27165
+Brown Bear,Norway3,,NorthScand,SAMN32301360, de Jong et al. 2023,69.4439,25.80482
+Brown Bear,Norway4,,NorthScand,SAMN32301361, de Jong et al. 2023,69.4439,25.80482
+Brown Bear,Kirkenes,,NorthScand,SAMN32301362, de Jong et al. 2023,69.72706,30.04578
+Brown Bear,Norway6,,NorthScand,SAMN32301363, de Jong et al. 2023,70.483,26.0135
+Brown Bear,Norway8,,NorthScand,SAMN32301365, de Jong et al. 2023,70.483,26.0135
+Brown Bear,Russia_Kola1,,NorthScand,SAMN32301371, de Jong et al. 2023,68.979,33.09
+Brown Bear,Russia_Kola3,,NorthScand,SAMN32301372, de Jong et al. 2023,68.979,33.09
+Brown Bear,Amur4,,Sakhalin,SAMN32301315, de Jong et al. 2023,48,142.2532
+Brown Bear,SouthSweden,F,SouthScand,SAMN02256313,Liu et al. 2014,62.73334,17.58332
+Brown Bear,Sweden3,,SouthScand,SAMN03252407,Cahill et al. 2015,61.00487,14.53714
+Brown Bear,SouthNorway1,,SouthScand,SAMN32301373, de Jong et al. 2023,60.83333,11.6666
+Brown Bear,SouthNorway2,,SouthScand,SAMN32301374, de Jong et al. 2023,60.83333,11.6666
+Brown Bear,SouthNorway3,,SouthScand,SAMN32301375, de Jong et al. 2023,60.83333,11.6666
+Brown Bear,SouthNorway5,,SouthScand,SAMN32301377, de Jong et al. 2023,63.16666,10.3333
+Brown Bear,CentralRussia1,,Ural,SAMN32301329, de Jong et al. 2023,55.5,80.5
+Brown Bear,CentralRussia5,,Ural,SAMN32301333, de Jong et al. 2023,57.6,57.6
+Brown Bear,Ural1,,Ural,SAMN32301381, de Jong et al. 2023,58,56.31667
+Brown Bear,Ural2,,Ural,SAMN32301382, de Jong et al. 2023,58,56.31667
+Brown Bear,Ural3,,Ural,SAMN32301383, de Jong et al. 2023,58,56.31667
+Brown Bear,Ural4,,Ural,SAMN32301384, de Jong et al. 2023,58,56.31667
+Brown Bear,Ural5,,Ural,SAMN32301385, de Jong et al. 2023,60.3262,56.423
+Brown Bear,Ural6,,Ural,SAMN32301386, de Jong et al. 2023,63.3162,42.533
+Brown Bear,Montana,NA,Westcoast,SAMN02256322,Liu et al. 2014,46.96526,-109.534
+Brown Bear,Canada1,,Westcoast,SAMN32301317, de Jong et al. 2023,49.93,-117.627
+Brown Bear,US1,,Westcoast,SAMN32301387, de Jong et al. 2023,44.0682,-114.742
+Brown Bear,US2,,Westcoast,SAMN32301388, de Jong et al. 2023,48.1978,-114.316
+Brown Bear,US3,,Westcoast,SAMN32301389, de Jong et al. 2023,44.03971,-109.541
+Brown Bear,US6,,Westcoast,SAMN32301390, de Jong et al. 2023,48.8,-117.255
+Brown Bear,US8,,Westcoast,SAMN32301391, de Jong et al. 2023,44.56,-111.444
+Brown Bear,Amur5,,Yakutia,SAMN32301316, de Jong et al. 2023,57.645,136.23
+Brown Bear,FarEast6,,Yakutia,SAMN32301340, de Jong et al. 2023,56.65,124.7
+Brown Bear,FarEast7,,Yakutia,SAMN32301341, de Jong et al. 2023,64.31348,133.5363
+Brown Bear,FarEast8,,Yakutia,SAMN32301342, de Jong et al. 2023,60.02505,123.3926
+Brown Bear,FarEast9,,Yakutia,SAMN32301343, de Jong et al. 2023,64.16806,116.4672
+Polar Bear,BB02,F,BB,SAMN02261811,Liu et al. 2014,73,-65
+Polar Bear,BB06,M,BB,SAMN02261854,Liu et al. 2014,73,-65
+Polar Bear,BB05,M,BB,SAMN02261868,Liu et al. 2014,73,-65
+Polar Bear,BB04,M,BB,SAMN02261870,Liu et al. 2014,73,-65
+Polar Bear,BB03,M,BB,SAMN02261871,Liu et al. 2014,73,-65
+Polar Bear,BB01,F,BB,SAMN02261880,Liu et al. 2014,73,-65
+Polar Bear,2372KF,M,CS,SAMN19922659,Laidre et al. 2022,65,-168
+Polar Bear,950089KA,F,CS,SAMN19922660,Laidre et al. 2022,65,-168
+Polar Bear,980387KB,F,CS,SAMN19922661,Laidre et al. 2022,65,-168
+Polar Bear,KB01,M,KB,SAMN02231732,Liu et al. 2014,77,-75
+Polar Bear,KB06,M,KB,SAMN02261840,Liu et al. 2014,77,-75
+Polar Bear,KB05,F,KB,SAMN02261845,Liu et al. 2014,77,-75
+Polar Bear,KB03,F,KB,SAMN02261851,Liu et al. 2014,77,-75
+Polar Bear,KB04,M,KB,SAMN02261853,Liu et al. 2014,77,-75
+Polar Bear,KB02,F,KB,SAMN02261865,Liu et al. 2014,77,-75
+Polar Bear,EG04,F,Northeast Greenland,SAMN02261805,Liu et al. 2014,70.5,-22
+Polar Bear,EG02,F,Northeast Greenland,SAMN02261819,Liu et al. 2014,70.5,-22
+Polar Bear,EG03,F,Northeast Greenland,SAMN02261821,Liu et al. 2014,70.5,-22
+Polar Bear,EG05,F,Northeast Greenland,SAMN02261826,Liu et al. 2014,70.5,-22
+Polar Bear,EG06,F,Northeast Greenland,SAMN02261858,Liu et al. 2014,70.5,-22
+Polar Bear,EG01,F,Northeast Greenland,SAMN02261878,Liu et al. 2014,70.5,-22
+Polar Bear,D24033,F,Northeast Greenland,SAMN10734296,Laidre et al. 2022,70.5,-22
+Polar Bear,D24080,M,Northeast Greenland,SAMN16454143,Laidre et al. 2022,70.5,-22
+Polar Bear,D24082,F,Northeast Greenland,SAMN16454145,Laidre et al. 2022,70.5,-22
+Polar Bear,D24084,F,Northeast Greenland,SAMN16454146,Laidre et al. 2022,70.5,-22
+Polar Bear,D24105,M,Northeast Greenland,SAMN16454158,Laidre et al. 2022,70.5,-22
+Polar Bear,D24109,F,Northeast Greenland,SAMN16454160,Laidre et al. 2022,70.5,-22
+Polar Bear,polarSvalbard2,,polar,SAMN01057636,Miller et al. 2012,79,17.6
+Polar Bear,polarSvalbard1,,polar,SAMN01057666,Miller et al. 2012,79,17.6
+Polar Bear,polar4,,?,SAMN02231733,Liu et al. 2014,70.78,-22.91
+Polar Bear,polar1,,?,SAMN02231736,Liu et al. 2014,70.78,-22.91
+Polar Bear,970201KA,M,SB,SAMN19922662,Laidre et al. 2022,70,-152
+Polar Bear,990083KD,M,SB,SAMN19922663,Laidre et al. 2022,70,-152
+Polar Bear,990671KB,F,SB,SAMN19922664,Laidre et al. 2022,70,-152
+Polar Bear,D24101,F,Southeast Greenland,SAMN10734297,Laidre et al. 2022,62,-42
+Polar Bear,D24087,M,Southeast Greenland,SAMN16454148,Laidre et al. 2022,62,-42
+Polar Bear,D24090,F,Southeast Greenland,SAMN16454149,Laidre et al. 2022,62,-42
+Polar Bear,D24051,M,Southeast Greenland,SAMN16454151,Laidre et al. 2022,62,-42
+Polar Bear,D24094,F,Southeast Greenland,SAMN16454152,Laidre et al. 2022,62,-42
+Polar Bear,D24095,F,Southeast Greenland,SAMN16454153,Laidre et al. 2022,62,-42
+Polar Bear,D24097,F,Southeast Greenland,SAMN16454154,Laidre et al. 2022,62,-42
+Polar Bear,D24098,F,Southeast Greenland,SAMN16454155,Laidre et al. 2022,62,-42
+Polar Bear,D24099,M,Southeast Greenland,SAMN16454156,Laidre et al. 2022,62,-42
+Polar Bear,D24102,F,Southeast Greenland,SAMN16454157,Laidre et al. 2022,62,-42
