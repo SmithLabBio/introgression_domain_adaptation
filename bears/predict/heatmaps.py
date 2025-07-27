@@ -71,7 +71,7 @@ for name, data in out_df.groupby(by="Lambda"):
         print(f"    Std: {d['Probability Introgression'].std()}")
 
 
-def plot_full(thresh):
+def plot_full(thresh, path):
     
     df1_thresh = df1.map(lambda x: 1 if x>=thresh else 0 ) 
     df2_thresh = df2.map(lambda x: 1 if x>=thresh else 0 ) 
@@ -95,8 +95,8 @@ def plot_full(thresh):
     axs[0,0].set_ylabel("Softmax Probabilities")
     axs[1,0].set_ylabel(f"{thresh} Softmax Threshold")
 
-    for i, ax in enumerate(fig.get_axes()):
-        ax.text(-0.05, 1.02, f"{chr(97 + i)})", transform=ax.transAxes, size=14, weight="bold")
+    # for i, ax in enumerate(fig.get_axes()):
+    #     ax.text(-0.05, 1.02, f"{chr(97 + i)})", transform=ax.transAxes, size=14, weight="bold")
 
     plt.tight_layout(rect=[0, 0, .9, 1])
 
@@ -107,12 +107,46 @@ def plot_full(thresh):
     # cbar_ax = fig.add_axes([0.90, 0.15, 0.02, 0.7])
     # fig.colorbar(axs[1,1].collections[0], cax=cbar_ax)
 
-    out =  f"{root}/sim2-batch16.learn_1e-3.enc_learn_1e-3.disc_learn_1e-3.heatmap.pdf"
-    fig.savefig(out)
-    print(f"Saved to: {out}")
+    fig.savefig(path)
+    print(f"Saved to: {path}")
 
-def plot_thresh(thresh):
+
+def plot_single_thresh(thresh, path):
     
+    df1_thresh = df1.map(lambda x: 1 if x>=thresh else 0 ) 
+    df2_thresh = df2.map(lambda x: 1 if x>=thresh else 0 ) 
+    
+    import matplotlib.gridspec as gridspec
+    cmap = "cividis"
+    fig, axs = plt.subplots(1, 2, sharey=True, sharex=True, figsize=(10, 4))
+    
+    sns.heatmap(df1_thresh, ax=axs[0], cmap=cmap, vmin=0, vmax=1, cbar=False)
+    sns.heatmap(df2_thresh, ax=axs[1], cmap=cmap, vmin=0, vmax=1, cbar=False)
+    
+    for i, ax in enumerate(fig.get_axes()):
+        ax.set_xticklabels([])
+        ax.set_xlabel('')
+        ax.set_ylabel('')
+    
+    axs[0].set_title("Mis-specified", pad=20)
+    axs[1].set_title("Domain Adaptation", pad=20)
+    axs[0].set_ylabel(f"{thresh} Softmax Threshold")
+
+    # for i, ax in enumerate(fig.get_axes()):
+    #     ax.text(-0.05, 1.02, f"{chr(97 + i)})", transform=ax.transAxes, size=14, weight="bold")
+
+    plt.tight_layout(rect=[0, 0, .9, 1])
+
+
+    # # Old code which put colorbar in middle    
+    # cbar_ax = fig.add_axes([0.90, 0.15, 0.02, 0.7])
+    # fig.colorbar(axs[1,1].collections[0], cax=cbar_ax)
+
+    fig.savefig(path)
+    print(f"Saved to: {path}")
+
+
+def plot_multi_thresh(thresh, path):
     
     import matplotlib.gridspec as gridspec
     cmap = "cividis"
@@ -143,9 +177,13 @@ def plot_thresh(thresh):
 
     plt.tight_layout(rect=[0, 0, .9, 1])
 
-    out =  f"{root}/sim2-batch16.learn_1e-3.enc_learn_1e-3.disc_learn_1e-3.heatmap-supp.pdf"
-    fig.savefig(out)
-    print(f"Saved to: {out}")
+    fig.savefig(path)
+    print(f"Saved to: {path}")
 
-plot_full(0.95)
-plot_thresh([0.5, 0.6, 0.7, 0.8])
+# plot_full(0.5, f"{root}/sim2-batch16.learn_1e-3.enc_learn_1e-3.disc_learn_1e-3.heatmap-0.5.pdf")
+# plot_full(0.95, f"{root}/sim2-batch16.learn_1e-3.enc_learn_1e-3.disc_learn_1e-3.heatmap-0.95.pdf")
+
+plot_single_thresh(0.5, f"{root}/sim2-batch16.learn_1e-3.enc_learn_1e-3.disc_learn_1e-3.heatmap-0.5.pdf")
+plot_single_thresh(0.95, f"{root}/sim2-batch16.learn_1e-3.enc_learn_1e-3.disc_learn_1e-3.heatmap-0.95.pdf")
+
+plot_multi_thresh([0.5, 0.6, 0.7, 0.8], f"{root}/sim2-batch16.learn_1e-3.enc_learn_1e-3.disc_learn_1e-3.heatmap-supp-0.5.pdf")

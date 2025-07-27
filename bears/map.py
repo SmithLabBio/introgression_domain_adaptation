@@ -5,6 +5,9 @@ import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 import matplotlib.ticker as mticker
 
+def rgb(r,g,b):
+    return r/255, g/255, b/255
+
 renaming = { 
   "brown-abc": "ABC Islands",
   "brown-alaska": "Alaska",
@@ -26,7 +29,7 @@ colors = {
     "brown-scandanavia": "#a6761d",
     "brown-us": "#e7298a"}
 
-directory = "/mnt/home/kc2824/bears/filtering"
+directory = "filtering/"
 brown_files = [f for f in os.listdir(directory) if f.startswith("brown-")]
 samples = []
 for pop in renaming.keys():
@@ -38,7 +41,7 @@ for pop in renaming.keys():
         samples.append(dict(population=pop, biosample=line.split('/')[-1].split('.')[0]))
 
 sample_df = pd.DataFrame(samples)
-data_df = pd.read_csv("/mnt/home/kc2824/bears/data/bear-samples.csv")
+data_df = pd.read_csv("data/bear-samples.csv")
 df = sample_df.merge(data_df, left_on="biosample", right_on="BioSample ID", how="left")
 
 # Adjust position of some samples to eliminate overlap
@@ -46,16 +49,19 @@ df.loc[df["biosample"] == "SAMN09907428", "Lon"] += 6
 df.loc[df["biosample"] == "SAMN32301302", "Lon"] += 6 
 df.loc[df["biosample"] == "SAMN32301303", "Lon"] += 6 
 
+center = -175
+extent = 40
 # Map projection
-transform = ccrs.NorthPolarStereo(-30)
-# transform = ccrs.Orthographic(0, 90)
+# transform = ccrs.NorthPolarStereo(-30)
+transform = ccrs.NorthPolarStereo(center)
+# transform = ccrs.Orthographic(165, 90)
 # transform = ccrs.PlateCarree()
 
 # Map elements
 ax = plt.axes(projection=transform)
-ax.add_feature(cfeature.OCEAN.with_scale('50m'), facecolor=(0.8, 0.8, 0.8))
-ax.add_feature(cfeature.LAND.with_scale("50m"), facecolor=(1, 1, 1))
-ax.add_feature(cfeature.COASTLINE.with_scale("50m"), linewidth=0.01)
+# ax.add_feature(cfeature.OCEAN.with_scale('50m'), facecolor=(rgb(245, 255, 255)))
+ax.add_feature(cfeature.LAND.with_scale("50m"), facecolor=(rgb(175, 175, 175)))
+ax.add_feature(cfeature.COASTLINE.with_scale("50m"), linewidth=0.005)
 
 gl = ax.gridlines(
     linewidth=0.5,
@@ -78,6 +84,16 @@ gl.xlocator = mticker.LinearLocator(numticks=12)
 for name, group in df.groupby("population"):
     population_name = renaming[str(name)]
     ax.plot(group["Lon"], group["Lat"], 'o', c=colors[str(name)], markersize=5, transform=ccrs.PlateCarree(), label=population_name)
+
+# Add invisible points to create extent
+rescaled = (center - 180) % 360
+opposite = (rescaled + 180) % 360 - 180
+mid1 = (rescaled + 90) % 360 - 180
+mid2 = (rescaled + 270) % 360 - 180
+ax.plot(center, extent, markersize=0, transform=ccrs.PlateCarree())
+ax.plot(opposite, extent, markersize=0, transform=ccrs.PlateCarree())
+ax.plot(mid1, extent, markersize=0, transform=ccrs.PlateCarree())
+ax.plot(mid2, extent, markersize=0, transform=ccrs.PlateCarree())
 
 # ax.legend(loc="upper right", handletextpad=-.5, markerscale=0.75, fontsize=7)
 ax.legend(loc="lower right", ncols=4, handletextpad=-.5, markerscale=0.75, fontsize=7, framealpha=1)
