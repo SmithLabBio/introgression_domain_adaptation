@@ -1,0 +1,14 @@
+// Priors and rules file
+// *********************
+
+[PARAMETERS]
+//#isInt? #name   #dist.#min  #max
+//all N are in number of haploid individuals
+1  POPSIZE     unif     10000    100000     output
+0  NMIG        unif     5e-2     5          hide
+1  TDIV        unif     1000     1000000    output
+
+
+[COMPLEX PARAMETERS]
+1  TMIG  = TDIV/2        output     
+0  RMIG   = NMIG/POPSIZE    output
