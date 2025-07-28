@@ -13,10 +13,10 @@ POPSIZE
 0
 //historical event: time, source, sink, migrants, new deme size, growth rate, migr mat index
 1 historical event
-TDIV 0 1 1 POPSIZE 0 1
+TDIV 0 1 1 1 0 0
 //Number of independent loci [chromosome] 
 1 0
 //Per chromosome: Number of contiguous linkage Block: a block is a set of contiguous loci
 1
 //per Block:data type, number of loci, per gen recomb and mut rates
-DNA 500000 1e-8 1e-8
+FREQ 1 0 1e-8
