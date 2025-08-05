@@ -4,7 +4,9 @@ modeldir = "/mnt/home/kc2824/domain-adaptation/fastsimcoal"
 outdir = "/mnt/scratch/smithlab/cobb/fastsimcoal/general-secondary-contact-1-100-test-fsc-output"
 
 process fsc {
-  memory { 4.GB }
+  errorStrategy 'retry'
+  maxRetries 2
+  memory {4.GB * task.attempt}
 
   publishDir outdir, mode: 'copy'
 
@@ -17,8 +19,10 @@ process fsc {
   script:
     simulation_replicate = sfs.baseName
     """
+    hostname 
+
     # Rename input SFS to match expected format
-    mv ${sfs} ${model}_jointMAFpop1_0.obs 
+    cp ${sfs} ${model}_jointMAFpop1_0.obs 
     cp ${modeldir}/${model}.tpl .
     cp ${modeldir}/${model}.est .
 
@@ -28,15 +32,17 @@ process fsc {
       -e ${model}.est \
       -n 100000 \
       -L 40 \
-      -m -M
-    
+      -m -M -q \
+
     mv ${model} ${simulation_replicate}-${model}-${fsc_replicate}
     """
 }
 
 workflow {
-  fsc_replicates = channel.from(1, 2)
+  fsc_replicates = channel.from(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+  // fsc_replicates = channel.from(1, 2)
   sfs = channel.fromPath("${indir}/*.txt")
+  // sfs = sfs.take(2)
   models = channel.from(models)
   comb = models.combine(sfs).combine(fsc_replicates)
   fsc(comb)
