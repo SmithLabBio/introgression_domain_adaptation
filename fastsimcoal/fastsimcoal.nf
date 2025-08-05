@@ -1,7 +1,11 @@
-indir = "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-100-test-fsc"
 models = ["secondary_contact", "isolation" ]
 modeldir = "/mnt/home/kc2824/domain-adaptation/fastsimcoal"
-outdir = "/mnt/scratch/smithlab/cobb/fastsimcoal/general-secondary-contact-1-100-test-fsc-output"
+
+// indir = "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-100-test-fsc"
+// outdir = "/mnt/scratch/smithlab/cobb/fastsimcoal/general-secondary-contact-1-100-test-fsc-output"
+
+indir = "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-100-test-fsc-unlinked"
+outdir = "/mnt/scratch/smithlab/cobb/fastsimcoal/general-secondary-contact-1-100-test-fsc-unlinked-output"
 
 process fsc {
   errorStrategy 'retry'
@@ -40,9 +44,7 @@ process fsc {
 
 workflow {
   fsc_replicates = channel.from(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-  // fsc_replicates = channel.from(1, 2)
   sfs = channel.fromPath("${indir}/*.txt")
-  // sfs = sfs.take(2)
   models = channel.from(models)
   comb = models.combine(sfs).combine(fsc_replicates)
   fsc(comb)
