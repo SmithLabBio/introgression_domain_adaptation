@@ -36,7 +36,7 @@ process fsc {
       -e ${model}.est \
       -n 100000 \
       -L 40 \
-      -m -M -q \
+      -m -M -q -0 \
 
     mv ${model} ${simulation_replicate}-${model}-${fsc_replicate}
     """

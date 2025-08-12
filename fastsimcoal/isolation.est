@@ -4,5 +4,5 @@
 [PARAMETERS]
 //#isInt? #name   #dist.#min  #max
 //all N are in number of haploid individuals
-1  POPSIZE     unif     10000    100000     output
-1  TDIV        unif     1000     1000000    output
+1  POPSIZE     unif     10000    100000     output bounded
+1  TDIV        unif     1000     1000000    output bounded
