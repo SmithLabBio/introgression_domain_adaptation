@@ -10,41 +10,53 @@ model_map = {"isolation": "0", "secondary_contact": "1"}
 label_map = {"0": "isolation", "1": "secondary_contact"}
 
 dfs = []
-# For every output directory
+# Iterate over all directories in outdir
 for dir in os.listdir(outdir):
-    # Split filename to get model, label, simulation replicate, and fsc2 replicate
-    split = dir.split("-")
-    fsc_rep = split[-1]
-    model = split[-2]
-    label = split[-3].split("_")[1]
-    sim_rep = split[-4]
-    lhood_path = os.path.join(outdir, dir, f"{model}.bestlhoods") # Path to the .bestlhoods file
-    if os.path.exists(lhood_path):
-        # Read likelihood output and add columns for fsc2 replicate, simulation replicate, model, and label
-        df = pd.read_csv(lhood_path, sep="\t")
-        df["fsc_rep"] = fsc_rep
-        df["sim_rep"] = sim_rep
-        df["model"] = model
-        df["label"] = label
-        dfs.append(df)
-    else:
-        print(dir, "does not have a .bestlhoods file")
+    model = dir.split("-")[-2]  # Extract model from directory name 
+    fsc_replicate = dir.split("-")[-1]  # Extract replicate from directory name
+    label = dir.split("-")[-3].split("_")[1]  # Extract label from directory name
+    sim_replicate = dir.split("-")[-4]  # Extract simulation replicate from directory name
+    dir_path = os.path.join(outdir, dir)
+    lhood_path = os.path.join(dir_path, f"{dir.split('-')[-2]}.bestlhoods")  # Path to .bestlhoods file
+    # Read the .bestlhoods file
+    df = pd.read_csv(lhood_path, sep="\t")
+    # Calculate the number of model parameters (columns - 2)
+    k = df.shape[1] - 2
+    # Extract the maximum likelihood estimate
+    max_lhood = df["MaxEstLhood"].max()
+    # Calculate AIC
+    aic = 2 * k - 2 * max_lhood
+    df = pd.read_csv(lhood_path, sep="\t")
+    df["fsc_rep"] = fsc_replicate
+    df["sim_rep"] = sim_replicate
+    df["model"] = model
+    df["label"] = label
+    df["aic"] = aic
+    dfs.append(df)
 
 # Concatenate all likelihood dataframes
 df = pd.concat(dfs, ignore_index=True) 
+df.sort_values(by=["sim_rep", "model", "label", "fsc_rep"], inplace=True)
+df = df[["sim_rep", "model", "label", "fsc_rep", "MaxEstLhood", "MaxObsLhood", "aic", 'POPSIZE', 'TDIV', 'TMIG', 'RMIG']]
+df.to_csv(f"{outdir.split('/')[-1]}.csv", na_rep="NA", index=False)
 
 true_model = [] 
 predicted_model = []
+# Group by simulation replicate
 for sim_rep, sim_rep_df in df.groupby("sim_rep"):
-    estimates = []
-    # For each model, get the highest likelihood value
+    best_estimates = []
+    # For each simulation replicate group by model
     for model, model_df in sim_rep_df.groupby("model"):
-        highest = model_df.loc[model_df['MaxEstLhood'].idxmin()]
-        estimates.append(highest)
-    estimates_df = pd.DataFrame(estimates)
-    best = estimates_df.loc[estimates_df['MaxEstLhood'].idxmin()]
-    true_model.append(int(best["label"]))
-    predicted_model.append(int(model_map[best["model"]]))
+        # Get row with the smallest negative log likelihood value
+        best_estimate = model_df.loc[model_df['MaxEstLhood'].idxmin()]
+        best_estimates.append(best_estimate)
+    # Make dataframe of best estimates for each model
+    best_estimates_df = pd.DataFrame(best_estimates)
+    # Get the model with the lowest AIC
+    best_model = best_estimates_df.loc[best_estimates_df['aic'].idxmin()] 
+    # Append true and predicted model to lists
+    true_model.append(best_model["label"])
+    predicted_model.append(model_map[best_model["model"]]) # Ignore pylance warning
 
 cm =confusion_matrix(true_model, predicted_model)
 print(cm)
