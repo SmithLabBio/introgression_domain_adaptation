@@ -9,6 +9,7 @@ outdir = "/mnt/home/kc2824/scratch/fastsimcoal/general-secondary-contact-1-100-t
 # outdir = "/mnt/home/kc2824/scratch/fastsimcoal/general-secondary-contact-ghost-1-100-test-fsc-output"
 # outdir = "/mnt/home/kc2824/scratch/fastsimcoal/general-secondary-contact-ghost-1-100-test-fsc-unlinked-output"
 
+# Map confusion matrix row/col indices to model name
 model_map = {"isolation": "0", "secondary_contact": "1"}
 label_map = {"0": "isolation", "1": "secondary_contact"}
 

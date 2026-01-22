@@ -1,15 +1,19 @@
 models = ["secondary_contact", "isolation" ]
 modeldir = "/mnt/home/kc2824/domain-adaptation/fastsimcoal"
 
+// Data with no ghost introgression, no subsampling of unlinked SNPs
 indir = "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-100-test-fsc"
 outdir = "/mnt/scratch/smithlab/cobb/fastsimcoal/general-secondary-contact-1-100-test-fsc-output"
 
+// Data with no ghost introgression, subsampling of unlinked SNPs 
 // indir = "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-100-test-fsc-unlinked"
 // outdir = "/mnt/scratch/smithlab/cobb/fastsimcoal/general-secondary-contact-1-100-test-fsc-unlinked-output"
 
+// Data with ghost introgression, no subsampling of unlinked SNPs
 // indir = "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-ghost-1-100-test-fsc"
 // outdir = "/mnt/scratch/smithlab/cobb/fastsimcoal/general-secondary-contact-ghost-1-100-test-fsc-output"
 
+// Data with ghost introgression, subsampling of unlinked SNPs
 // indir = "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-ghost-1-100-test-fsc-unlinked"
 // outdir = "/mnt/scratch/smithlab/cobb/fastsimcoal/general-secondary-contact-ghost-1-100-test-fsc-unlinked-output"
 
