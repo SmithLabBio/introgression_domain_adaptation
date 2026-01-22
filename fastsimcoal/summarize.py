@@ -6,6 +6,9 @@ from sklearn.metrics import confusion_matrix
 outdir = "/mnt/home/kc2824/scratch/fastsimcoal/general-secondary-contact-1-100-test-fsc-output"
 # outdir = "/mnt/home/kc2824/scratch/fastsimcoal/general-secondary-contact-1-100-test-fsc-unlinked-output"
 
+# outdir = "/mnt/home/kc2824/scratch/fastsimcoal/general-secondary-contact-ghost-1-100-test-fsc-output"
+# outdir = "/mnt/home/kc2824/scratch/fastsimcoal/general-secondary-contact-ghost-1-100-test-fsc-unlinked-output"
+
 model_map = {"isolation": "0", "secondary_contact": "1"}
 label_map = {"0": "isolation", "1": "secondary_contact"}
 

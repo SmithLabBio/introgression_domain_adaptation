@@ -1,11 +1,17 @@
 models = ["secondary_contact", "isolation" ]
 modeldir = "/mnt/home/kc2824/domain-adaptation/fastsimcoal"
 
-// indir = "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-100-test-fsc"
-// outdir = "/mnt/scratch/smithlab/cobb/fastsimcoal/general-secondary-contact-1-100-test-fsc-output"
+indir = "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-100-test-fsc"
+outdir = "/mnt/scratch/smithlab/cobb/fastsimcoal/general-secondary-contact-1-100-test-fsc-output"
 
-indir = "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-100-test-fsc-unlinked"
-outdir = "/mnt/scratch/smithlab/cobb/fastsimcoal/general-secondary-contact-1-100-test-fsc-unlinked-output"
+// indir = "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-100-test-fsc-unlinked"
+// outdir = "/mnt/scratch/smithlab/cobb/fastsimcoal/general-secondary-contact-1-100-test-fsc-unlinked-output"
+
+// indir = "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-ghost-1-100-test-fsc"
+// outdir = "/mnt/scratch/smithlab/cobb/fastsimcoal/general-secondary-contact-ghost-1-100-test-fsc-output"
+
+// indir = "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-ghost-1-100-test-fsc-unlinked"
+// outdir = "/mnt/scratch/smithlab/cobb/fastsimcoal/general-secondary-contact-ghost-1-100-test-fsc-unlinked-output"
 
 process fsc {
   errorStrategy 'retry'

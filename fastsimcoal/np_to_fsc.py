@@ -2,10 +2,13 @@ import numpy as np
 import os
 import fire
 
-path =   "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-100-test-sfs.npz"
-outdir = "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-100-test-fsc" 
+# path =   "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-100-test-sfs.npz"
+# outdir = "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-100-test-fsc" 
 
+path =   "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-ghost-1-100-test-sfs.npz"
+outdir = "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-ghost-1-100-test-fsc" 
 
+os.makedirs(outdir, exist_ok=True)
 data = np.load(path)
 
 matrices = data["x"].squeeze()

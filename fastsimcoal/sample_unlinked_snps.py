@@ -8,8 +8,14 @@ import tskit
 import numpy as np
 
 
-path =   "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-100-test.json"
-outdir = "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-100-test-fsc-unlinked" 
+# path =   "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-100-test.json"
+# outdir = "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-1-100-test-fsc-unlinked" 
+
+path =   "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-ghost-1-100-test.json"
+outdir = "/mnt/scratch/smithfs/cobb/popai/simulations/general-secondary-contact-ghost-1-100-test-fsc-unlinked" 
+
+os.makedirs(outdir, exist_ok=True)
+
 min_distance = 500
 
 with open(path, "r") as fh:
@@ -32,7 +38,6 @@ for rep in range(len(simulations)):
         else:
             sites_to_drop.append(i)
     ts = ts.delete_sites(sites_to_drop)
-    print(ts.num_sites)
     
     # Compute allele frequency spectrum
     n_samples = len(ts.samples())
