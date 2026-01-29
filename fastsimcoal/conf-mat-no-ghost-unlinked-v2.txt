@@ -1,2 +1,6 @@
-[[50  0]
+Confusion Matrix based on AIC:
+[[49  1]
+ [ 0 50]]
+Confusion Matrix based on LRT:
+[[49  1]
  [ 0 50]]

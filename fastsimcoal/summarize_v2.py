@@ -3,6 +3,9 @@ import os
 import pandas as pd
 from sklearn.metrics import confusion_matrix
 import math
+import sys
+import numpy as np
+from scipy.stats import chi2
 
 # uncomment one of the following lines to set the output directory
 outdir = "/mnt/scratch/smithlab/megan/da_revision/fastsimcoal_output/general-secondary-contact-1-100-test-fsc-unlinked-output"
@@ -47,21 +50,45 @@ df.to_csv(outputfile, na_rep="NA", index=False)
 
 true_model = [] 
 predicted_model = []
+predicted_model_lrt = []
 # Group by simulation replicate
 for sim_rep, sim_rep_df in df.groupby("sim_rep"):
     best_estimates = []
     # For each simulation replicate group by model
     for model, model_df in sim_rep_df.groupby("model"):
-        # Get row with the smallest negative log likelihood value
-        best_estimate = model_df.loc[model_df['MaxEstLhood'].idxmin()]
+        # Get row with the maximum log-likeihood
+        best_estimate = model_df.loc[model_df['MaxEstLhood'].idxmax()]
         best_estimates.append(best_estimate)
+        if model=="isolation":
+            log10_null = best_estimate['MaxEstLhood']
+        if model=="secondary_contact":
+            log10_alt = best_estimate['MaxEstLhood']
+
+    # perform LRT
+    lnL_null = log10_null/math.log10(math.exp(1))
+    lnL_alt  = log10_alt /math.log10(math.exp(1))
+    df = 1 # degrees of freedom
+    LR = 2 * (lnL_alt - lnL_null)
+    p_value = chi2.sf(LR, df)
     # Make dataframe of best estimates for each model
     best_estimates_df = pd.DataFrame(best_estimates)
     # Get the model with the lowest AIC
-    best_model = best_estimates_df.loc[best_estimates_df['aic'].idxmin()] 
+    best_model = best_estimates_df.loc[best_estimates_df['aic'].idxmin()]
+    # Determine the best model based on LRT
+    if p_value < 0.01:
+        best_model_lrt = best_estimates_df.loc[best_estimates_df['model']=='secondary_contact']
+    else:
+        best_model_lrt = best_estimates_df.loc[best_estimates_df['model']=='isolation']
     # Append true and predicted model to lists
     true_model.append(best_model["label"])
     predicted_model.append(model_map[best_model["model"]]) # Ignore pylance warning
+    assert len(best_model_lrt) == 1, "Expected exactly one best model"
+    model_name = best_model_lrt.at[best_model_lrt.index[0], "model"]
+    predicted_model_lrt.append(model_map[model_name])
 
 cm =confusion_matrix(true_model, predicted_model)
+cm_lrt =confusion_matrix(true_model, predicted_model_lrt)
+print("Confusion Matrix based on AIC:")
 print(cm)
+print("Confusion Matrix based on LRT:")
+print(cm_lrt)
