@@ -1,0 +1,10 @@
+// Priors and rules file
+// *********************
+
+[PARAMETERS]
+//#isInt? #name   #dist.#min  #max
+//all N are in number of haploid individuals
+1  POPSIZE     unif     10000    100000     output bounded
+1  TDIV        unif     50000     500000    output bounded
+
+[COMPLEX PARAMETERS]
