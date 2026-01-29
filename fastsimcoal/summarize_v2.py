@@ -2,9 +2,10 @@ import glob
 import os
 import pandas as pd
 from sklearn.metrics import confusion_matrix
+import math
 
 # uncomment one of the following lines to set the output directory
-# outdir = "/mnt/scratch/smithlab/megan/da_revision/fastsimcoal_output/general-secondary-contact-1-100-test-fsc-unlinked-output"
+outdir = "/mnt/scratch/smithlab/megan/da_revision/fastsimcoal_output/general-secondary-contact-1-100-test-fsc-unlinked-output"
 # outdir = "/mnt/scratch/smithlab/megan/da_revision/fastsimcoal_output/general-secondary-contact-ghost-1-100-test-fsc-unlinked-output"
 
 # Map confusion matrix row/col indices to model name
@@ -27,7 +28,8 @@ for dir in os.listdir(outdir):
     # Extract the maximum likelihood estimate
     max_lhood = df["MaxEstLhood"].max()
     # Calculate AIC
-    aic = 2 * k - 2 * max_lhood
+    aic = 2 * k - 2 *(max_lhood/math.log10(math.exp(1)))
+    # output
     df = pd.read_csv(lhood_path, sep="\t")
     df["fsc_rep"] = fsc_replicate
     df["sim_rep"] = sim_replicate
