@@ -22,7 +22,6 @@ def plot_adapt_history(history, outdir, disc=True):
         ax1.plot(h["val_accuracy"], color="green", linestyle="dotted", label="Val. Accuracy: %.2f"%h["val_accuracy"][-1])
     ax2 = ax1.twinx()
     ax2.set_ylabel("Loss")
-    ax2.plot(h["loss"], color="darkblue", label="Loss: %.2f"%h["loss"][-1])
     if disc:
         if "disc_loss" in h: 
             ax2.plot(h["disc_loss"], color="royalblue", linestyle="dashed", label="Disc. Loss: %.2f"%h["disc_loss"][-1])
@@ -69,7 +68,6 @@ def save_roc(outpath, labels, pred):
     df = pd.DataFrame(dict(fpr=fpr, tpr=tpr))
     df.to_csv(outpath, index=False)
 
-
 def plot_roc(data, outpath):
     """
     data: tuple(name, df_path]
@@ -91,3 +89,37 @@ def plot_roc(data, outpath):
 def get_auc(path):
     df = pd.read_csv(path)
     return auc(df["fpr"], df["tpr"])
+
+
+def random_subsample(data, n, seed=None):
+    rng = np.random.default_rng(seed)
+    idx = rng.choice(len(data["x"]), size=n, replace=False)
+    return {k: v[idx] for k, v in data.items()}
+
+def stratified_subsample(data, num, proportion, seed=None):
+    rng = np.random.default_rng(seed)
+    X = data["x"]
+    y = data["labels"]
+    unique_labels = np.unique(y)
+
+    indices = []
+
+    for label in unique_labels:
+        label_idx = np.where(y == label)[0]
+        if label == 0:
+            n_keep = int(num * proportion)
+        elif label == 1:
+            n_keep = int(num * (1 - proportion))
+
+        if n_keep == 0:
+            continue
+
+        chosen = rng.choice(label_idx, size=n_keep, replace=False)
+        indices.append(chosen)
+
+    indices = np.concatenate(indices)
+    rng.shuffle(indices)  # mix labels
+
+    X_sub = X[indices]
+    y_sub = y[indices]
+    return {"x": X_sub, "labels": y_sub}

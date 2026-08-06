@@ -3,7 +3,7 @@ import os
 import pandas as pd
 from sklearn.metrics import confusion_matrix
 
-outdir = "/mnt/home/kc2824/scratch/fastsimcoal/general-secondary-contact-1-100-test-fsc-output"
+# outdir = "/mnt/home/kc2824/scratch/fastsimcoal/general-secondary-contact-1-100-test-fsc-output"
 # outdir = "/mnt/home/kc2824/scratch/fastsimcoal/general-secondary-contact-1-100-test-fsc-unlinked-output"
 
 # outdir = "/mnt/home/kc2824/scratch/fastsimcoal/general-secondary-contact-ghost-1-100-test-fsc-output"

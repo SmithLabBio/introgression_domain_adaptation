@@ -1,3 +1,8 @@
 .nextflow
 work/
 *.out
+fastsimcoal_output/
+*__pycache__/
+fastsimcoal/.nextflow.log
+fastsimcoal/.nextflow.log.1
+simulations/simulations/__pycache__/
