@@ -9,9 +9,6 @@ import os
 
 from extract_iw_weights import collect_iw_weights
 
-def instability(group):
-    diffs = group.sort_values("epoch")["iw_weight"].diff().abs()
-    return pd.Series({"mean_abs_step_change": diffs.mean()})
 
 
 def plot_iw_trajectories(iw_df, output_dir):
@@ -34,7 +31,7 @@ def plot_iw_trajectories(iw_df, output_dir):
     g.set_titles("lambda_val = {col_name} | target_prop = {row_name}")
     g.set_axis_labels("Epoch", "Importance weight")
     g.tight_layout()
-    g.savefig(os.path.join(output_dir,"iw_trajectories_by_lambda.png"), dpi=150, bbox_inches="tight")
+    g.savefig(os.path.join(output_dir,"iw_trajectories_by_lambda.png"), dpi=300, bbox_inches="tight")
 
 def parse_arguments():
 

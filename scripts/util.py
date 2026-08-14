@@ -40,6 +40,9 @@ def plot_tsne(model, source, target, outpath):
     Xs = model.transform(source["x"])
     Xt = model.transform(target["x"])
     X = np.concatenate((Xs, Xt))
+    std = np.std(X[:, 0])
+    if np.any(np.std(X, axis=0) == 0) or np.any(np.isnan(X)):
+        return
     X_tsne = TSNE(2).fit_transform(X)
     plt.plot(X_tsne[:len(Xs), 0], X_tsne[:len(Xs), 1], '.', label="Source")
     plt.plot(X_tsne[len(Xs):, 0], X_tsne[len(Xs):, 1], '.', label="Target")

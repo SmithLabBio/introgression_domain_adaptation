@@ -64,7 +64,7 @@ def plot_metric(data: pd.DataFrame, y: str, fname: str):
         height=4,
         aspect=1,
     )
-    g.set_titles("lambda_val = {col_name}")
+    g.set_titles("λ = {col_name}")
     g.set_axis_labels("Target proportion", y.replace("_", " ").title())
     g.tight_layout()
     g.savefig(fname, dpi=150, bbox_inches="tight")
