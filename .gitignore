@@ -1,3 +1,13 @@
 .nextflow
 work/
 *.out
+*.err
+fastsimcoal_output/
+*__pycache__/
+fastsimcoal/.nextflow.log
+fastsimcoal/.nextflow.log.1
+simulations/simulations/__pycache__/
+.nextflow.log*
+not_using/
+simulations/build/
+simulations/simulations.egg-info/

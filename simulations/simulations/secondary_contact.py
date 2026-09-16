@@ -5,7 +5,7 @@ from typing import Tuple
 import tskit
 import msprime as mp
 import numpy as np
-from .simulator import Scenario, ScenarioData, run_simulations
+from simulations.simulator import Scenario, ScenarioData, run_simulations
 
 
 class SecondaryContactData(ScenarioData):

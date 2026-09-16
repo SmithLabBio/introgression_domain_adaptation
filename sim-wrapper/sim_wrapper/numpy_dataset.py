@@ -1,7 +1,7 @@
 from typing import Optional, Callable
 import numpy as np
-from .simulator import Simulations
-from .genotype_matrix import genotype_matrix
+from simulations.simulator import Simulations
+from simulations.genotype_matrix import genotype_matrix
 
 
 class NumpySnpDataset():
@@ -27,7 +27,7 @@ class NumpyAfsDataset():
     def __init__(self, scenario: type, path: str, field: str, expand_dims=False, polarized=False, normalized=False):
         with open(path, "r") as fh:
             json_data = fh.read()
-        simulations = Simulations[scenario, scenario._data_class].model_validate_json(json_data)
+        simulations = Simulations[scenario, scenario._data_class.default].model_validate_json(json_data)
         afs_list = []
         labels = []
         for rep in simulations:
